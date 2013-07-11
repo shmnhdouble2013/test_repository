@@ -65,6 +65,8 @@ KISSY.add('brandsite/1.0/widget/search', function (S) {
             var self = this;
             var input = self.input;
             var sug = self.sug;
+			
+			
 
             // 展现关闭 -- 浮动框
             E.on(input, 'focus', function () {
@@ -88,10 +90,10 @@ KISSY.add('brandsite/1.0/widget/search', function (S) {
                 }
 
                 // 挂载输入字段
-                if(self.atrlinks.length){
+                if(self.atrlinks.length){					
                     S.each(self.atrlinks, function(el){
-                        var hrefs = D.attr(el, 'href'),
-                            renderLink = /\?/i.test(hrefs) ? hrefs+'&q='+ encodeURI(searchStr) : hrefs+'?q='+ encodeURI(searchStr);
+						var hrefs = D.attr(el, 'data-href'),													
+							renderLink = /\?/i.test(hrefs) ? hrefs+'&q='+ encodeURI(searchStr) : hrefs+'?q='+ encodeURI(searchStr);
 
                         D.attr(el, 'href', renderLink);
                     });
@@ -147,7 +149,7 @@ KISSY.add('brandsite/1.0/widget/search', function (S) {
                 var attrLen = attrsData.length;
                 while (attrLen--) {
                     var item = attrsData[attrLen],
-                        atrHtml = '<p><a class="j_atrlink" data-log="search,3,'+ attrLen +'" target="_blank" href="' + item[1] + '"><em></em>&nbsp;在<span>'+item[0]+'</span>搜索</a></p>';
+                        atrHtml = '<p><a class="j_atrlink" data-log="search,3,'+ attrLen +'" target="_blank" href="' + item[1] + '" data-href="' + item[1] + '"><em></em>&nbsp;在<span>'+item[0]+'</span>搜索</a></p>';
                     D.append(D.create(atrHtml), attrLi );
                 }
             }
