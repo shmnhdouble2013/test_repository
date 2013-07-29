@@ -1,10 +1,10 @@
 /** 
 * @fileOverview 浏览器 窗口宽度 监控 公共通用方法 
 * @extends  KISSY.Base
-* @creator 黄甲 (旺旺：水木年华double) <huangjia2015@gmail.com>
+* @creator 黄甲 (旺旺：水木年华double_2) <huangjia2015@gmail.com>
 * @depends  ks-core
 * @version 1.0
-* @update 2013-05-29
+* @update 2013-05-30
 * @example
 *     new MoreViewVersion([720, 750, 990, 1080, 1190]);
 */
