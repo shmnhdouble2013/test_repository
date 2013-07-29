@@ -1,0 +1,2 @@
+/* build 2013-07-25 12:25:15 */
+KISSY.ready(function(S){S.use("tbsui",function(S,Tbsui){var OTbsui=new Tbsui({selector:["select","radio","checkbox"]});OTbsui.on("checkboxClick radioClick",function(el){console.log("fire\u4e8b\u4ef6\u5916\u90e8\u63a5\u6536\u5230\u5e76\u6267\u884c\uff1a"+el.inputTarget)});S.Event.on("#abcd","click",function(el){console.log("\u539f\u751finput\u89e6\u53d1\u4e86"+el.target)})})});

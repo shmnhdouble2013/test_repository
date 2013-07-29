@@ -1,0 +1,193 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8" />
+    <title>TBS-UI2</title>
+    <script src="http://a.tbcdn.cn/s/kissy/1.3.0/seed-min.js"></script>
+
+    <link rel="stylesheet" href="../src/css/tbsui.css" />
+    <link rel="stylesheet" href="demo.css" />
+    
+    <script src="../src/js/tbsui.js"></script>
+    <script src="../src/js/init.js"></script>
+</head>
+<body class="tbs-ui">
+<div style="margin: 20px; padding: 20px;">
+    <ul>
+        <li>INPUT</li>
+        <li><input value="value" type="text" /></li>
+        <li><input value="value" type="text" disabled="disabled" /></li>
+    </ul>
+    <ul>
+        <li>SELECT</li>
+        <li>
+            <select class="slct" name="slct">
+                <option value="0">1111</option>
+                <option value="1">2222</option>
+                <option value="2">3333chanchanchang</option>
+            </select>
+        </li>
+        <li>
+            <select class="slct" name="slct">
+                <option value="0">1111</option>
+                <option value="1"  selected>selected</option>
+                <option value="2">3333</option>
+            </select>
+        </li>
+    </ul>
+    <ul>
+        <li>STEP</li>
+        <li>
+            <div class="tbsui-step-5">
+                <ol class="tbsui-step-bar">
+                    <li class="tbsui-step-start-done">
+                        1. 步骤一
+                    </li>
+                    <li class="tbsui-step-done">
+                        <i></i>2. 步骤二
+                    </li>
+                    <li class="tbsui-step-cur">
+                        <i></i>3. 步骤三
+                    </li>
+                    <li>
+                        <i></i>3. 步骤四
+                    </li>
+                    <li class="tbsui-step-end">
+                        <i></i>4. 步骤五
+                    </li>
+                </ol>
+            </div>
+        </li>
+    </ul>
+    <ul>
+        <li>PAGE</li>
+        <li>
+            <div class="tbsui-page-m">
+                <div class="tbsui-page-wrap">
+                    <div class="tbsui-page-num">
+                        <a href="#" class="tbsui-page-prev">&lt;</a>
+                        <a href="#" >1</a>
+                        <a href="#" class="tbsui-page-cur" href="#">2</a>
+                        <b  class="tbsui-page-break">...</b>
+                        <a href="#" class="tbsui-page-next">&gt;</a>
+                    </div>
+                    <div class="tbsui-page-skip" >
+                        <form id="" name="" method="get" action="">
+                            共100页，去第<input type="text" name="jumpto" class="tbsui-page-skipTo" size="3" value="265">页
+                            <a class="btn btn-submit">确定</a>
+                        </form>
+                    </div>
+                </div>
+                <div>xxx</div>
+            </div>
+        </li>
+        <li>
+            <p class="tbsui-page-s">
+                <b class="tbsui-page-s-len">1/59</b>
+                <a class="tbsui-page-s-prev" href="javascript:void(0)" title="上一页">&lt;</a>
+                <a class="tbsui-page-s-next" href="javascript:void(0)" title="下一页">&gt;</a>
+            </p>
+        </li>
+    </ul>
+    <ul>
+        <li>
+            TABLE
+        </li>
+        <li>
+            <table class="tbsui-simtable" style="width: 100%;">
+                <thead>
+                <tr>
+                    <th>产品名称</th>
+                    <th>
+                        产品类型
+                    </th>
+                    <th>
+                        发布日期
+                    </th>
+                    <th>审核状态</th>
+                    <th> 操作</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td>
+                        表格单元1
+                    </td>
+                    <td>xxxx</td>
+                    <td>2012-07-03</td>
+                    <td>
+                        xxxx
+                    </td>
+                    <td>
+                        xxxx
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        表格单元2
+                    </td>
+                    <td>xxxx</td>
+                    <td>2012-07-03</td>
+                    <td>
+                        xxxx
+                    </td>
+                    <td>
+                        xxxxx
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </li>
+    </ul>
+    <ul>
+        <li>RADIO</li>
+        <li>
+            <label class="radoBox-label j_rado">
+                <span class="radoBox-icons"></span>
+                <input type="radio" name="optionsRadios" value="option1"  class="radoBox-cls" />Radio is off1
+            </label>
+
+            <label class="radoBox-label j_rado">
+                <span class="radoBox-icons"></span>
+                <input type="radio" name="optionsRadios" value="option2" checked  class="radoBox-cls" />Radio is off2
+            </label>
+
+            <label class="radoBox-label j_rado">
+                <span class="radoBox-icons"></span>
+                <input type="radio" name="optionsRadios2" value="option3" disabled="disabled" checked="true" class="radoBox-cls" />Radio is off3
+            </label>
+
+            <label class="radoBox-label j_rado">
+                <span class="radoBox-icons"></span>
+                <input type="radio" name="optionsRadios2" value="option4" disabled="disabled" class="radoBox-cls" />Radio is off4
+            </label>
+
+        </li>
+        <li>CHECHBOX</li>
+        <li>
+            <label class="radoBox-label j_Box">
+                <span class="radoBox-icons"></span>
+                <input type="checkbox" name="optionscheckoxs" value="checkox1" checked class="radoBox-cls" id="abcd" />checkox Buttons1
+            </label>
+
+            <label class="radoBox-label j_Box">
+                <span class="radoBox-icons"></span>
+                <input type="checkbox" name="optionscheckoxs" value="checkox2"  class="radoBox-cls" />checkox Buttons2
+            </label>
+
+            <label class="radoBox-label j_Box">
+                <span class="radoBox-icons"></span>
+                <input type="checkbox" name="optionscheckoxs2" value="checkox3" disabled="disabled" checked class="radoBox-cls" />checkox Buttons3
+            </label>
+
+            <label class="radoBox-label j_Box">
+                <span class="radoBox-icons"></span>
+                <input type="checkbox" name="optionscheckoxs2" value="checkox4" disabled="disabled" class="radoBox-cls" />checkox Buttons4
+            </label>
+
+        </li>
+    </ul>
+</div>
+</body>
+</html>
