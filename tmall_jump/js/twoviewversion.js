@@ -6,7 +6,10 @@
 * @version 1.0
 * @update 2013-05-29
 * @example
-*     new MoreViewVersion([480, 640, '750px', 768, '850px', 950, '990px', 1190, 1280]);
+*   new MoreViewVersion({
+*		aryRange: [480, 640, '750px', 768, '850px', 950, '990px', 1190, 1280],	// 监控宽度值 数组范围	
+*		isRealTimeEvent: false	// 监控宽度值 数组范围	-- 默认 true 实时监控	
+*	});
 */
 
 KISSY.add('twoviewversion', function(S){
@@ -26,13 +29,11 @@ KISSY.add('twoviewversion', function(S){
 	function MoreViewVersion(config){	
 		var _self = this;
 		
-		_self.config = config;
-		
 		if( !(_self instanceof MoreViewVersion) ){
 			return new MoreViewVersion(config);
 		}
 		
-		MoreViewVersion.superclass.constructor.call(_self);	  	
+		MoreViewVersion.superclass.constructor.call(_self, config);	  	
 		
 		_self._init();	
 	}
@@ -58,8 +59,8 @@ KISSY.add('twoviewversion', function(S){
 		_arguIf: function(){
 			var _self = this;
 			
-			if(S.isArray(_self.config)){
-				RANGENO = _self.config;
+			if(S.isArray( _self.get('aryRange') )){ 
+				RANGENO = _self.get('aryRange');
 			}else{
 				console.log('未指定监控范围或者不是数组,系统将监控默认范围值！');
 			}
@@ -123,9 +124,11 @@ KISSY.add('twoviewversion', function(S){
 		_numbCompar: function(){
 			var _self = this,
 				compreValue = _self.oldViewWidth + RESNO,
-				view = Math.max( DOM.viewportWidth(), DOM.docWidth() ), // 修订 在手机端 判断bug 缩放导致
+				view = Math.max( DOM.viewportWidth(), DOM.docWidth() ), // 修订 在手机端 判断bug 缩放导致 DOM.viewportWidth()
 				aryEndIdx = RANGENO.length-1,
 				thatWidth;
+			
+			// console.log('docwidth为:'+DOM.docWidth()+';页面可视view宽高是:'+ DOM.viewportWidth() +'*'+DOM.viewportHeight () );
 				
 			// console.log('宽度标示值判断逻辑开始调用！');
 			// console.log('document 的总宽度: '+ DOM.docWidth() );				
@@ -157,7 +160,11 @@ KISSY.add('twoviewversion', function(S){
 			var _self = this,
 				oCompare = S.buffer(_self._numbCompar, LaterTime, _self);
 			
-			// 监控浏览器大小
+			// 若取消 实时 监控，则直接退出
+			if(_self.get('isRealTimeEvent') == false ){
+				return;
+			}
+			//挂载 窗口大小 监控事件
 			Event.on(win, 'resize', oCompare);
 		},	
 		

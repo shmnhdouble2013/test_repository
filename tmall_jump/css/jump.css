@@ -50,15 +50,11 @@ img{
      *width:100%; /*hack for ie*/
 }
 
- /* 容器样式 */
+ /* 游戏容器 -- 一行 外容器样式 */
 .jump-container{
 	margin: 0 auto;
 	width: 100%;
-	min-width: 480px;	
-	height: 100%;	
-	min-height: 850px;
-	/*background: black url(../images/background/container-bg.jpg);*/
-	position: relative;
+	background: black url(../images/background/container-bg.jpg);
 }
 
 
@@ -85,20 +81,58 @@ img{
 **/
 
 
+/*背景*/
 
-.jump-container .block {  /**/
-	margin: 0 auto;
+/*方案A：---- btn icon 通过css3 background-size 来实现反木桶效应  IE9+、Firefox 4+、Opera、Chrome 以及 Safari 5+ 支持 background-size 属性。*/
+/*.mod{
+    background-image:url(http://img04.taobaocdn.com/tps/i4/T1947tXmJhXXcCfooh-210-320.png);
+    background-size: 105px 155px;
+}*/
+
+
+/*方案B 放弃： ---- 大背景图片通过 CSS Image Level 4 ---- Webkit --- image-set */
+/*h3{
+	background-image:url(http://img02.taobaocdn.com/tps/i2/T10s3JXn4XXXXnbIAn-105-160.png);  普通屏幕 
+	background-image: -webkit-image-set(
+	    url(http://img02.taobaocdn.com/tps/i2/T10s3JXn4XXXXnbIAn-105-160.png) 1x,
+    url(http://img04.taobaocdn.com/tps/i4/T1947tXmJhXXcCfooh-210-320.png) 2x);  Retina 
+}*/
+
+
+/* 各个分辨率下 游戏界面：尺寸 && 背景 && btn icon size  || 301宽度 m.tmall.com 外层最宽 320 */
+.w320 .start-view, .w320 .game_view, .w320 .end-view{
 	width: 320px;
 	height: 480px;
+	background-image:url(../images/background/320_480_end.jpg);/* 普通屏幕 */
+}
+.w480 .start-view, .w480 .game_view, .w480 .end-view{
+	width: 480px;
+	height: 800px;
+	background-image:url(../images/background/480_800_end.jpg);/* 普通屏幕 */
+}
+.w640 .start-view, .w640 .game_view, .w640 .end-view{
+	width: 640px;
+	height: 960px;
+	background-image:url(../images/background/640_960_end.jpg);/* 普通屏幕 */
+}
+.w768 .start-view, .w768 .game_view, .w768 .end-view{
+	width: 768px;
+	height: 1024px;
+	background-image:url(../images/background/768_1024_end.jpg);/* 普通屏幕 */
+}
+
+/* 游戏3个板块 容器样式 */
+.start-view, .game_view, .end-view{
+	margin: 0 auto;	
 	position: relative;
 }
 
 
-/* 初始化界面 */
-.start-bg{
-	background: url(../images/system/background.jpg) 0 0 no-repeat;
-}
 
+
+
+
+/* 初始化界面 */
 .jump-container .icon {
 	background-image: url(../images/system/icon.png);
 	background-repeat: no-repeat;
@@ -121,8 +155,8 @@ img{
 
 /* 操作按钮 */
 .btn-play {	
-	left: 31%;
-	top:79%;
+	right: 27%;
+	bottom:12%;
 	width: 166px;
 	height: 107px;
 	background-position: -220px -1508px;
@@ -139,19 +173,9 @@ img{
 }
 
 
-
-
-.btn-Share{
-	left: 83%;
-	top: 2%;
-	width: 99px;
-	height: 99px;
-	z-index: 5;
-	background-position: -220px -1508px; /*-257px -970px;*/
-}
 .btn-sound {
 	left: 3%;
-	top: 2%;
+	top: 3%;
 	width: 52px;
 	height: 52px;
 	background-position: -17px -1023px;
@@ -159,26 +183,8 @@ img{
 .btn-sound.disabled {
 	background-position: -17px -971px;
 }
-.btn-cup {
-	left: 58%;
-	top: 62%;
-	width: 79px;
-	height: 79px;
-	background-position: -390px -1786px;
-}
-.btn-cup:hover {
-	background-position: -390px -1707px;
-}
-.btn-score {	
-	left: 5%;
-	top: 77%;
-	width: 152px;
-	height: 110px;
-	background-position: -225px -1246px;
-}
-.btn-score:hover {
-	background-position: -225px -1136px;
-}
+
+
 
 
 
@@ -300,34 +306,20 @@ img{
  * 游戏结束
  */
 
-/*背景*/
-
-/*方案A：---- iconbtn 通过css3 background-size 来实现*/
-/*.mod{
-    background-image:url(http://img04.taobaocdn.com/tps/i4/T1947tXmJhXXcCfooh-210-320.png);
-    background-size: 105px 155px;
-}*/
-
-
-/*方案B： ---- 大背景图片通过 CSS Image Level 4 ---- Webkit --- image-set */
-/*h3{
-	background-image:url(http://img02.taobaocdn.com/tps/i2/T10s3JXn4XXXXnbIAn-105-160.png);  普通屏幕 
-	background-image: -webkit-image-set(
-	    url(http://img02.taobaocdn.com/tps/i2/T10s3JXn4XXXXnbIAn-105-160.png) 1x,
-    url(http://img04.taobaocdn.com/tps/i4/T1947tXmJhXXcCfooh-210-320.png) 2x);  Retina 
-}*/
-
 
 .end-view{
-	background-image:url(http://img02.taobaocdn.com/tps/i2/T10s3JXn4XXXXnbIAn-101-160.png);/* 普通屏幕 */
-	background-image: -webkit-image-set(
-	    url(http://img02.taobaocdn.com/tps/i2/T10s3JXn4XXXXnbIAn-102-160.png) 1x,
-	    url(http://img04.taobaocdn.com/tps/i4/T1947tXmJhXXcCfooh-103-320.png) 2x
-    );/* Retina */
 }
 
-
-
+.btn-score {	
+	left: 5%;
+	top: 77%;
+	width: 152px;
+	height: 110px;
+	background-position: -225px -1246px;
+}
+.btn-score:hover {
+	background-position: -225px -1136px;
+}
 
 
 /*得分*/
@@ -352,36 +344,24 @@ img{
   	-webkit-animation-timing-function: ease-in-out;		/*开始结束都低速*/
   	-webkit-animation-direction: alternate; 		/*动画反向效果 normal */
 }
-#btnShare2 {
-	display: block;
-	position: absolute;
-	left: 0px;
-	top: 0px;
+#btnShare2 {	
+	left: 20%;
+	bottom: 17%;
 	width: 99px;
 	height: 99px;
 	background-position: -357px -970px;
 }
-#name, #score {
-	display: block;
-	position: absolute;
-	left: 145px;
-	top: 465px;
+#score {	
+	left: 18%;
+	bottom: 15%;
 	height: 33px;
 	line-height: 33px;
 	font-size: 22px;
 	color: #ffb34a;
 }
-#score {
-	top: 498px;
-}
-
-
-
 
 
 #btnScore2 {
-	display: block;
-	position: absolute;
 	left: 20px;
 	top: 600px;
 	width: 144px;
@@ -391,9 +371,7 @@ img{
 #btnScore2:hover {
 	background-position: -18px -1130px;
 }
-#btnRetry {
-	display: block;
-	position: absolute;
+#btnRetry {	
 	left: 168px;
 	top: 600px;
 	width: 158px;
@@ -403,9 +381,7 @@ img{
 #btnRetry:hover {
 	background-position: -15px -1403px;
 }
-#btnMore2 {
-	display: block;
-	position: absolute;
+#btnMore2 {	
 	left: 331px;
 	top: 600px;
 	width: 131px;
@@ -415,9 +391,7 @@ img{
 #btnMore2:hover {
 	background-position: -19px -1667px;
 }
-#btnCup2 {
-	display: block;
-	position: absolute;
+#btnCup2 {	
 	left: 380px;
 	top: 515px;
 	width: 79px;

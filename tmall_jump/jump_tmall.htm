@@ -45,12 +45,12 @@
         }
     </style>
 </head>
-<body class="w480">
+<body class="">
         
     <div class="jump-container">
     
         <!-- 预备界面  background -->
-        <div id="gameCover" class="block start-bg hide">
+        <div id="gameCover" class="block start-view">
 
             <!-- 一只会动的猫猫 -->
             <a href="javascript:void(0)" alt="猫猫" class="my_cat"><img src="./images/background/maoamo.png" alt="猫猫" /></a>
@@ -66,7 +66,7 @@
         </div>
       
         <!-- 游戏主体 -->
-        <div id="gameBody" class="block hide">
+        <div id="gameBody" class="block game_view hide">
             <div id="gameCanvas" class="block">
                 <!-- 天空背景层 -->
                 <canvas width="480" height="800" id="canvasSkyLayer"></canvas>
@@ -112,7 +112,7 @@
         </div>
       
         <!-- 游戏结束 -->
-        <div id="gameOver" class="block end-view ">
+        <div id="gameOver" class="block end-view hide">
 
             <!-- 分享 -->
             <a href="javascript:void(0)" id="btnShare2" class="icon">&nbsp;</a>
@@ -136,7 +136,12 @@
                 Event = S.Event;
 
             // 分辨率监控    
-            new MoreViewVersion(['480px', 640, 768]);
+            new MoreViewVersion({
+				aryRange: [320, '480px', 640, 768],	// 监控宽度值 数组范围	
+				isRealTimeEvent: true			// 监控宽度值 数组范围	-- 默认 true 实时监控	
+			});
+			
+			
 
             // S.one("#J_WeekShare").on("click", function () {
             //     //  main operation
