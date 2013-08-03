@@ -6,7 +6,7 @@
 * @version 1.0
 * @update 2013-05-29
 * @example
-*     new MoreViewVersion([720, 750, 990, 1080, 1190]);
+*     new MoreViewVersion([480, 640, '750px', 768, '850px', 950, '990px', 1190, 1280]);
 */
 
 KISSY.add('twoviewversion', function(S){
@@ -19,8 +19,9 @@ KISSY.add('twoviewversion', function(S){
 		doc = document,
 		body = doc.body;
 		
-	var RESNO = 0,						  				  // 增益 监控 范围值 
-		RANGENO = [550, 750, 850, 950, 990, 1190, 1280]; // 监控分辨率范围  
+	var RESNO = UA.mobile ? 0 : 10,						  // 容差(滚动条||设计差等) 监控 范围值 		
+		LaterTime = UA.mobile ? 0 : 300, 				  // 延迟执行时间0 -- 1毫秒延迟 for mobile
+		RANGENO = [480, 640, '750px', 768, '850px', 950, '990px', 1190, 1280]; // 监控分辨率范围 
 		
 	function MoreViewVersion(config){	
 		var _self = this;
@@ -60,7 +61,7 @@ KISSY.add('twoviewversion', function(S){
 			if(S.isArray(_self.config)){
 				RANGENO = _self.config;
 			}else{
-				S.log('未指定监控范围或者不是数组！');
+				console.log('未指定监控范围或者不是数组,系统将监控默认范围值！');
 			}
 			_self._setWindowsView();			
 		},			
@@ -98,20 +99,22 @@ KISSY.add('twoviewversion', function(S){
 			return ary;
 		},
 		
-		// 去重 + 数字  验证
+		// 去重 + 数字  验证(支持带px 范围值字符串)----- 数值过滤+处理
 		_validAry: function(ary){
 			var _self = this,
 				afterAry = [],
 				ary = S.unique(ary);
 				
 			S.each(ary, function(val){
+				var parseNum = parseInt(val, 10);
+
 				if(S.isNumber(val)){
 					afterAry.push(val);
-				}/* else{
-					if( S.isNumber( parseInt(val, 10) ) ){
-						afterAry.push(val);
+				}else{
+					if(S.isNumber(parseNum)){
+						afterAry.push(parseNum);
 					}
-				} */
+				}
 			});			
 			return afterAry;
 		},
@@ -120,23 +123,28 @@ KISSY.add('twoviewversion', function(S){
 		_numbCompar: function(){
 			var _self = this,
 				compreValue = _self.oldViewWidth + RESNO,
-				view = DOM.viewportWidth(),
+				view = Math.max( DOM.viewportWidth(), DOM.docWidth() ), // 修订 在手机端 判断bug 缩放导致
 				aryEndIdx = RANGENO.length-1,
 				thatWidth;
 				
-			// 边界值判断 如果当前值 >= / <= 数组 最大/最小值  且 上次class为 最大/最小 值标示，则退出 
+			// console.log('宽度标示值判断逻辑开始调用！');
+			// console.log('document 的总宽度: '+ DOM.docWidth() );				
+			// console.log('documentouterWidth: ' + DOM.outerWidth(doc) );
+			// console.log('当前可视区域(viewport)的宽度值: ' +DOM.viewportWidth() );	
+
+			// 边界值前置判断：如果当前值 >= || <= 数组 最大/最小值  且 上次class为 最大/最小 值标示，则退出 
 			if(view >= compreValue && compreValue === RANGENO[0] ){
 				return;
 			}else if(view <= compreValue && compreValue === RANGENO[aryEndIdx] ){
 				return;
 			}
 						
-			// 大于等于 数组 从大到小 某一值 或者 小于 数组任何值 
+			// 差值截取判断逻辑 
 			S.each(RANGENO, function(val, index){					
-				if( view < val && index === aryEndIdx ){ 
+				if( view < val && index === aryEndIdx ){ // 小于 数组任何值 (最小值下限)
 					thatWidth = val;
 					return false;
-				}else if( view >= val ){ 
+				}else if( view >= val ){  // 大于等于 数组 从大到小 某一值(向下兼容策略)
 					thatWidth = val;
 					return false;
 				}
@@ -147,7 +155,7 @@ KISSY.add('twoviewversion', function(S){
 		// 事件初始化
 		_eventnit: function(){
 			var _self = this,
-				oCompare = S.buffer(_self._numbCompar, 300, _self);
+				oCompare = S.buffer(_self._numbCompar, LaterTime, _self);
 			
 			// 监控浏览器大小
 			Event.on(win, 'resize', oCompare);
@@ -156,7 +164,7 @@ KISSY.add('twoviewversion', function(S){
 		// body写入 宽度标识  只要一个有值即可 --- 先移除 再写入 的顺序
 		_writeBodyWth: function(newView, oldView){
 			var _self = this,
-				newView = newView - RESNO;// 当前宽度-容差值 = class设定标示宽度 ---- 将宽度值还原到 容差之前的值
+				newView = newView - RESNO; // 当前宽度-容差值 = class设定标示宽度 ---- 将宽度值还原到 容差之前的值
 			
 			// 如果写入值 和 移除值一样 则不处理
 			if(newView === oldView){
@@ -172,9 +180,9 @@ KISSY.add('twoviewversion', function(S){
 				DOM.addClass(body, 'w' + newView);				
 				// 标示宽度值 -- 控制台提示
 				_self.oldViewWidth = newView;
-				alert('当前body宽度class标示：'+'w' + newView);
+				console.log('当前body宽度class标示：'+'w' + newView);
 			}else{
-				S.log('无效的宽度值！');
+				console.log('无效的宽度值！');
 			}			
 		}
 	});
