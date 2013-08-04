@@ -124,16 +124,11 @@ KISSY.add('twoviewversion', function(S){
 		_numbCompar: function(){
 			var _self = this,
 				compreValue = _self.oldViewWidth + RESNO,
-				view = Math.max( DOM.viewportWidth(), DOM.docWidth() ), // 修订 在手机端 判断bug 缩放导致 DOM.viewportWidth()
+				view = DOM.viewportWidth(), 
 				aryEndIdx = RANGENO.length-1,
 				thatWidth;
-			
-			// console.log('docwidth为:'+DOM.docWidth()+';页面可视view宽高是:'+ DOM.viewportWidth() +'*'+DOM.viewportHeight () );
 				
 			// console.log('宽度标示值判断逻辑开始调用！');
-			// console.log('document 的总宽度: '+ DOM.docWidth() );				
-			// console.log('documentouterWidth: ' + DOM.outerWidth(doc) );
-			// console.log('当前可视区域(viewport)的宽度值: ' +DOM.viewportWidth() );	
 
 			// 边界值前置判断：如果当前值 >= || <= 数组 最大/最小值  且 上次class为 最大/最小 值标示，则退出 
 			if(view >= compreValue && compreValue === RANGENO[0] ){
