@@ -1,62 +1,11 @@
-/**
- * 公共样式
- Download by http://www.codefans.net*/
-body, ul, ol, li, p, h1, h2, h3, h4, h5, h6, form, fieldset, table, th, td, img, div {
-	margin: 0px;
-	padding: 0px;
-	border: 0px;
-	-webkit-text-size-adjust: 100%;
-}
-ul, ol {
-	list-style-type: none;
-}
-input, textarea, select {
-	vertical-align: middle;
-	font-size: 14px;
-	padding: 2px;
-	font-family: 'Arial Unicode MS', Verdana, Arial, Helvetica, sans-serif;
-}
-a, a:hover {
-	text-decoration: none;
-}
-
-.clear {
-	clear: both;
-	display: block;
-	font-size: 0px;
-	line-height: 0px;
-	margin: 0px;
-	padding: 0px;
-	border: 0px;
-	zoom:1;
-}
 
 .hide{
 	display: none !important;
 }
 
-/* 最前面显示 */
-.show-beforeDex{
-	z-index: 5;
-	zoom:1;
+a, a:hover{
+	text-indent: -999999px;
 }
-
-/* moble */
-
-/* 图片等比缩放 */
-img{
-     height:auto;
-     max-width:100%;
-     *width:100%; /*hack for ie*/
-}
-
- /* 游戏容器 -- 一行 外容器样式 */
-.jump-container{
-	margin: 0 auto;
-	width: 100%;
-	background: black url(../images/background/container-bg.jpg);
-}
-
 
 /* ********************************************************************
 * iphone4-4s 横向放置大屏手机分辨率 
@@ -99,228 +48,166 @@ img{
 }*/
 
 
-/* 各个分辨率下 游戏界面：尺寸 && 背景 && btn icon size  || 301宽度 m.tmall.com 外层最宽 320 */
+/* 游戏容器 -- 一行 外容器样式 */
+.jump-container{
+	position: fixed; /*ie 6 7无法直接垂直平铺*/
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	max-height: 800px;	 /*canvs限定*/
+	margin: 0 auto;	
+	background: black url(http://img02.taobaocdn.com/tps/i2/T1vsR_FgBbXXb.TO6A-1920-800.png);
+}
+ 
+/* 各个分辨率下 游戏界面：尺寸 && 背景 && btn icon size  || 301宽度 m.tmall.com 外层最宽 320  755*420 pc天猫首页 banner A区 */
 .w320 .start-view, .w320 .game_view, .w320 .end-view{
 	width: 320px;
-	height: 480px;
-	background-image:url(../images/background/320_480_end.jpg);/* 普通屏幕 */
 }
 .w480 .start-view, .w480 .game_view, .w480 .end-view{
 	width: 480px;
-	height: 800px;
-	background-image:url(../images/background/480_800_end.jpg);/* 普通屏幕 */
 }
 .w640 .start-view, .w640 .game_view, .w640 .end-view{
 	width: 640px;
-	height: 960px;
-	background-image:url(../images/background/640_960_end.jpg);/* 普通屏幕 */
 }
 .w768 .start-view, .w768 .game_view, .w768 .end-view{
 	width: 768px;
-	height: 1024px;
-	background-image:url(../images/background/768_1024_end.jpg);/* 普通屏幕 */
 }
 
-/* 游戏3个板块 容器样式 */
+/* 游戏3个板块 容器样式 */ /* 开始结束 进行中 高度 === 更具viewHeight 来定；*/
 .start-view, .game_view, .end-view{
-	margin: 0 auto;	
+	margin: 0 auto;
+	height: 100%;
+	position: relative;	
+	overflow: hidden;
+/*	max-width: 400px;
+	*/
+}
+
+/* 开始背景图片 */
+.start-view{
+	border: 1px solid gray;
+	background: url(http://img02.taobaocdn.com/tps/i2/T1jq8_FjReXXauwSw9-768-650.png);/* 普通屏幕 */
+}
+
+/* 结束背景图片 */
+.end-view{
+	background: url(http://img04.taobaocdn.com/tps/i4/T1SFd9FgBeXXauwSw9-768-650.png);/* 普通屏幕 */
+}
+
+
+
+/****************** 初始化界面 ***********************/
+
+.start-container{
+	width: 502px;
+	height: 366px;
+	position: relative;
+	left: 20%;
+	top:13%;
+	background: url(http://img03.taobaocdn.com/tps/i3/T1ofB9FlhdXXaS6NDD-502-366.png) no-repeat;
+}
+.start-cat{
+	display: block;
+	position: relative;
+	left: 27%;
+	top:48%;
+	width: 222px;
+	height: 164px;
+	background:url(http://img01.taobaocdn.com/tps/i1/T1iXpCFnxhXXan5xED-222-164.png) no-repeat;
+}
+/* 开始按钮 */
+.btn-play {	
+	display: block;
+	width: 337px;
+	height: 94px;
+	position: relative;
+	left: 30%;
+	top:23%;
+	background: url(http://img04.taobaocdn.com/tps/i4/T101R_FXheXXXM5xrH-337-94.png) no-repeat;
+}
+
+/*开始页面 btn 按比例缩放 */
+.w320 .start-container, .w320 .start-cat, .w320 .btn-play{
+	background-size: 55%;
+}
+.w480 .start-container, .w480 .start-cat, .w480 .btn-play{
+	background-size: 75%;
+}
+.w640 .start-container, .w640 .start-cat, .w768 .start-container, .w768 .start-cat{
+	background-size: auto;
+}
+
+/*btn*/
+
+
+/*startbox*/
+.w320 .start-container{
+	left: 7%;
+}
+.w480 .start-container{
+	left: 9%;
+}
+.w640 .start-container{
+	left: 12%;
+}
+
+/*猫猫*/
+.w320 .start-cat{
+	left: 15%;
+	top: 27%;
+}
+.w480  .start-cat{
+	left: 22%;
+	top: 41%;
+}
+
+/*开始*/
+.w320 .btn-play{
+	left: 24%;
+}
+.w480 .btn-play, .w640 .btn-play{
+	left: 25%;
+}
+
+.w640 .btn-play, .w768 .btn-play{
+	top:30%;
+}
+
+/**
+ ****************** 游戏结束 *****************
+ */
+
+/*分享*/
+.share{
+	display: block;
+	position: relative;
+	width: 66px;
+	height: 36px;
+	left: 87%;
+	top: 3%;
+	background: url(http://img02.taobaocdn.com/tps/i2/T1xLV_FotaXXcYXAPl-66-36.png) no-repeat;
+}
+.score-container{
+	position: relative;
+	left:20%;
+	top: 11%;
+	width: 502px ;
+	height: 366px;
+	background: url(http://img03.taobaocdn.com/tps/i3/T1bPeXFfNXXXaS6NDD-502-366.png) no-repeat;	
+}
+
+.score-container span{
+	display: block;
 	position: relative;
 }
 
-
-
-
-
-
-/* 初始化界面 */
-.jump-container .icon {
-	background-image: url(../images/system/icon.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	position: absolute;
-	*zoom:1;
+.red-page{
+	left: 22%;
+	top: 72%;
+	width: 38px ;
+	height: 33px;
+	background: url(http://img03.taobaocdn.com/tps/i3/T1.kB8Fa4fXXbP7cff-38-33.png) no-repeat;
 }
-
-.my_cat{
-	display: inline-block;
-	position: absolute;
-	left: 54%;
-	top:16%;
-	width: 100px;
-	height: 150px;
-	/*background:url(../images/background/maoamo.png) 0 0 no-repeat;*/
-	z-index: 5;
-}
-
-
-/* 操作按钮 */
-.btn-play {	
-	right: 27%;
-	bottom:12%;
-	width: 166px;
-	height: 107px;
-	background-position: -220px -1508px;
-}
-.btn-play:hover {
-	background-position: -220px -1401px;
-}
-
-.jump_cat{
-	left: 40%;
-	top:70%;
-	width: 80px;
-	height:80px;
-}
-
-
-.btn-sound {
-	left: 3%;
-	top: 3%;
-	width: 52px;
-	height: 52px;
-	background-position: -17px -1023px;
-}
-.btn-sound.disabled {
-	background-position: -17px -971px;
-}
-
-
-
-
-
-/**
- * 游戏主体
- */
-#gameBody {
-	display: none;
-}
-#gameCanvas canvas {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-}
-#btnPause {
-	display: block;
-	position: absolute;
-	left: 410px;
-	top: 740px;
-	width: 57px;
-	height: 54px;
-	background-position: -154px -970px;
-}
-#number {
-	position: absolute;
-	left: 8px;
-	top: 8px;
-	width: 190px;
-	padding-left: 66px;
-	height: 128px;
-	background-position: -21px -749px;
-}
-#number span {
-	display: block;
-	width: 16px;
-	height: 24px;
-	background-image: url(../images/system/icon.png);
-	background-repeat: no-repeat;
-	float: left;
-	margin: 30px 3px 0px 0px;
-}
-#number .number0 {
-	background-position: -8px -880px;
-}
-#number .number1 {
-	background-position: -26px -880px;
-}
-#number .number2 {
-	background-position: -44px -880px;
-}
-#number .number3 {
-	background-position: -62px -880px;
-}
-#number .number4 {
-	background-position: -80px -880px;
-}
-#number .number5 {
-	background-position: -98px -880px;
-}
-#number .number6 {
-	background-position: -116px -880px;
-}
-#number .number7 {
-	background-position: -134px -880px;
-}
-#number .number8 {
-	background-position: -152px -880px;
-}
-#number .number9 {
-	background-position: -170px -880px;
-}
-#panelResume {
-	position: absolute;
-	left: 76px;
-	top: 160px;
-	width: 327px;
-	height: 402px;
-	background-position: -6px -277px;
-	display: none;
-}
-#btnResumeExit, #btnResume {
-	display: block;
-	position: absolute;
-	top: 246px;
-	width: 97px;
-	height: 97px;
-}
-#btnResumeExit {
-	left: 50px;
-}
-#btnResume {
-	left: 187px;
-}
-#beingReady {
-	position: absolute;
-	left: 46px;
-	top: 346px;
-	width: 388px;
-	height: 108px;
-	background-position: 0px 0px;
-	display: none;
-}
-#beingGo {
-	position: absolute;
-	left: 130px;
-	top: 355px;
-	width: 220px;
-	height: 90px;
-	background-position: -4px -137px;
-	display: none;
-}
-#canvasSkyLayer {
-	background: #0D1635;
-}
-
-
-
-/**
- * 游戏结束
- */
-
-
-.end-view{
-}
-
-.btn-score {	
-	left: 5%;
-	top: 77%;
-	width: 152px;
-	height: 110px;
-	background-position: -225px -1246px;
-}
-.btn-score:hover {
-	background-position: -225px -1136px;
-}
-
 
 /*得分*/
 @-webkit-keyframes pulse{
@@ -334,8 +221,16 @@ img{
 	 }
 }	
 .score_no{
+	color: red;
+	overflow: hidden;
+	left: 43%;
+	top:26%;
+	width: 48%;
+	height: 35px;
+	line-height: 35px;
+	text-align: left;
 	font-family: 'Verdana tahoma arial';
-	font-size: 18px;
+	font-size: 28px;
 	font-weight: bold;
 /*	background: rgba(255, 255, 255, 0.4);*/
  	-webkit-animation-name: pulse;
@@ -344,60 +239,96 @@ img{
   	-webkit-animation-timing-function: ease-in-out;		/*开始结束都低速*/
   	-webkit-animation-direction: alternate; 		/*动画反向效果 normal */
 }
-#btnShare2 {	
+/*重玩*/
+.replay-btn{	
+	display: block;
+	width: 339px;
+	height: 95px;
+	position: relative;
+	top: 25%;
+	left: 29%;
+	background: url(http://img01.taobaocdn.com/tps/i1/T16Jh8Fo0dXXapecvI-339-95.png) no-repeat; 
+}
+
+/* 结束页面 btn 按比例缩放 */
+.w480 .score-container,  .w480 .replay-btn{
+	background-size: 75%;
+}
+.w640 .score-container, .w640 .replay-btn{
+	background-size: 80%;
+}
+.w768 .score-container, .w768 .replay-btn{
+	background-size: auto;
+}
+
+
+/* 分享 */
+.w320 .share {
+	left: 73%;
+}
+.w480 .share {
+	left: 82%;
+}
+
+/* 红包 */
+.w640 .red-page {
+	left: 56%;
+	top: 47%;
+}
+.w320 .red-page{
+	left: 36%;
+	top: 30%;
+}
+.w480 .red-page{
+	left: 51%;
+	top: 45%;
+}
+
+.w768 .red-page {
+	left: 68%;
+	top: 64%;
+}
+
+/*中奖情况*/
+.w320 .score_no, .w480 .score_no{
+	left: 27%;
+	top: 12%;
+	width: 21%;
+}
+.w480 .score_no{
+	left: 36%;
+	top: 19%;
+	width:32%;
+}
+.w640 .score_no{
+	left: 38%;
+	top: 21%;
+	width:35%;
+}
+.w768 .score_no{
+	left: 47%;
+	top: 26%;
+	width:45%;
+}
+
+
+/*大背景图*/
+.w480 .score-container{ 
+	left: 13%;	
+}
+.w320 .score-container{
+	left: 8%;
+	top: 15%;
+	background-size: 55%;
+}
+
+/*重玩btn*/
+.w320 .replay-btn{	
+	width: 279px;
 	left: 20%;
-	bottom: 17%;
-	width: 99px;
-	height: 99px;
-	background-position: -357px -970px;
+	background-size: 70%;
 }
-#score {	
-	left: 18%;
-	bottom: 15%;
-	height: 33px;
-	line-height: 33px;
-	font-size: 22px;
-	color: #ffb34a;
-}
-
-
-#btnScore2 {
-	left: 20px;
-	top: 600px;
-	width: 144px;
-	height: 117px;
-	background-position: -18px -1247px;
-}
-#btnScore2:hover {
-	background-position: -18px -1130px;
-}
-#btnRetry {	
-	left: 168px;
-	top: 600px;
-	width: 158px;
-	height: 117px;
-	background-position: -15px -1519px;
-}
-#btnRetry:hover {
-	background-position: -15px -1403px;
-}
-#btnMore2 {	
-	left: 331px;
-	top: 600px;
-	width: 131px;
-	height: 117px;
-	background-position: -19px -1784px;
-}
-#btnMore2:hover {
-	background-position: -19px -1667px;
-}
-#btnCup2 {	
-	left: 380px;
-	top: 515px;
-	width: 79px;
-	height: 79px;
-	background-position: -390px -1786px;
-}
-#btnCup2:hover {
-	background-position: -390px -1707px;
+.w480 .replay-btn{	
+	width: 299px;
+	left: 25%;
 }
