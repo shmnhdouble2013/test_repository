@@ -126,3 +126,9 @@ return _self.get(calendarStr);
 	// <label>
 	// <input value="" type="text" data-valid="{'startEndtime':[{startInput:'#ac_startTime',endInput:'#ac_endTime'}]}" id="ac_startTime" name="ac_startTime" class="clendar_width ks-select-calendar" />&nbsp;至&nbsp;<input value="2013-07-18 15:45:00" type="text" id="ac_endTime" name="ac_endTime" class="clendar_width ks-select-calendar" /></label>          
  //</li>
+
+// arguments 转化数组这样写的意义何在？
+KISSY.use(_self.fullPlugins, function (S) {
+    var args = S.makeArray(arguments);
+    args.shift();
+});
