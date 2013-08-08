@@ -88,3 +88,41 @@ getDateParse: function(dateStr){
 	return Date.parse(dateStr.replace(/\-/g,'/'));
 },
 
+// kissy 原生 日历控件 带时间 公用 初始化方法
+renderCalendar: function(container, cfg){
+    var _self = this;
+
+    if(!container){
+    	return;
+    }
+
+    var calenderCfg = S.merge({
+			showTime:true,
+			popup:true,
+            triggerType:['click'],
+            closable:true // 选择后 关闭日历窗口
+		}, cfg),
+		calendarStr = container+'_obj',
+		calendarObj = _self.get(calendarStr) || null; 
+
+	if(!calendarObj){
+		_self.set(calendarStr, new Calendar(container, calenderCfg) );
+	}
+
+	_self.get(calendarStr).render();
+
+	// 点击后 填写日期数据
+_self.get(calendarStr).on('timeSelect', function(e){
+    DOM.val(container,  S_Date.format(e.date, 'yyyy-mm-dd HH:MM:ss') );
+    _self.validform && _self.validform.isValid(); // 这里方便验证
+});
+
+return _self.get(calendarStr);
+},
+
+// 附：dom结构
+ //<li class="ui-form-field">               
+	// <span class="ui-form-label"><em class="ui-form-req">*</em>活动时间：</span>
+	// <label>
+	// <input value="" type="text" data-valid="{'startEndtime':[{startInput:'#ac_startTime',endInput:'#ac_endTime'}]}" id="ac_startTime" name="ac_startTime" class="clendar_width ks-select-calendar" />&nbsp;至&nbsp;<input value="2013-07-18 15:45:00" type="text" id="ac_endTime" name="ac_endTime" class="clendar_width ks-select-calendar" /></label>          
+ //</li>
