@@ -42,3 +42,49 @@ _bindUI: function() {
 
 //调用基类的初始化事件
 this.constructor.superclass._initEvent.call(this);
+
+
+
+
+// 校验实例化
+_validaRender: function(){
+	var _self = this;
+
+	_self.form = S.get('#J_tablForm');
+
+	Validation.Rule.add('startEndtime', '', function(value, text, config){
+		var startValue = DOM.val(config.startInput),
+			endValue = DOM.val(config.endInput),
+			startTimes = _self.getDateParse(startValue),
+			endTimes = _self.getDateParse(endValue);
+							
+		if(!startValue || !endValue){
+			return '开始或结束时间不能为空！';
+		}	
+
+		if(startValue == endValue){
+			return '开始时间和结束时间不能相同！';
+		}
+
+		if(startTimes> endTimes){
+			return '开始时间不能大于结束时间！';
+		}
+	});	
+
+	// 校验实例 
+	_self.validform = new Validation('#J_tablForm', {
+        style:'under'
+    });	
+
+	// 校验开始结束时间
+	Event.on('#ac_startTime', 'change blur', function(){
+		_self.validform.get('ac_endTime') && _self.validform.get('ac_endTime').isValid();
+	});	
+},
+
+
+// 获取时间
+getDateParse: function(dateStr){
+	return Date.parse(dateStr.replace(/\-/g,'/'));
+},
+
