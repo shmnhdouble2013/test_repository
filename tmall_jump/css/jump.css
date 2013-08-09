@@ -1,6 +1,6 @@
 
 .hide{
-	display: none !important;
+	display: none;
 }
 
 a, a:hover{
@@ -86,7 +86,16 @@ a, a:hover{
 /* 开始背景图片 */
 .start-view{
 	border: 1px solid gray;
-	background: url(http://img02.taobaocdn.com/tps/i2/T1jq8_FjReXXauwSw9-768-650.png);/* 普通屏幕 */
+	background: url(http://img01.taobaocdn.com/tps/i1/T1QRl.FfdcXXcCInHR-478-258.png);/* 普通屏幕 */
+}
+
+.game_view{
+	background-color: red;
+}
+
+/*选择控制方式 背景*/
+.selctContainer{	
+	background: url(http://img01.taobaocdn.com/tps/i1/T1QRl.FfdcXXcCInHR-478-258.png);/* 普通屏幕 */
 }
 
 /* 结束背景图片 */
@@ -106,16 +115,28 @@ a, a:hover{
 	top:13%;
 	background: url(http://img03.taobaocdn.com/tps/i3/T1ofB9FlhdXXaS6NDD-502-366.png) no-repeat;
 }
+
+/*猫猫*/
 .start-cat{
 	display: block;
 	position: relative;
 	left: 27%;
-	top:48%;
+	top:49%;
 	width: 222px;
 	height: 164px;
 	background:url(http://img01.taobaocdn.com/tps/i1/T1iXpCFnxhXXan5xED-222-164.png) no-repeat;
 }
+
+
 /* 开始按钮 */
+@-webkit-keyframes jump_start{
+	from {
+	   opacity: 0.3;
+	}
+	to {
+	   opacity: 1.0;
+	 }
+}
 .btn-play {	
 	display: block;
 	width: 337px;
@@ -124,7 +145,20 @@ a, a:hover{
 	left: 30%;
 	top:23%;
 	background: url(http://img04.taobaocdn.com/tps/i4/T101R_FXheXXXM5xrH-337-94.png) no-repeat;
+
+	animation-name: jump_start;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+  	animation-direction: alternate;
+
+	-webkit-animation-name: jump_start;	
+  	-webkit-animation-duration: 1s;  
+ 	-webkit-animation-iteration-count: infinite; 	/*循环次数*/ 	
+  	-webkit-animation-timing-function: linear;		/*开始结束都低速 ease-in-out ease */
+  	-webkit-animation-direction: alternate; 		/*动画反向效果 normal */
 }
+
 
 /*开始页面 btn 按比例缩放 */
 .w320 .start-container, .w320 .start-cat, .w320 .btn-play{
@@ -158,7 +192,7 @@ a, a:hover{
 }
 .w480  .start-cat{
 	left: 22%;
-	top: 41%;
+	top: 37%;
 }
 
 /*开始*/
@@ -172,6 +206,105 @@ a, a:hover{
 .w640 .btn-play, .w768 .btn-play{
 	top:30%;
 }
+
+
+
+/**
+ ****************** 选择方式 *****************
+ */
+  .ks-overlay {
+        position:absolute;
+        left:-9999px;
+        top:-9999px;
+    }
+    .ks-overlay-hidden {
+        visibility: hidden;
+    }
+
+    .ks-overlay-mask-hidden {
+        display: none;
+    }
+
+    .ks-overlay-shown {
+        visibility: visible;
+    }
+
+    .ks-overlay-mask-shown{
+        display: block;
+    }
+
+  .ks-ext-mask {
+	background-color: gray;
+	opacity: 0.3;
+	filter: alpha(opacity = 15);
+	z-index: 1 !important;
+  }
+  .ks-dialog{
+  	z-index: 5 !important;
+  }
+
+  /*隐藏关闭按钮*/
+.ks-ext-close-x{
+	display: none;
+}
+
+.selctContainer {
+	width: 400px;
+	height: 250px;
+	margin: 0 auto;
+	text-align: center;
+	vertical-align: middle;
+	padding-top: 20px;
+	overflow: hidden;
+}
+.selctContainer a, .selctContainer span{
+	display: inline-block;
+	background-repeat: no-repeat;
+}
+.selctContainer a{
+	width: 83px;
+	height: 34px;
+}
+
+
+.selctContainer span{
+	margin: 5px;
+	width: 175px;
+	height: 128px;
+}
+
+.btn-contaienr{	
+	height: 50px;
+	line-height: 50px;
+}
+
+
+.ipone-btn{
+	margin-right:110px;
+	background: url(http://img04.taobaocdn.com/tps/i4/T1ZVGXFg4bXXcUfhfp-83-34.png);
+	
+	transform:rotateZ(0deg);
+	transition: transform 0.4s ease-in-out;
+
+	-webkit-transform: rotateZ(0deg);
+	-webkit-transition: -webkit-transform 0.4s ease-in-out;
+}
+.ipone-btn:hover {
+  	-webkit-transform: rotateZ(360deg);
+  	transform: rotateZ(360deg);
+}
+
+.pc-btn{
+	background: url(http://img02.taobaocdn.com/tps/i2/T1WMGXFjNbXXcUfhfp-83-34.png);
+}
+.ipone-log{
+	background: url(http://img04.taobaocdn.com/tps/i4/T1N1uXFm0bXXbyGpZd-175-128.png);
+}
+.pc-log{
+	background: url(http://img01.taobaocdn.com/tps/i1/T1CYR8FjpgXXbyGpZd-175-128.png);
+}
+
+
 
 /**
  ****************** 游戏结束 *****************
@@ -207,7 +340,18 @@ a, a:hover{
 	width: 38px ;
 	height: 33px;
 	background: url(http://img03.taobaocdn.com/tps/i3/T1.kB8Fa4fXXbP7cff-38-33.png) no-repeat;
+
+	transform:rotateZ(-5deg);
+	transition: transform 1s ease-in-out;
+
+	-webkit-transform: rotateZ(-5deg);
+	-webkit-transition: -webkit-transform 1s ease-in-out;
 }
+.red-page:hover {
+  	-webkit-transform: rotateZ(360deg);
+  	transform: rotateZ(360deg);
+}
+
 
 /*得分*/
 @-webkit-keyframes pulse{
@@ -232,13 +376,23 @@ a, a:hover{
 	font-family: 'Verdana tahoma arial';
 	font-size: 28px;
 	font-weight: bold;
-/*	background: rgba(255, 255, 255, 0.4);*/
+	
+	animation-name: pulse;
+	animation-duration: 1s;
+	animation-iteration-count: 6;
+	animation-timing-function: ease-in-out;
+  	animation-direction: alternate;
+
  	-webkit-animation-name: pulse;
   	-webkit-animation-duration: 1s;
- 	-webkit-animation-iteration-count: 6; 		/*循环次数*/
+ 	-webkit-animation-iteration-count: 6; 				/*循环次数*/
   	-webkit-animation-timing-function: ease-in-out;		/*开始结束都低速*/
-  	-webkit-animation-direction: alternate; 		/*动画反向效果 normal */
+  	-webkit-animation-direction: alternate; 			/*动画反向效果 normal */  	
 }
+.score_no:hover{
+	text-shadow: 5px 5px 5px #FF0000;
+}
+
 /*重玩*/
 .replay-btn{	
 	display: block;
@@ -248,7 +402,20 @@ a, a:hover{
 	top: 25%;
 	left: 29%;
 	background: url(http://img01.taobaocdn.com/tps/i1/T16Jh8Fo0dXXapecvI-339-95.png) no-repeat; 
+
+	transform:rotateZ(-5deg);
+	transition: transform 1s ease-in-out;
+
+	-webkit-transform: rotateZ(-5deg);
+	-webkit-transition: -webkit-transform 1s ease-in-out;
 }
+.replay-btn:hover {
+  	-webkit-transform: rotateZ(0deg);
+  	transform: rotateZ(0deg);
+}
+
+
+
 
 /* 结束页面 btn 按比例缩放 */
 .w480 .score-container,  .w480 .replay-btn{
@@ -325,10 +492,12 @@ a, a:hover{
 /*重玩btn*/
 .w320 .replay-btn{	
 	width: 279px;
+	top:18%;
 	left: 20%;
 	background-size: 70%;
 }
 .w480 .replay-btn{	
 	width: 299px;
+	top:19%;
 	left: 25%;
 }
