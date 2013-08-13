@@ -4,7 +4,7 @@
  * @Date:        2013.7.3
  */
 
-KISSY.add('tbsui', function (S, XTemplate) {
+KISSY.add('tbsui', function (S, XTemplate) { // , TbsUiValid Validation,
     'use strict';
 
     var D = S.DOM,
@@ -20,7 +20,7 @@ KISSY.add('tbsui', function (S, XTemplate) {
     function Tbsui(cfg) {
         var self = this;		
 
-        self.selector = cfg.selector;
+        self.selector = cfg? cfg.selector : null;
         self.selectPrifix = 'slct-block';
 		
         self.init();
@@ -29,14 +29,13 @@ KISSY.add('tbsui', function (S, XTemplate) {
     S.augment(Tbsui, S.EventTarget, {
         init:function(){
             var self = this;
-            self.detecte();
-			
-			// E.on('input', 'click', function(el){
-				// el.stopPropagation();  
-			// });
+            self.detecte();            
         },
         detecte:function(){
             var self = this;
+            if(!self.selector){
+                return;
+            }
 
             S.each(self.selector,function(i){
 
@@ -135,27 +134,48 @@ KISSY.add('tbsui', function (S, XTemplate) {
        
 	   
         //初始化 checkbox radio --  by huangj
-        _renderRidoCheckbox: function(inputType){
+        /*
+        * @description 公用方法--初始化 input
+        * @param {string|HTMLCollection|Array<HTMLElement>, document}
+        * @return {null}
+        */
+        _renderRidoCheckbox: function(inputType, thatDoc){
             var self = this,
+                thatDoc = thatDoc || document, 
 				evtStr = inputType == 'radio' ? '.j_rado' : (inputType == 'checkbox' ?  '.j_Box' : '');
+                
+            // 设定radio：dom 容器结样式 已属性-invalid
+             if( !self.hasGlobalAttr ){                
+                self.labelSpanCls = '.radoBox-icons';
+                self.protyInptCls = '.radoBox-cls';
+                self.radioDisabTypeCls = '.cursor-disabled';
 
-            // 设定radio：dom 容器结样式
-            self.labelSpanCls = '.radoBox-icons';
-            self.protyInptCls = '.radoBox-cls';
-            self.radioDisabTypeCls = '.cursor-disabled';
+                self.hasGlobalAttr = true;
+            }     
 
-            self._setGlobalRdChkls(inputType);
-
-            // 设定radio/checkbox数组
-            self.radios = S.query('input[type="'+inputType+'"]');
+            // 获取 radio/checkbox数组
+            self.radios = S.query('input[type="'+inputType+'"]', thatDoc);
+            if(self.radios.length < 1){
+                return;
+            }else{
+                self.radios = S.filter(self.radios, function(els){
+                   return D.hasClass(els, self.protyInptCls); 
+                }, self);
+            }
 
             // 根据原始 radio/checkbox数据 回显自定义radio样式
             self.radioBox_UiRender(self.radios);
 			
-			// radio/checkbox label事件监控
-			E.delegate(document, 'click', evtStr, function(el){				
-				self._radioBoxClick(el);
-			});				
+			// radio/checkbox label事件监控 -- 木有-invalid 已绑定-invalid
+            if( evtStr && !self[evtStr] ){
+               // var radioBoxClickObj = S.buffer(self._radioBoxClick, 150, self);
+
+                E.delegate(document, 'click', evtStr, function(el){
+                    self._radioBoxClick(el);
+                }); 
+
+                self[evtStr] = evtStr;
+            }               					
         },
 		
         // 设定 全局 radio checkbox样式
@@ -201,10 +221,18 @@ KISSY.add('tbsui', function (S, XTemplate) {
         _radioBoxClick: function(el){
 			el.halt(true);  
 			
-			// console.log('事件处理函数被调用');			
-            var self = this,
-                protoRadio = D.children(el.currentTarget, self.protyInptCls)[0],
-                isdisable = protoRadio.disabled || D.attr(protoRadio, 'disabled'),
+			// console.log('处理函数-radioBoxClick已调用');
+						
+			var self = this,
+                protoRadio = D.children(el.currentTarget, self.protyInptCls)[0];
+			
+			// 不存在 既定的 input 元素
+			if(!protoRadio){
+				throw new Error('未找到class为: "'+self.protyInptCls+'" 的input元素！');
+				return;
+			}	
+			
+			var isdisable = protoRadio.disabled || D.attr(protoRadio, 'disabled'),
                 isChecked = protoRadio.checked || D.attr(protoRadio, 'checked'),
                 radioOrBoxStr = protoRadio.type || D.attr(protoRadio, 'type');
 
@@ -307,6 +335,94 @@ KISSY.add('tbsui', function (S, XTemplate) {
                 }
             }
         }
+
     });
     return Tbsui;
 }, {requires: ['xtemplate','dom','event','sizzle']});
+
+
+
+/**
+* @Description  tbs-ui 验证框架提示类
+* @Author       jia.huangj  旺旺：水木年华double
+* @param  		{form || config}
+* @return 		{validation}
+* @Date 		2013.8.13 
+*/
+KISSY.add("Validation", function(S, Validation){
+	
+	/**
+	* 自定义提示类
+	* 新增校验规则
+	*/	
+	function tbsUiValid() {
+		var S = KISSY,
+			DOM = S.DOM,
+			Event = S.Event;
+			
+		return {
+
+			//重写init
+			init:function () {
+				var self = this, 
+					tg = self.target,
+					panel = DOM.create(self.template), 
+					estate = DOM.get('.estate', panel),
+					label = DOM.get('.label', panel);
+
+				S.ready(function(){
+					DOM.append( panel, DOM.parent(tg) );
+				});
+				
+				S.mix(self,{
+					panel: S.one(panel),
+					estate: S.one(estate),
+					label: S.one(label)
+				});
+
+				//绑定对象		
+				self._bindEvent(self.el, self.event, function(ev){
+					var result = self.fire("valid", {event:ev.type});
+					
+					if(S.isArray(result) && result.length==2){
+						self.showMessage(result[1], result[0], ev.type, ev.target);
+					}
+				});
+			},
+			
+			//处理校验结果
+			showMessage:function (result, msg, evttype, target) {
+				var self = this, 
+					panel = self.panel, 
+					estate = self.estate, 
+					label = self.label;		
+
+				if (result == true || result === 1 || result === 3) {
+					DOM.removeClass(estate, 'error');
+					DOM.addClass(estate, 'ok');					
+				}else{
+					DOM.removeClass(estate, 'ok');
+					DOM.addClass(estate, 'error');						
+					label.html(msg);					
+				}
+			},
+
+			style: {			
+				tbsUiValid_under: {
+					template: '<div class="tbsUiValid-under"><p class="estate"><span class="label"></span></p></div>',
+					event: 'focus blur keyup'
+				},			
+				tbsUiValid_text: {
+					template: '<label class="tbsUiValid-text"><span class="estate"><em class="label"></em></span></label>',
+					event: 'focus blur keyup'
+				}
+			}
+		}
+	}
+	
+	//增加提示类 -- tbsUiValid
+	Validation.Warn.extend("tbsUiValid", tbsUiValid);
+	
+	return Validation;
+
+}, { requires: ["gallery/validation/1.1/"] });

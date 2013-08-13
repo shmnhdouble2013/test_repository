@@ -17,7 +17,7 @@
         doc = document,
         Event = S.Event;
 
-    var LaterTime = uao.mobile ? 200 :10000;                  // 延迟执行时间0 -- 1毫秒延迟 for mobile
+    var LaterTime = uao.mobile ? 300 :300;                  // 延迟执行时间0 -- 1毫秒延迟 for mobile
 
     function StrantEnd(config){
         var _self = this;
@@ -40,7 +40,7 @@
             
             _self._domRender();
             _self._eventRender();
-           _self._startCatJump();
+            _self._startCatJump();
         },
         
         _domRender:function(){
@@ -48,9 +48,8 @@
 
             // 分辨率监控    
             new MoreViewVersion({
-                aryRange: _self.get('aryRange'), // 监控宽度值 数组范围   
-                isRealTimeEvent: _self.get('isRealTimeEvent'),    // 监控宽度值 数组范围   -- 默认 true 实时监控 
-                isResizeBack:null
+                aryRange: _self.get('aryRange'),                  // 监控宽度值 数组范围   
+                isRealTimeEvent: _self.get('isRealTimeEvent')    // 监控宽度值 数组范围   -- 默认 true 实时监控 
             });
         },
 
@@ -58,6 +57,7 @@
         _eventRender: function(){
             var _self = this;
 
+            // 手机红包重力感应
             win.addEventListener('deviceorientation', function(event) {          
                 _self._redPageFn(event);
             }, false);
@@ -81,16 +81,21 @@
                 // });
             });
 
-            // 点击开始
-            _self.selectCtrolfn();
-
-            Event.on('#J_btnPlay', 'click', function() {
-                 _self.dialog.show();
+            // resize事件
+            var oCompare = S.buffer(_self._startCatJump, LaterTime, _self);
+            Event.on(win, 'resize', function(){
+                if(_self.catup){
+                    clearInterval(_self.catup);                   
+                    _self.catup = null;
+                }
             });
 
-            // resize事件
-            Event.on(win, 'resize', function(){
-                _self._startCatJump();
+            Event.on(win, 'resize', oCompare);
+
+             // 初始化dialog对话框 -- 点击开始
+            _self.selectCtrolfn();
+            Event.on('#J_btnPlay', 'click', function() {
+                 _self.dialog.show();
             });
 
             // pc端控制
@@ -118,10 +123,15 @@
 
             // 进行中跳转结束
             Event.on('#J_btnPlay2', 'click', function(){
-                 // 显示隐藏
                 DOM.hide('#J_gameBody');
                 DOM.show('#J_gameOver');
-            })
+            });
+
+            // 重玩
+            Event.on('#J_replay', 'click', function(){
+                DOM.hide('#J_gameOver');
+                DOM.show('#J_gameCover');
+            });
            
         },
 
@@ -147,15 +157,15 @@
         // 天猫跳跳
         _startCatJump: function(){
             var _self = this;
-
-            if(_self.catLog){
-                _self.catLog.style.cssText = ""; 
-                DOM.removeAttr(_self.catLog, 'style');
-            }
             
             if(_self.catup){
                 clearInterval(_self.catup);                   
                 _self.catup = null;
+            }
+
+            if(_self.catLog){
+                _self.catLog.style.cssText = ""; 
+                DOM.removeAttr(_self.catLog, 'style');
             }
 
             var catLog = S.get('.start-cat'),

@@ -1,25 +1,52 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML> 
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="gbk" />
     <title>TBS-UI2</title>
-    <script src="http://a.tbcdn.cn/s/kissy/1.3.0/seed-min.js"></script>
-
+    <script src="http://a.tbcdn.cn/s/kissy/1.3.0/seed.js"></script>
+    <script src="http://g.tbcdn.cn/mui/seed/1.0.2/seed.js"></script>
     <link rel="stylesheet" href="../src/css/tbsui.css" />
     <link rel="stylesheet" href="demo.css" />
+    <link rel="stylesheet" href="http://g.tbcdn.cn/tm/tbs-ui/1.0.3/css/mui.css" />
     
     <script src="../src/js/tbsui.js"></script>
     <script src="../src/js/init.js"></script>
 </head>
+
 <body class="tbs-ui">
+  <form name="cs" action="#" method="post" id="J_form">
+      <ul>
+        <li class="ui-form-field">    
+          <span class="ui-form-label"><em class="ui-form-req">*</em>tbsUiValid£∫</span>
+          <p>Tbsui -- —È÷§øÚº‹ Ã· æ—˘ Ω -- ª∆º◊  @ÀÆƒæƒÍª™double</p>
+        </li>    
+        <li class="ui-form-field">               
+            <span class="ui-form-label"><em class="ui-form-req">*</em>ªÓ∂Ø±ÍÃ‚£∫</span>
+            <label>
+                <input value="" type="text" data-valid="{maxLength:[30, false, &#39; ◊Ó¥Û≥§∂»Œ™{0}∏ˆ◊÷∑˚&#39;]}" class="large" name="acname" />
+                <span class="ui-form-tip">Ω®“È±ÍÃ‚≤ª≥¨π˝30◊÷</span>   
+            </label>                  
+        </li>
+        <li class="ui-form-field">    
+          <button type="button" id="sub_form">Ã·Ωª</button>
+        </li>
+      </ul>
+  </form>
+
 <div style="margin: 20px; padding: 20px;">
     <ul>
         <li>INPUT</li>
         <li><input value="value" type="text" /></li>
-        <li><input value="value" type="text" disabled="disabled" /></li>
+         <li><input value="value" type="text" disabled="disabled" /></li>
+         <li><input class="large" value="input.large" type="text" /></li>
+         <li><input class="short" value="input.short" type="text" /></li>
+        <li>π©»’∆⁄ π”√µƒinput,”“≤‡ª·”–logo,»‘‘⁄ÕÍ…∆÷–  @º”¿Ô</li>
+         <li><input id="calA" class="calendarNeeded ks-select-calendar" value="2013ƒÍ07‘¬02»’" type="text" /></li>
+         <li><input id="calB" class="calendarTimeNeeded ks-select-calendar" value="2013ƒÍ07‘¬02»’ 16:20" type="text" /></li>
     </ul>
     <ul>
         <li>SELECT</li>
+        <li>E.on('slchange',function(){})</li>
         <li>
             <select class="slct" name="slct">
                 <option value="0">1111</option>
@@ -41,19 +68,19 @@
             <div class="tbsui-step-5">
                 <ol class="tbsui-step-bar">
                     <li class="tbsui-step-start-done">
-                        1. Ê≠•È™§‰∏Ä
+                        1. ≤Ω÷Ë“ª
                     </li>
                     <li class="tbsui-step-done">
-                        <i></i>2. Ê≠•È™§‰∫å
+                        <i></i>2. ≤Ω÷Ë∂˛
                     </li>
                     <li class="tbsui-step-cur">
-                        <i></i>3. Ê≠•È™§‰∏â
+                        <i></i>3. ≤Ω÷Ë»˝
                     </li>
                     <li>
-                        <i></i>3. Ê≠•È™§Âõõ
+                        <i></i>3. ≤Ω÷ËÀƒ
                     </li>
                     <li class="tbsui-step-end">
-                        <i></i>4. Ê≠•È™§‰∫î
+                        <i></i>4. ≤Ω÷ËŒÂ
                     </li>
                 </ol>
             </div>
@@ -73,8 +100,8 @@
                     </div>
                     <div class="tbsui-page-skip" >
                         <form id="" name="" method="get" action="">
-                            ÂÖ±100È°µÔºåÂéªÁ¨¨<input type="text" name="jumpto" class="tbsui-page-skipTo" size="3" value="265">È°µ
-                            <a class="btn btn-submit">Á°ÆÂÆö</a>
+                            π≤100“≥£¨»•µ⁄<input type="text" name="jumpto" class="tbsui-page-skipTo" size="3" value="265">“≥
+                            <a class="btn btn-submit">»∑∂®</a>
                         </form>
                     </div>
                 </div>
@@ -84,8 +111,8 @@
         <li>
             <p class="tbsui-page-s">
                 <b class="tbsui-page-s-len">1/59</b>
-                <a class="tbsui-page-s-prev" href="javascript:void(0)" title="‰∏ä‰∏ÄÈ°µ">&lt;</a>
-                <a class="tbsui-page-s-next" href="javascript:void(0)" title="‰∏ã‰∏ÄÈ°µ">&gt;</a>
+                <a class="tbsui-page-s-prev" href="javascript:void(0)" title="…œ“ª“≥">&lt;</a>
+                <a class="tbsui-page-s-next" href="javascript:void(0)" title="œ¬“ª“≥">&gt;</a>
             </p>
         </li>
     </ul>
@@ -97,22 +124,22 @@
             <table class="tbsui-simtable" style="width: 100%;">
                 <thead>
                 <tr>
-                    <th>‰∫ßÂìÅÂêçÁß∞</th>
+                    <th>≤˙∆∑√˚≥∆</th>
                     <th>
-                        ‰∫ßÂìÅÁ±ªÂûã
+                        ≤˙∆∑¿‡–Õ
                     </th>
                     <th>
-                        ÂèëÂ∏ÉÊó•Êúü
+                        ∑¢≤º»’∆⁄
                     </th>
-                    <th>ÂÆ°Ê†∏Áä∂ÊÄÅ</th>
-                    <th> Êìç‰Ωú</th>
+                    <th>…Û∫À◊¥Ã¨</th>
+                    <th> ≤Ÿ◊˜</th>
                 </tr>
                 </thead>
 
                 <tbody>
                 <tr>
                     <td>
-                        Ë°®Ê†ºÂçïÂÖÉ1
+                        ±Ì∏Òµ•‘™1
                     </td>
                     <td>xxxx</td>
                     <td>2012-07-03</td>
@@ -125,7 +152,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Ë°®Ê†ºÂçïÂÖÉ2
+                        ±Ì∏Òµ•‘™2
                     </td>
                     <td>xxxx</td>
                     <td>2012-07-03</td>
@@ -142,10 +169,10 @@
     </ul>
     <ul>
         <li>RADIO</li>
-        <li>
+        <li id="J_radio">
             <label class="radoBox-label j_rado">
                 <span class="radoBox-icons"></span>
-                <input type="radio" name="optionsRadios" value="option1"  class="radoBox-cls" />Radio is off1
+                <input type="radio" name="optionsRadios" value="option1"  class="radoBox-cls jacky" />Radio is off1
             </label>
 
             <label class="radoBox-label j_rado">
@@ -164,8 +191,9 @@
             </label>
 
         </li>
+        <li><input type="radio" name="optionsRaaadios" value="option1" />≤ªª·≥ı ºªØui“‘Õ‚µƒradio</li>
         <li>CHECHBOX</li>
-        <li>
+        <li id="J_checkbox">
             <label class="radoBox-label j_Box">
                 <span class="radoBox-icons"></span>
                 <input type="checkbox" name="optionscheckoxs" value="checkox1" checked class="radoBox-cls" id="abcd" />checkox Buttons1
@@ -173,7 +201,7 @@
 
             <label class="radoBox-label j_Box">
                 <span class="radoBox-icons"></span>
-                <input type="checkbox" name="optionscheckoxs" value="checkox2"  class="radoBox-cls" />checkox Buttons2
+                <input type="checkbox" name="optionscheckoxs" value="checkox2"  class="radoBox-cls jack" />checkox Buttons2
             </label>
 
             <label class="radoBox-label j_Box">
@@ -185,6 +213,28 @@
                 <span class="radoBox-icons"></span>
                 <input type="checkbox" name="optionscheckoxs2" value="checkox4" disabled="disabled" class="radoBox-cls" />checkox Buttons4
             </label>
+
+        </li>
+        <li> <input type="checkbox" name="optionscheckoxfas" value="checkox1" />≤ªª·≥ı ºªØui“‘Õ‚µƒcheckox</li>
+
+        <li>MUI-select (short)</li>
+        <li>
+            <div class="mui-select mui-select-short" id="mui-select-sample"></div>
+            <input id="mui-select-result" type="hidden" name="select-ageL">
+
+        </li>
+
+        <li>MUI-select (normal)</li>
+        <li>
+            <div class="mui-select" id="mui-select-sample-2"></div>
+            <input id="mui-select-result-2" type="hidden" name="select-ageL">
+
+        </li>
+
+        <li>MUI-select (checkable)</li>
+        <li>
+            <div class="mui-select" id="mui-select-sample-3"></div>
+            <input id="mui-select-result-3" type="hidden" name="select-ageL">
 
         </li>
     </ul>
