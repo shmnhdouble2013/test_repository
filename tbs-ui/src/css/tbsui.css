@@ -999,21 +999,24 @@ li.mui-select-item-hover, .mui-select-multiple li.mui-select-item-hover {
 
   /* mui li 布局高度 by huangj --- 与下方 validation联合使用 */
   .ui-form-field{
-	margin-bottom: 0;
-	height:50px;
-  }      
+	margin-bottom: 0;	
+	height:auto !important;
+	height:50px;	  
+	min-height:50px;
+  }    
+  
   /* tbsui validation 提示样式 by huangj */
   .tbsUiValid-under .ok, .tbsUiValid-text .ok{
 	visibility: hidden;
   }      
-  .tbsUiValid-under .error{
-	padding-left:20px;
-	color:#F0983F;
+  .tbsUiValid-under .error i{
+	display:inline-block;
+	width:20px;
+	height:18px;
 	background: url(http://a.tbcdn.cn/apps/tmall/mui/msg/img/msg.png) -65px -153px no-repeat;
-	overflow:hidden;
+	vertical-align:middle;
   }
   .tbsUiValid-text .error{	
-    padding-left: 5px;
 	color:#F0983F;
 	overflow:hidden;
   }
