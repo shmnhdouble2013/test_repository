@@ -170,60 +170,80 @@ KISSY.add('tm/tbs-back/blue_print/BpContMgt', function(S, Tbsui, O, LightBox, TL
 		// ********** 全部导出前置初始化 ******** 
         // 菊花 <span class="download-load" id="J_loading">系统正在导出中，请稍后！<img src="http://img02.taobaocdn.com/tps/i2/T115PmXipeXXaY1rfd-32-32.gif"></span>
         
-		_allSelectDownBefore: function(){
-			var _self = this,	
-				isLoading = DOM.attr(_self.allDownloadTagA, 'data-loading');
+	// 公用的js轮询 异步导出文件 方法
 
-			if(!isLoading){
+	// ********** 全部导出前置初始化 ******** 
+	_allSelectDownBefore: function(){
+		var _self = this,	
+			isLoading = DOM.attr(_self.allDownloadTagA, 'data-loading');
+	
+		if(!isLoading){
+	
+			// 禁用 所有 导出 btn
+			_self._disabledDownloadBtn();
+		
+			// 全部导出
+			_self._dlayTimeDo('interValFineDowload', function(){ 
+			    	_self._allSelect();
+			}, true, 1500);	
+		}
+	},
 
-				// 禁用 所有 导出 btn
-				_self._disabledDownloadBtn();
-
-				// 全部导出
-				_self._dlayTimeDo('interValFineDowload', function(){ 
-	            	_self._allSelect();
-	       		}, true, 1500);	
+	// 全部导出 
+	_allSelect: function(){
+		var _self = this;
+	
+		// 异步请求 导出
+		var ajaxConfig = {
+	        'url': _self.get('selectAllDown_url') || '',
+	        'data': {
+			'curTrId': DOM.val('#id_tr'),
+			'operationType':'allDownload',
+			'_tb_token_':_self._tb_token_
 			}
-		},
-		// 全部导出 
-		_allSelect: function(){
-			var _self = this;
-
-			// 异步请求 导出
-			var ajaxConfig = {
-	                'url': _self.get('selectAllDown_url') || '',
-	                'data': {
-						'curTrId': DOM.val('#allDownloadId'),
-						'operationType':'allDownload',
-						'_tb_token_':_self._tb_token_
-					}
-            };   		
-           _self._ajaxAllConfig(ajaxConfig, _self._pollOkCall, _self._erorReqst, _self._pollOkCall);            
-		},		
-		// 轮询正常情况 callback -- 取消轮询 和 loading状态
-		_pollOkCall: function(){
-			var _self = this;
-
-			_self._cancelTimeout('interValFineDowload', true);
-			_self._enabledDownloadBtn();
-
-			// 全部导出 仅仅写入类型
-			DOM.val('#operationType', 'allDownload');
-
-			_self.form.submit();
-		},
-		// 轮询 非正常错误提示
-		_erorReqst: function(data){
-			var _self = this;
-
-			if(!data.success){
-				if(data.error){
-					_self._pollOkCall();				
-				}else{
-					_self._empotyFn();
-				}		
-			}					
-		},
+		};   		
+		_self._ajaxAllConfig(ajaxConfig, _self._pollOkCall, _self._erorReqst, _self._pollerrorCall);            
+	},	
+	
+	// 出错啦 --取消轮询 和 btn禁用
+	_pollerrorCall:function(){
+		var _self = this;
+	
+		_self._cancelTimeout('interValFineDowload', true);
+		_self._enabledDownloadBtn();
+	},
+	
+	// 轮询正常情况 callback -- 取消轮询 和 loading状态
+	_pollOkCall: function(){
+		var _self = this;
+	
+		_self._cancelTimeout('interValFineDowload', true);
+		_self._enabledDownloadBtn();
+	
+		// 全部导出 仅仅写入类型
+		DOM.val('#operationType', 'allDownload');
+		DOM.val('#allDownloadId', DOM.val('#id_tr'));
+	
+		// 改变form action
+		DOM.attr(_self.form, 'action', _self.get('selectAllDown_url') || '#');
+	
+		_self.form.submit();// windwos.open( data.url )
+	
+		DOM.val('#operationType', '');
+		DOM.val('#allDownloadId', '');
+	},
+	// 轮询 非正常错误提示
+	_erorReqst: function(data){
+		var _self = this;
+	
+		if(!data.success){
+			if(data.error){ // 文件未装备好，且 后台已经报错 error
+				_self._pollerrorCall();				
+			}else{
+				_self._empotyFn();
+			}		
+		}					
+	},
 
 
 		// ********** 勾选 和 全部导出 公用代码 -- 禁用 导出按钮 **********
