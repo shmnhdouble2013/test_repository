@@ -1,0 +1,121 @@
+
+<!-- 时间进度 游标尺-->
+
+<!-- dom -->
+<div class="press-state">
+    <div class="press-container">
+        <span class="float-left-center gray-color-font">2012-12-13</span>
+        <span class="float-left-center press-span">   
+			<em class="current-icon j_icon" style="left: 175px; display: inline;">进行中   <!-- gray-color-img 如果100% 结束 添加改样式 -->     
+                <span>o</span>
+            </em>                
+            <span class="press-outer"> 
+                <span class="press-line j_pressLine" style="width:69%;"></span> <!--- data-preportion为 后台输出日期 百分比例 0.5 即为50% ---->
+            </span> 
+        </span>
+        <span class="float-left-center gray-color-font">2013-12-01</span>
+    </div> 
+    <div class="clear-left-fix">         
+		<a href="brandAlbumEdit.htm?id=3" class="ui-btn-l-primary" id="mangment-content">管理晒图内容</a>  <!-- 活动中的 -->
+	</div>            
+</div>
+
+<!-- css -->
+<style>
+    /* 进度条 容器 一栏 */
+    .press-state{
+        padding: 15px 6px 20px;
+        border-bottom: 1px solid #EBEBEB;
+        height: 140px;
+    }
+    .press-container{
+        clear: left;
+        height: 65px;
+    }
+    .press-container .float-left-center{
+        height:35px;
+        padding-top:30px; 
+    }
+
+    .date-span{
+        width: 80px;
+    }
+    .float-left-center.press-span{
+        padding-top:37px; 
+        width: 280px;
+        position: relative;
+    }
+    /* 进度条span容器 */
+    .press-span span, .press-span em{
+        display: inline-block;
+    }
+    .press-outer, .press-line{
+        float: left;    
+        height: 5px;
+        overflow: hidden;
+     }
+    .press-outer{
+        margin:0 1px;
+        background-color: #b41700;  
+        width: 100%;
+        border-radius:2px;
+
+    }
+    .press-line{
+        text-align:left;
+        background-color: #999999;
+        width:7%;
+        border-radius:2px;
+        position: relative;
+    }
+
+    /* 游标icon */
+    em.current-icon{
+        display: none;
+        position: absolute;
+        top: 0 !important;
+        left: 0;
+        width: 36px;
+        height: 36px;
+        line-height:normal; 
+        color:#b41700;
+    }
+    .current-icon span{
+        display: inline-block;
+        font-family: 'tmallbrandsite';
+        font-size: 22px;
+        *zoom:1;
+    }
+</style>
+
+
+<---- js --->
+<script>
+    _uiRender: function(){
+        var _self = this;
+
+        // 根据 进度条 进行 游标icon left定位  
+        S.each( S.query('.j_pressLine'), function(elTag){
+            var pressWith = DOM.width(elTag),
+                iconLeft = pressWith < 0 ? 0 : pressWith,   
+
+                pressContainer = S.one(elTag).parent(),  
+                pressContainerWidth = DOM.width(pressContainer), // 进度条容器宽度
+
+                emIcon = pressContainer.prev('.j_icon'), // icon 提示 容器
+                iconPyl = DOM.width(emIcon)/2;
+
+            // 如果大于容器 则为容器宽度   // 若 小于0 则 0
+            if(pressWith >= pressContainerWidth){
+                iconLeft = pressContainerWidth;
+            }else if(pressWith <= 0){
+                iconLeft = 0;
+            }
+                
+            iconLeft = iconLeft-iconPyl; // icon 偏移量
+
+            DOM.css(emIcon, 'left', iconLeft);
+            DOM.show(emIcon);
+        });
+    }
+</script>
