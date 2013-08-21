@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="http://g.tbcdn.cn/tm/tbs-ui/1.0.4/css/??mui.css,tbsui.css">
 
     <link rel="stylesheet" href="http://demo.tmall.net/brandsite/demo/back/operator/css/header.css">
-    <script src="./品牌运营后台_files/kissy-min.js"></script>
+    <script src="./品牌运营后台_files/kissy.js"></script>
     <script src="./品牌运营后台_files/seed.js"></script>
     <script src="./品牌运营后台_files/tbsui.js"></script>
     <script src="./品牌运营后台_files/nav.js"></script>
@@ -101,7 +101,9 @@
         <div id="content">
 <!-- header end -->
 <link rel="stylesheet" type="text/css" href="./品牌运营后台_files/select_plan.css">
-<script type="text/javascript" src="./品牌运营后台_files/select_plan.js"></script>
+<script type="text/javascript" src="./品牌运营后台_files/selectgrid.js"></script>
+<script type="text/javascript" src="./品牌运营后台_files/grid.js"></script>
+<script type="text/javascript" src="./品牌运营后台_files/store.js"></script>
  
 <div class="select-data-container">	
 	
@@ -235,26 +237,28 @@
 
 
 	KISSY.ready(function(S){
-	    S.use('tm/tbs-back/brand_active_url/Select_plan', function(S, Select_plan){        
-	        new Select_plan({	
-	        	poolTableId: '#J_selectPoolTable', 					// 选择池 table id钩子
-	        	candTableId: '#J_selectCandTable', 					// 候选 table id钩子
-
-	        	addMoreId: '#J_addMore', 							// 批量添加 id
-	        	removeMoreId: '#J_removeMore' ,						// 批量移除 id
-
-	        	ajaxUrl: 'result.php?message=546876489745454',      // 异步查询url  
-	        	pagepation: 'result.php?message=服务器端返回信息',	// 翻页url 	   	
-
-	       		pool_table_tpl: main_table,							// 选择池 table tbody tr 模板
-				poolData: mainData, 								// 选择池 静态数据 
-
-				candidate_table_tpl: select_table,					// 已候选 table tbody tr 模板
-				candidateData: selectData, 							// 已候选 table 静态数据
-
-	        	isMoveData: false,									// 是否 移动 选择池数据? 默认copy数据 false
-	        	isPagination:true,									// 是否有分页 默认 为false
-	        	isAjaxData:true										// 是否是异步数据 默认 为false
+	    S.use('tm/tbs-back/brand_active_url/selectGrid', function(S, SelectGrid){  
+		
+	        new SelectGrid({	
+			
+				poolGridConfig:{
+					tableId: '#J_selectPoolTable', 						// 选择池 table id钩子
+					staticData: mainData, 								// 选择池 静态数据 
+					//isPagination:true,								// 是否有分页 默认 为false
+					//isAjaxData:true,									// 是否是异步数据 默认 为false
+					//ajaxUrl: 'result.php?message=546876489745454',      // 异步查询url  
+					trTpl: main_table									// 选择池 table tbody tr 模板
+				},
+				
+				poolGridConfig:{
+					tableId: '#J_selectCandTable', 						// 候选 table id钩子
+					staticData: selectData, 							// 候选 table 静态数据 
+					trTpl: select_table									// 候选 table tbody tr 模板
+				},
+				
+				//isMoveData: false,								// 是否 移动 选择池数据? 默认copy数据 false
+				addMoreId: '#J_addMore', 							// 批量添加 id
+	        	removeMoreId: '#J_removeMore' 						// 批量移除 id
 	        });
 	    });
 	});
