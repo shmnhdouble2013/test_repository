@@ -1,0 +1,39 @@
+// LABELS
+// ------
+
+// Base
+.ks-label,.label {
+  .ks-inline-block();
+  padding: 1px 4px 2px;
+  font-size: @baseFontSize * .846;
+  font-weight: bold;
+  line-height: 15px; // ensure proper line-height if floated
+  color: @white;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+  background-color: @grayLight;
+  .border-radius(3px);
+}
+
+// Hover state
+.ks-label:hover,.label:hover {
+  color: @white;
+  text-decoration: none;
+}
+
+// Colors
+.ks-label-important,.label-important     { background-color: @errorText; }
+.ks-label-important:hover,.label-important:hover  { background-color: darken(@errorText, 10%); }
+
+.ks-label-warning,.label-warning      { background-color: @orange; }
+.ks-label-warning:hover, .label-warning:hover   { background-color: darken(@orange, 10%); }
+
+.ks-label-success,.label-success           { background-color: @successText; }
+.ks-label-success:hover,.label-success:hover    { background-color: darken(@successText, 10%); }
+
+.ks-label-info,.label-info        { background-color: @infoText; }
+.ks-label-info:hover,.label-info:hover   { background-color: darken(@infoText, 10%); }
+
+.ks-label-inverse,.label-inverse       { background-color: @grayDark; }
+.ks-label-inverse:hover ,.label-inverse:hover      { background-color: darken(@grayDark, 10%); }

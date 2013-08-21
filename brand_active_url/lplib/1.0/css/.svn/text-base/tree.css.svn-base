@@ -1,0 +1,40 @@
+.tree, .tree h1, .tree h2, .tree h3, .tree h4, .tree h5, .tree h6, .tree hr, .tree p, .tree blockquote, .tree dl, .tree dt, .tree dd, .tree ul, .tree ol, .tree li, .tree pre, .tree form, .tree fieldset, .tree legend, .tree button, .tree input, .tree textarea, .tree th, .tree td, .tree div, .tree span {
+	margin: 0px;
+	padding: 0px;
+	overflow:hidden;
+}
+
+.tree ul {
+	list-style:none;
+}
+.tree li {
+	height:22px;
+}
+ .tree .empty {
+	width:18px;
+	height:16px;
+	background-position:1px 0px;
+	border:0px;
+	display:inline-block;
+	background-repeat:no-repeat;
+}
+.tree .more, .tree .min,.tree .emptyMore {
+	display:inline-block;
+	padding-left:10px;	
+	cursor:pointer;
+}
+.tree .more label, .tree .min label,.tree .emptyMore label{
+	padding:5px;
+}
+.tree .more label, .tree .min label,.tree .emptyMore label{
+	cursor:pointer;
+}
+.tree .more {
+	background:url(http://img04.taobaocdn.com/tps/i4/T1_CWzXkJEXXXXXXXX-5-9.png) 0px 4px no-repeat;
+}
+.tree .min {
+	background:url(http://img01.taobaocdn.com/tps/i1/T1_mWzXgVAXXXXXXXX-9-5.png) 0px 5px no-repeat ;
+}
+.tree .selectInput{
+	margin-right:5px;
+}

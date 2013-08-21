@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="lplib.build" default="build" basedir=".">
+	
+	<property name="tools.dir" location="../../../tools/"/>
+    <property name="build.dir" location="./"/>
+    <property name="component.files" value="*"/>
+    <property name="charset" value="UTF-8"/>
+	
+	
+	<target name="build" depends="prepare,compress.js,native2ascii">
+    </target>
+	<target name="prepare">
+        <delete>
+            <fileset dir="${build.dir}" includes="**/*-min.js"/>
+        </delete>
+    </target>
+	
+	<!-- 用 YUICompressor 压缩 js -->
+    <target name="compress.js"> 	        
+        <apply executable="java" verbose="true" dest="${build.dir}">
+            <fileset dir="${build.dir}" includes="**/*.js"/>
+            <arg line="-jar"/>
+            <arg path="${tools.dir}/yuicompressor.jar"/>
+            <arg line="--charset utf-8"/>
+            <srcfile/>
+            <arg line="-o"/>
+            <targetfile/>
+            <mapper type="regexp" from="^(.*)\.(js)$" to="\1-min.\2"/>
+        </apply>
+    </target>
+
+	<!-- 对 JS 文件 ASCII 化 -->
+    <target name="native2ascii" depends="compress.js">
+        <mkdir dir="${build.dir}/tmp"/>
+        <move todir="${build.dir}/tmp">
+            <fileset dir="${build.dir}" includes="*-min.js"/>
+        </move>
+        <native2ascii encoding="${charset}"
+                      src="${build.dir}/tmp"
+                      dest="${build.dir}"
+                      includes="*.js"/>
+        <delete dir="${build.dir}/tmp"/>
+    </target>
+</project>

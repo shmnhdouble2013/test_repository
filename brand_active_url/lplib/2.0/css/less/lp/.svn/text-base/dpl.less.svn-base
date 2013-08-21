@@ -1,0 +1,58 @@
+/*!
+ * LP.DPL
+ *
+ * Copyright 2012 alibaba
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Remixed by lp-ued team.
+ */
+
+/*!
+ * Bootstrap v2.0.2
+ *
+ * Copyright 2012 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ */
+
+// Core variables and mixins
+@import "../base/variables.less"; 
+@import "../base/mixins.less";
+@import "variables.less";
+
+// CSS Reset
+@import "../base/type.less";
+@import "../base/reset.less";
+
+// Scaffolding
+@import "../base/grid.less";
+@import "../base/layout.less";
+
+
+// Base
+
+@import "label.less";
+@import "../base/badge.less";
+@import "../base/icon.less";
+@import "../base/tables.less";
+@import "../base/sprites.less";
+@import "../base/breadcrumbs.less";
+
+
+@import "../base/form.less";
+@import "buttons.less";
+@import "overlayimage.less";
+
+@import "../base/wells.less";
+@import "../base/tabs.less";
+@import "../base/steps.less";
+//pages
+@import "../base/detail.less";
+// Utility classes
+@import "../base/utilities.less";
+@import "utilities.less";
+
+@import "../base/tips.less";

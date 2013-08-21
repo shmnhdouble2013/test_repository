@@ -1,0 +1,70 @@
+.container{
+	padding: 20px;
+}
+.els-height{
+	margin: 20px 0 5px 0;
+}
+
+.btn-style{
+	text-align:center;
+}
+
+.shortbtn{
+	padding:2px !important;
+}
+.right-align{
+	float: right;
+}
+
+.text-agncener{
+	text-align: center;
+}
+
+
+/*控件样式*/
+
+/*外容器*/
+.select-data-container{
+	margin: 10px;
+	height: 500px;
+}
+
+/*tr选中样式*/
+.selected-tr td{
+	background-color: #E0EAFD;
+}
+/*tr选中 删除 样式*/
+.delete-tr td{
+	/*background-color: gray; */
+}
+
+/*左右表格容器*/
+.main-table-container, .select-talbe-container{
+	padding: 0 10px;
+	width: 40%;
+	height: 100%;
+	float: left;
+}
+.main-table-container{
+	border: 1px solid red;
+}
+.tr-opraition-btn{
+	margin: 0 5px;
+	height: 100%;
+	float: left;
+}
+.tr-opraition-btn .add-btn{
+	margin-top:180px; 
+	margin-bottom: 50px;
+}
+.select-talbe-container{
+	border: 1px dashed red;
+}
+.dele-select-tall{
+
+}
+
+/*容器下的表格*/
+.main-table-container table, .select-talbe-container table{
+	max-height: 400px;
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="lplib.build" default="build" basedir=".">
+	
+	<property name="tools.dir" location="../../../../tools/"/>
+    <property name="build.dir" location="./"/>
+    <property name="less.dir" location="./less"/>
+    <property name="component.files" value="*"/>
+    <property name="charset" value="UTF-8"/>
+	
+	
+	<target name="build" depends="less">
+    </target>
+
+    <target name="less">
+        <exec executable="cmd" failonerror="true">
+            <arg line="/c node ${tools.dir}/less/bin/lessc ${less.dir}/lp-page.less > ${build.dir}/lp-page.css"/>
+        </exec>
+    </target>
+</project>

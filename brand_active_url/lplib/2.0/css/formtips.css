@@ -1,0 +1,10 @@
+.ks-form-tip {
+    color: #999999;
+}
+.ks-form-tip-container{
+	position:relative;
+}
+.ks-form-tip .tip-text {
+    margin-left: 0px;
+	word-break: break-all;
+}
