@@ -8,6 +8,7 @@
 * @example
 *   new Grid({
 		tableId: '#poolTable',			// table 容器 id
+		tr_tpl: tpltr,					// tr渲染模板
 		gridData:[{},{}],				// 指定数据
 		isAjaxData:true,				// 是否是异步数据 默认 为false
 		ajaxUrl: 'result.php'		    // 异步查询url  
@@ -21,7 +22,8 @@ KISSY.add('tm/tbs-back/grid', function(S, O, XTemplate, Store) {
 		S_Date = S.Date;
 
 	// 设定全局 参数 变量 
-	var	SELECTALLCLS = '.j_select_all',				// 全部选中 checkbox cls钩子
+	var	DATA_ELEMENT = 'row-element',				// row 元素index
+		SELECTALLCLS = '.j_select_all',				// 全部选中 checkbox cls钩子
 
 		POOLCHECKBOXCLS = '.j_pool_checkobx', 		// 选择池 table tr checkbox cls钩子
 		CANDCHECKBOXCLS = '.j_candidate_checkobx', 	// 候选 table tr checkbox cls钩子
@@ -138,7 +140,7 @@ KISSY.add('tm/tbs-back/grid', function(S, O, XTemplate, Store) {
 				_self._createRow(obj, index);
 			});
 
-			_self._afterShow();
+			// _self._afterShow(); 自适应宽高 方法
 
 			_self.fire('aftershow');
 		},
@@ -151,27 +153,22 @@ KISSY.add('tm/tbs-back/grid', function(S, O, XTemplate, Store) {
 				rows = _self.tbody.rows;
 
 			// 移除行，一般是数据源移除数据后，表格移除对应的行数据	
-			// S.each(rows, function(row){
-			// 	_self.fire('rowremoved', {data : DOM.data(row, DATA_ELEMENT), row : row} );
-			// });
+			S.each(rows, function(row){
+				_self.fire('rowremoved', {data : DOM.data(row, DATA_ELEMENT), row : row} );
+			});
 
 			S.all(rows).remove();
 		},
 
 		/**
-		* 创建tr
+		* 添加tr
 		*/
 		_createRow : function (element, index) {
 			var _self = this,
-
-				rowTemplate = _self._getRowTemplate(index, element),
+				rowTemplate = _self.trRender(element, _self.get('tr_tpl') ), // 手动全部显示 或者 根据 模板创建
 				rowEl = new Node(rowTemplate).appendTo(_self.get('tbody')),
-				dom = rowEl.getDOMNode(),
-				lastChild = dom.lastChild;
-
+				dom = rowEl.getDOMNode();
 			DOM.data(dom, DATA_ELEMENT, element);
-			DOM.addClass(lastChild, 'lp-last');
-
 			_self.fire('rowcreated',{data : element,row : dom});
             return rowEl;
 		},
@@ -229,37 +226,26 @@ KISSY.add('tm/tbs-back/grid', function(S, O, XTemplate, Store) {
 			_self.fire('afterappend', {rows : rows, data : data});
 		},
 
-		trRender: function(targetContainer, data, tpl){
-    		var  _self = this,
+		// 渲染tr
+		trRender: function(data, tpl){
+    		var _self = this,
     			htmlText,
     			creatNode;
 
-    		if(!targetContainer){
-				throw '渲染容器未传入！';    
+    		if(!tpl){
+				throw '渲染模板未传入！';    
 			}
 
     		try{
     			htmlText = new XTemplate(tpl).render(data);
     			creatNode = DOM.create(htmlText);
-
-    			DOM.Html(targetContainer, creatNode); 
     		}catch(e){
-    			
-
-    			
-
-    			throw e;
-    			throw '渲染模板未传入，默认渲染全部数据！';    			
+    			throw e;			
     		}
 
-
-    		// 静态数据渲染 -- 非异步 有数据 模板
-			if( !_self.get('isAjaxData') && _self.get('poolData') && _self.get('pool_table_tpl') ){				
-				_self.fire('loading');
-
-				var render = new XTemplate(tpl).render(data);
-			}
+    		return creatNode;
     	},
+
 
     	// 渲染data json 扁平化数据  _self.poolCheckBoxCls  _self.candCheckBoxCls
     	_renderTd: function(data, isPoolTr){
