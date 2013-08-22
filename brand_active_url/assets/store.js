@@ -4,12 +4,30 @@
 * @param {Object} config 配置项，store上面的field字段可以传入配置项中
 * @property {String} url 是字段 proxy.url的简写方式，可以直接写在配置信息中
 * @example 
-* var store = new Store({
+* var store = new Store({ use
 *	url : 'data.php'
+	root: 'rows',  // 根目录
+	totalProperty: 'results',  // 数据条数
+	autoLoad: true,				// 是否自动加载
+	proxy: {url : 'data.php', method: 'get' } //按照'name' 字段降序排序
+	params: {id:'124',type:1}//自定义参数
+	
+	matchFunction  // 对象匹配函数	
+	
+	
+	
+	
+*	hasLoad : false,
+*	resultRows : [],
+*	newRecords : [],
+*	modifiedRecords : [],
+*	deletedRecords : [],
+*	rowCount : 0,
+*	totalCount : 0
 *});
 */
 
-KISSY.add('store', function(S){
+KISSY.add('mui/gridstore', function(S){
 	var DOM = S.DOM, 
 		Event = S.Event,
         win = window, 
@@ -106,9 +124,9 @@ KISSY.add('store', function(S){
 			* 是否后端排序，如果为后端排序，每次排序发送新请求，否则，直接前端排序
 			* @field
 			* @type Boolean
-			* @default false
+			* @default true
 			*/
-			remoteSort: false,
+			remoteSort: true,
 
 			/**
 			* 对象的匹配函数，验证两个对象是否相当
@@ -145,7 +163,7 @@ KISSY.add('store', function(S){
 					return  -1;
 				}
 			}
-		},config);
+		}, config);
 
 		S.mix(_self, config);
 		S.mix(_self, {
@@ -264,7 +282,7 @@ KISSY.add('store', function(S){
 		*  function(obj1,obj2){
 		*	 return obj1 == obj2;
 		*  }
-		* 
+		*  use
 		*/
 		add :function(data, noRepeat, match){
 			var _self=this,
@@ -287,12 +305,18 @@ KISSY.add('store', function(S){
 			});
 			_self.fire('addrecords', {data:newData});
 		},
-
+		
+		/* 测试事件监控 */
+		addData: function(data){
+			var _self = this;
+			_self.fire('dataChange', {});
+		},
+		
 
 		/**
-		* 清除数据,清空所有数据
+		* 清除数据,清空所有数据 use
 		*/
-		clear : function(){
+		clear : function(){ 
 			var _self = this;
 			_self.setResult([]);
 		},
@@ -357,15 +381,16 @@ KISSY.add('store', function(S){
 		},
 
 		/**
-		* 查找记录，仅返回第一条
+		* 查找记录，仅返回第一条  use
 		* @param {String} field 字段名
 		* @param {String|Function} value 字段值 或过滤方法
 		* @return {Object|null}
 		*/
-		find : function(field, value, func){
+		find : function(field, value, func){ 
 			var result = null,
 				records = this.resultRows;
-			S.each(records,function(record,index){
+				
+			S.each(records, function(record, index){
 				if((func && func(record[field], value)) || record[field] === value){
 						result = record;
 						return false;
@@ -376,7 +401,7 @@ KISSY.add('store', function(S){
 
 		/**
 		* 根据索引查找记录
-		* @param {Number} index 索引
+		* @param {Number} index 索引 use
 		* @return {Object} 查找的记录
 		*/
 		findByIndex : function(index){
@@ -426,7 +451,7 @@ KISSY.add('store', function(S){
 		},
 
 		/**
-		* 获取加载完的数据
+		* 获取加载完的数据 use
 		* @return {Array}
 		*/
 		getResult : function(){
@@ -434,7 +459,7 @@ KISSY.add('store', function(S){
 		},
 
 		/**
-		* 获取加载完的数据的数量
+		* 获取加载完的数据的数量 use
 		* @return {Number}
 		*/
 		getCount : function () {
@@ -442,7 +467,7 @@ KISSY.add('store', function(S){
         },
 
 		/**
-		* 获取添加的数据
+		* 获取添加的数据 use
 		* @return {Array} 返回新添加的数据集合
 		*/
 		getNewRecords : function(){
@@ -474,11 +499,11 @@ KISSY.add('store', function(S){
         },
 
 		/**
-		* 删除记录触发 removerecords 事件.
+		* 删除记录触发 removerecords 事件. use
 		* @param {Array|Object} data 添加的数据，可以是数组，可以是单条记录
-		* @param {Function} [match = function(obj1,obj2){return obj1 == obj2}] 匹配函数，可以为空
+		* @param {Function} [match = function(obj1, obj2){return obj1 == obj2}] 匹配函数，可以为空
 		*/
-		remove :function(data,match){
+		remove :function(data, match){ 
 			var _self =this,
 				delData=[];
 			match = match || _self._getDefaultMatch();
@@ -506,13 +531,14 @@ KISSY.add('store', function(S){
 		* @param {Array} data 设置的数据集合，是一个数组
 		*/
 		setResult:function(data){
-			data= data||[];
-			var _self =this;
+			var _self = this,			
+				data = data || [];
+			
 			_self.resultRows = data;
 			_self.rowCount = data.length;
 			_self.totalCount = data.length;
-			 _self._sortData();
-			_self.fire('load',_self.oldParams);
+			// _self._sortData();
+			_self.fire('load', _self.oldParams);
 		},
 
 		/**
@@ -578,7 +604,7 @@ KISSY.add('store', function(S){
 			}
 			record = S.mix(record,obj);
 			if(!S.inArray(record,_self.newRecords) && !S.inArray(record,_self.modifiedRecords)){
-					_self.modifiedRecords.push(record);
+				_self.modifiedRecords.push(record);
 			}
 			_self.fire('updaterecord',{record:record});
 		},
@@ -592,14 +618,14 @@ KISSY.add('store', function(S){
 			_self = null;
         },
 
-		//添加记录
+		//添加记录 use
 		_addRecord :function(record, index){
 			var records = this.resultRows;
 			if(S.isUndefined(index)){
 				index = records.length;
 			}
 			records[index] = record;
-			//_self.fire('recordadded',{record:record,index:index});
+			_self.fire('recordadded',{record:record, index:index});
 		},
 
 		//清除改变的数据记录
@@ -610,7 +636,7 @@ KISSY.add('store', function(S){
 			_self.deletedRecords.splice(0);
 		},
 
-		//加载数据
+		//加载数据 use
 		_loadData : function(params){
 			var _self = this,
 				loadparams = params || {},
@@ -627,7 +653,7 @@ KISSY.add('store', function(S){
 			}
 			_self.fire('beforeload');
 
-			loadparams = S.merge(_self.oldParams, _self.sortInfo,loadparams);
+			loadparams = S.merge(_self.oldParams, _self.sortInfo, loadparams);
 			_self.oldParams = loadparams;
 			data = _self.proxy.method === 'post' ? loadparams : (loadparams ? S.param(loadparams) : '');
 
@@ -687,7 +713,7 @@ KISSY.add('store', function(S){
 			
 		},
 
-		//移除数据
+		//移除数据 use
 		_removeAt:function(index, array){
 			if(index < 0){
 				return;

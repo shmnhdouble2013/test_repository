@@ -15,18 +15,23 @@
 	});
 */
 
-KISSY.add('mui/grid', function(S, O, XTemplate, Store) {
+KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
 	var DOM = S.DOM,
+		Node = S.Node,
 		Ajax = S.IO,
+		UA = S.UA,
 		Event = S.Event,
-		S_Date = S.Date;
+		S_Date = S.Date,
+        win = window,
+        doc = document;		
 
 	// 设定全局 参数 变量 
 	var	DATA_ELEMENT = 'row-element',				// row 元素index
+		CLS_GRID_ROW_SELECTED = 'grid-row-selected', // row 选中class标示
+		
+		CLS_CHECKBOX = 'grid-checkbox', 			// checkbox
+		
 		SELECTALLCLS = '.j_select_all',				// 全部选中 checkbox cls钩子
-
-		POOLCHECKBOXCLS = '.j_pool_checkobx', 		// 选择池 table tr checkbox cls钩子
-		CANDCHECKBOXCLS = '.j_candidate_checkobx', 	// 候选 table tr checkbox cls钩子
 
 		TROPRATIONCLS = '.j_add_remove', 			// 添加/移除 btn cls钩子
 
@@ -80,46 +85,75 @@ KISSY.add('mui/grid', function(S, O, XTemplate, Store) {
 		_init: function(){
 			var _self = this;
 
-			_self.tbody = S.get(_self.get('tableId')).tbody;
-
-			_self._initStore();
-	        //_self._eventRender();
+			_self.tbody = S.get('tbody', _self.get('tableId'));
+			
+			
+			_self._initStore();			
+	        _self._eventRender();
+			_self._initGrid();
 		},
 		
 		// 事件初始化
 		_eventRender: function(){
 			var _self = this;
-
+			
+			//_self.store.addData( {} );
 		},
 
 		// 初始化gird
 		_initGrid: function(){
 			var _self = this;	
 			
-			// 绑定 选择池table 全选事件
-			Event.delegate(self.get('tableId'), 'click', SELECTALLCLS, function(el){
-				var el = el.target,
-					isChecked = el.checked || D.attr(el, 'checked');
+			_self.store.setResult( _self.get('staticData') );
+			
+			
+			// Event.delegate(self.get('tableId'), 'click', SELECTALLCLS, function(el){ 绑定 选择池table 全选事件
+				// var el = el.target,
+					// isChecked = el.checked || D.attr(el, 'checked');
 
-                _self.poolAllCheckData = self.selectedAllBox(self.get('tableId'), POOLCHECKBOXCLS, isChecked);
-            });
+                // _self.poolAllCheckData = self.selectedAllBox(self.get('tableId'), POOLCHECKBOXCLS, isChecked);
+            // });
+			
+			// if (!_self._isAutoFitWidth()) {//如果设置了宽度，则使用此宽度
+				// width = _self.get('width');
+				// _self._setWidth(width);
+			// } else {						//根据所有列的宽度设置Grid宽度
+				// width = _self._getColumnsWidth();
+				// _self._setWidth(width + 2);
+			// }
+            // if(_self.get('allowScroll')){
+                // gridEl.addClass(CLS_ALLOW_SCROLL);
+            // }
+
+			// if (height) { 			如果设置了高度，设置Grid Body的高度，
+				// _self.setHeight(height);
+			// }
 
 		},
 		
 		// 初始化Store
 		_initStore: function(){
 			var _self = this;
-
+			
 			// 如果异步 则异步加载数据，否则加载 静态数据 --Store
 			if(_self.get('isAjaxData') && _self.get('ajaxUrl')){
 				_self.store = new Store({
-					url : _self.get('ajaxUrl')
+					url : _self.get('ajaxUrl'),
+					root: 'rows',
+					totalProperty: 'results', 	 // 数据条数
+					params: {type:'all', id:'DJKFJDKFJ94944'}	//自定义参数
 				});
 			}else{
-				_self.store = new Store();
-				_self.store.setResult( _self.get('girdData') );
-			}	
-
+				_self.store = new Store({
+					autoLoad: false				// 是否自动加载
+				});
+			}
+			
+			// 若无store则推出绑定
+			if(!_self.store){
+				return;
+			}
+			
 			// 准备加载数据前 --- 添加 屏幕遮罩 delay
 			_self.store.on('beforeload', function(){
 				var loadMask = _self.get('loadMask');
@@ -127,17 +161,9 @@ KISSY.add('mui/grid', function(S, O, XTemplate, Store) {
 					loadMask.show();
 				}
 			});
-
-			_self.store.on('load', function(){
-				alert(1);
-				debugger;
-			});
-
+			
 			// 数据加载完成后 - 取消 屏幕遮罩 delay
 			_self.store.on('load', function(){
-				alert(1);
-				debugger;
-
 				var results = this.getResult(),
 					loadMask = _self.get('loadMask');
 
@@ -302,7 +328,65 @@ KISSY.add('mui/grid', function(S, O, XTemplate, Store) {
 
 			return selectedAry;
     	},
-
+		
+		/**
+		* 取消选中的记录
+		*/
+		clearSelection : function () {
+			var _self = this;
+			
+			_self._setAllRowsSelected(false);
+		},
+		
+		//设置全选
+		_setAllRowsSelected : function (selected) {
+			var _self = this,
+				body = _self.get('tbody');
+			//_self._setHeaderChecked(true);
+			S.each(body.rows, function (row) {
+				_self._setRowSelected(row, selected);
+			});
+		},
+		//设置行选择
+		_setRowSelected : function (row, selected) {
+			var _self = this,
+				checkbox = DOM.get('.' + CLS_CHECKBOX, row),
+				data = DOM.data(row, DATA_ELEMENT),
+				hasSelected = DOM.hasClass(row, CLS_GRID_ROW_SELECTED);
+			if (hasSelected === selected) {
+				return;
+			}
+			
+			if (checkbox) {
+				//如果选择框不可用，此行不能选中
+				if(DOM.attr(checkbox,'disabled')){
+					return;
+				}
+				checkbox.checked = selected;
+			}
+			if (selected) {
+				DOM.addClass(row, CLS_GRID_ROW_SELECTED);
+				//_self.fire('rowselected', {data : data, row : row});
+				_self._onRowSelectChanged(row, selected);
+			} else {
+				DOM.removeClass(row, CLS_GRID_ROW_SELECTED);
+				_self._setHeaderChecked(false);
+				//_self.fire('rowunselected', {data : data, row : row});
+				_self._onRowSelectChanged(row, selected);
+			}
+			//_self.fire('rowselectchanged', {data : data, row : row});
+		},
+		//触发行选中，取消选中事件
+		_onRowSelectChanged : function(row,selected){
+			var _self = this,
+				data = DOM.data(row, DATA_ELEMENT);
+			if(selected){
+				_self.fire('rowselected', {data : data, row : row});
+			}else{
+				_self.fire('rowunselected', {data : data, row : row});
+			}
+			_self.fire('rowselectchanged', {data : data, row : row, selected : selected});
+		},
     	// 渲染data json 扁平化数据  delay
     	_renderTd: function(data, isPoolTr){
     		var _self = this,
@@ -334,4 +418,4 @@ KISSY.add('mui/grid', function(S, O, XTemplate, Store) {
 
 return Grid;
 
-}, {'requires':['mui/overlay','mui/overlay/overlay.css', 'xtemplate', 'mui/gridstore', 'sizzle']});
+}, {'requires':['xtemplate', 'mui/gridstore', 'sizzle']}); // 'mui/overlay','mui/overlay/overlay.css',

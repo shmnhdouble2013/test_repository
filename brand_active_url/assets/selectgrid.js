@@ -8,9 +8,9 @@
 *   new SelectGrid({
 	});
 */	
-KISSY.add('tm/tbs-back/blue_print/selectGrid', function(S, O, Pagination, XTemplate, Validation, Store, Grid) {
+KISSY.add('mui/selectGrid', function(S, Pagination, XTemplate, Validation, Grid) { // O, 
 	var DOM = S.DOM,
-		Ajax = IO,
+		Ajax = S.IO,
 		Event = S.Event,
 		S_Date = S.Date;
 
@@ -22,8 +22,9 @@ KISSY.add('tm/tbs-back/blue_print/selectGrid', function(S, O, Pagination, XTempl
 		
 	// _self.get('addMoreId'), 								// 批量添加 id
 	// _self.get('removeMoreId'), 							// 批量移除 id	
+
 	
-	function SelectGrid(config){
+	function SelectGrid(config){ 
 		var _self = this,
 			config = S.merge({
 				isMoveData: false							// 是否 移动 选择池数据? 默认copy数据 false				
@@ -53,8 +54,7 @@ KISSY.add('tm/tbs-back/blue_print/selectGrid', function(S, O, Pagination, XTempl
 			_self._domRender();
 			_self._validaRender();
 
-			_self._initStore();
-	        _self._eventRender();
+	        // _self._eventRender();
 		},
 
 		// DOM初始化
@@ -77,7 +77,7 @@ KISSY.add('tm/tbs-back/blue_print/selectGrid', function(S, O, Pagination, XTempl
 			_self.poolGrid = new Grid( _self.get('poolGridConfig') );
 			
 			// 候选 grid对象
-			_self.candGrid = new Grid( _self.get('candGridConfig') );
+			// _self.candGrid = new Grid( _self.get('candGridConfig') );
 
 		},
 
@@ -97,18 +97,10 @@ KISSY.add('tm/tbs-back/blue_print/selectGrid', function(S, O, Pagination, XTempl
 		// 事件初始化
 		_eventRender: function(){
 			var _self = this,
-				poolTable = ,
+				poolTable = _self.get('candTableId'),
 				candTable = _self.get('candTableId');
 
-			/******* 选择池table 事件监控 *******/
-
-			// 绑定 选择池table 全选事件
-			Event.delegate(poolTable, 'click', SELECTALLCLS, function(el){
-				var el = el.target,
-					isChecked = el.checked || D.attr(el, 'checked');
-
-                _self.poolAllCheckData = self.selectedAllBox(poolTable, POOLCHECKBOXCLS, isChecked);
-            });
+			/******* 选择池table 事件监控 *******/			
 
             // 绑定 选择池table 添加事件
 			Event.delegate(poolTable, 'click', TROPRATIONCLS, function(el){
@@ -153,46 +145,12 @@ KISSY.add('tm/tbs-back/blue_print/selectGrid', function(S, O, Pagination, XTempl
 
 			// 查询数据
 			Event.on('#J_finedData', 'click', function(){
-
+				//
 			});
 		},
 
 
-
-
-		
-		
-		
-
-
     	// 以下为公用方法 ********** 空函数，应对特殊 情况啥也不做或者初始化方法 **********
-
-    	/*
-		* @description 公用方法--- 遍历 选中/取消 既定文档作用域, 指定cls钩子的 checkbox, 设置checked状态
-		* @param {string|boolean|document} class 钩子-- 是否选中 --- 文档作用域
-		* @return {array} 选中的checkbox value值 数组
-		*/
-    	selectedAllBox: function(thatDoc, cls, isChecked){
-    		var self = this,
-    		    selectedAry = [],	
-    			thatDoc = thatDoc || document, 
-                groupRadios = S.query(cls, thatDoc);
-                
-            S.each(groupRadios, function(el){
-            	var trID = DOM.val(el);
-
-				if(isChecked){
-					el.checked = 'checked';
-					selectedAry.push(trID);
-				}else{
-					el.checked = '';
-					DOM.removeAttr(el, 'checked');
-				}               
-            });
-
-			return selectedAry;
-    	},
-
     	_empotyFn: function(){
     		var _self = this;
     	},
@@ -260,4 +218,4 @@ KISSY.add('tm/tbs-back/blue_print/selectGrid', function(S, O, Pagination, XTempl
 
 return SelectGrid;
 
-}, {'requires':['mui/overlay','mui/overlay/overlay.css', 'gallery/pagination/2.0/index', 'xtemplate', 'Validation', 'tm/tbs-back/grid', 'sizzle']});
+}, {'requires':['gallery/pagination/2.0/index', 'xtemplate', 'Validation', 'mui/grid', 'sizzle']}); // 'mui/overlay','mui/overlay/overlay.css', 
