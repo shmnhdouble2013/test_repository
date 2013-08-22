@@ -100,10 +100,11 @@
         </div>
         <div id="content">
 <!-- header end -->
-<link rel="stylesheet" type="text/css" href="./品牌运营后台_files/select_plan.css">
+<link rel="stylesheet" type="text/css" href="./品牌运营后台_files/selectgrid.css">
 <script type="text/javascript" src="./品牌运营后台_files/selectgrid.js"></script>
 <script type="text/javascript" src="./品牌运营后台_files/grid.js"></script>
 <script type="text/javascript" src="./品牌运营后台_files/store.js"></script>
+
  
 <div class="select-data-container">	
 	
@@ -237,22 +238,22 @@
 
 
 	KISSY.ready(function(S){
-	    S.use('tm/tbs-back/brand_active_url/selectGrid', function(S, SelectGrid){  
+	    S.use('mui/selectGrid', function(S, SelectGrid){  
 		
 	        new SelectGrid({	
 			
 				poolGridConfig:{
 					tableId: '#J_selectPoolTable', 						// 选择池 table id钩子
-					staticData: mainData, 								// 选择池 静态数据 
+					girdData: mainData, 								// 选择池 静态数据 
 					//isPagination:true,								// 是否有分页 默认 为false
 					//isAjaxData:true,									// 是否是异步数据 默认 为false
 					//ajaxUrl: 'result.php?message=546876489745454',      // 异步查询url  
 					trTpl: main_table									// 选择池 table tbody tr 模板
 				},
 				
-				poolGridConfig:{
+				candGridConfig:{
 					tableId: '#J_selectCandTable', 						// 候选 table id钩子
-					staticData: selectData, 							// 候选 table 静态数据 
+					girdData: selectData, 							// 候选 table 静态数据 
 					trTpl: select_table									// 候选 table tbody tr 模板
 				},
 				
@@ -262,6 +263,7 @@
 	        });
 	    });
 	});
+
 </script>
 
 <!-- foot start -->
