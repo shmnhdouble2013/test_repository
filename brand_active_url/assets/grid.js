@@ -11,11 +11,12 @@
 		tr_tpl: tpltr,					// tr渲染模板
 		gridData:[{},{}],				// 指定数据
 		isAjaxData:true,				// 是否是异步数据 默认 为false
-		ajaxUrl: 'result.php'		    // 异步查询url  
+		ajaxUrl: 'result.php',		    // 异步查询url  
+		checkable: true					// 是否有checkbox
 	});
 */
 
-KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
+KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 	var DOM = S.DOM,
 		Node = S.Node,
 		Ajax = S.IO,
@@ -26,10 +27,15 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
         doc = document;		
 
 	// 设定全局 参数 变量 
-	var	DATA_ELEMENT = 'row-element',				// row 元素index
+	var	DATA_ELEMENT = 'row-element',				 // row 元素index
 		CLS_GRID_ROW_SELECTED = 'grid-row-selected', // row 选中class标示
+		ATTR_COLUMN_FIELD = 'data-column-field',	// 数据字段表示
+		CLS_GRID_ROW = 'grid-row',					// grid row标示
+		CLS_GRID_CELL = 'grid-cell',					// grid row标示
 		
-		CLS_CHECKBOX = 'grid-checkbox', 			// checkbox
+		CLS_CHECKBOX = '.grid-checkbox', 			// checkbox
+		
+		CLS_GRID_ROW_OVER = 'grid-row-over',		// 行 mouseover class 样式
 		
 		SELECTALLCLS = '.j_select_all',				// 全部选中 checkbox cls钩子
 
@@ -46,7 +52,8 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
 			isAjaxData:false,						// 是否是异步数据 默认 为false
 			ajaxUrl: null,      					// 异步查询url  
 			trTpl: null,							// 选择池 table tbody tr 模板
-			staticData: [] 							// 选择池 静态数据 						
+			staticData: [],							// 选择池 静态数据 
+			checkable:true							// 是否复选框 checkbox
 		}
 	/**
 	* 	ajaxUrl 返回数据格式
@@ -55,19 +62,27 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
 	*		"message":"",
 	*		"rows":[], 
 	*		"results":0 
-	*	}			
+	*	}	
+				new Store({
+					url : _self.get('ajaxUrl'),
+					root: 'rows',
+					totalProperty: 'results', 	 // 数据条数
+					params: {type:'all', id:'DJKFJDKFJ94944'}	//自定义参数
+				});	
 	*/	
 
 	function Grid(config){
 		var _self = this,
 			config = S.merge(POLLGRIDDEFAULT, config);
-
+			
 		if( !(_self instanceof Grid) ){
 			return new Grid(config);
 		}
 
 		Grid.superclass.constructor.call(_self, config);		
-
+		
+		_self.config = config;
+		
 		_self._init();
 	}
 
@@ -86,33 +101,67 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
 			var _self = this;
 
 			_self.tbody = S.get('tbody', _self.get('tableId'));
+			_self.thead = S.get('thead', _self.get('tableId'));
+			_self.tfoot = S.get('tfoot', _self.get('tableId'));
 			
-			
-			_self._initStore();			
-	        _self._eventRender();
+			_self._initStore();	
 			_self._initGrid();
+			_self._eventRender();
 		},
 		
-		// 事件初始化
+		// 事件初始化 -- click -- mouseout -- mouseover
 		_eventRender: function(){
 			var _self = this;
 			
-			//_self.store.addData( {} );
+			// thead事件
+			Event.on(_self.thead, 'click', function(event){
+				_self._allSlectEvt(event.target);	
+			});
+						
+			// tbody事件
+			S.one(_self.tbody).on('click', function (event) {
+				_self._rowClickEvent(event.target);
+			}).on('mouseover', function (event) {
+				_self._rowOverEvent(event.target);
+			}).on('mouseout', function (event) {
+				_self._rowOutEvent(event.target);
+			});			
+			
 		},
-
+		
 		// 初始化gird
 		_initGrid: function(){
-			var _self = this;	
+			var _self = this,
+				pagContainer = _self.get('pageConterId') || '#J_Page';	
 			
-			_self.store.setResult( _self.get('staticData') );
+			// 如果异步 则异步加载数据，否则加载 静态数据 --Store
+			if(_self.get('isAjaxData')){
+				if(_self.get('ajaxUrl')){
+					_self.store.load();
+				}else{
+					throw 'ajax url error！';
+				}				
+			}else if(_self.get('staticData')){
+				_self.store.setResult( _self.get('staticData') );				
+			}
 			
+			// 是否分页
+			if(_self.get('isPagination')){
+				// 初始化组件实例
+				_self.pagination = new Pagination(pagContainer);
+				/*
+					{
+						currentPage: 1, 		// 默认选中第7页
+						totalPage: 12, 			// 一共有12页
+						firstPagesCount: 2, 	// 显示最前面的2页
+						preposePagesCount: 1, 	// 当前页的紧邻前置页为1页
+						postposePagesCount: 2,	// 当前页的紧邻后置页为2页
+						lastPagesCount: 1 		// 显示最后面的1页
+					}
+				
+				*/				
+			}
 			
-			// Event.delegate(self.get('tableId'), 'click', SELECTALLCLS, function(el){ 绑定 选择池table 全选事件
-				// var el = el.target,
-					// isChecked = el.checked || D.attr(el, 'checked');
-
-                // _self.poolAllCheckData = self.selectedAllBox(self.get('tableId'), POOLCHECKBOXCLS, isChecked);
-            // });
 			
 			// if (!_self._isAutoFitWidth()) {//如果设置了宽度，则使用此宽度
 				// width = _self.get('width');
@@ -133,21 +182,14 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
 		
 		// 初始化Store
 		_initStore: function(){
-			var _self = this;
+			var _self = this,
+				data = TL.serializeToObject(_self.get('formEl'));				
 			
-			// 如果异步 则异步加载数据，否则加载 静态数据 --Store
-			if(_self.get('isAjaxData') && _self.get('ajaxUrl')){
-				_self.store = new Store({
-					url : _self.get('ajaxUrl'),
-					root: 'rows',
-					totalProperty: 'results', 	 // 数据条数
-					params: {type:'all', id:'DJKFJDKFJ94944'}	//自定义参数
-				});
-			}else{
-				_self.store = new Store({
-					autoLoad: false				// 是否自动加载
-				});
-			}
+			_self.store = new Store({
+				autoLoad: _self.get('autoLoad'),
+				url: _self.get('ajaxUrl'),
+				params: TL.encodeURIParam(data)
+			});
 			
 			// 若无store则推出绑定
 			if(!_self.store){
@@ -169,7 +211,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
 
 				_self.showData(results);
 
-				if (loadMask) {
+				if(loadMask) {
 					loadMask.hide();
 				}
 			});
@@ -194,13 +236,112 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
 				}
 			});
 		},
-
-
+		
+		// 全选事件
+		_allSlectEvt: function(target){
+			var _self = this,
+				hasAllSelect = DOM.hasClass(target, SELECTALLCLS);
+				
+			if(hasAllSelect){					
+                _self._setAllRowsSelected(target.checked);
+			}
+		},
+		
+				
+		// 查找 row
+		_findRow: function (element) {
+			return this._lookupByClass(element, CLS_GRID_ROW);
+		},	
+		
+		// 查找 cell
+		_findCell: function (element) {
+			return this._lookupByClass(element, CLS_GRID_CELL);
+		},
+		
+		// 通过class查找方法，若木有则返回父容器下的样式元素 td tr
+		_lookupByClass: function(element, css){
+			if(DOM.hasClass(element, css)) {
+				return element;
+			}
+			return DOM.parent(element, '.' + css);
+		},
+		
+		// row是否选中
+		_isRowSelected: function(row) {
+			return S.one(row).hasClass(CLS_GRID_ROW_SELECTED);
+		},
+		
+		//行的 click 事件
+		_rowClickEvent: function (target) {
+			var _self = this,
+				row = _self._findRow(target),
+				cell = _self._findCell(target),
+				rowCheckable = _self.get('checkable'), // 是否有checkbox
+				
+				data = null,
+				eventResult = null;
+				
+			if(row){
+				data = DOM.data(row, DATA_ELEMENT);
+				
+				if(cell){
+					eventResult = _self.fire('cellClick', {data: data, row: row, cell: cell, field: DOM.attr(cell, ATTR_COLUMN_FIELD), domTarget: target});
+					if(eventResult === false){ // 如果事件出错，则退出
+						return;
+					}
+				}
+				_self.fire('rowclick', {data: data, row: row});
+				
+				// 设置行选中状态
+				if(rowCheckable){// checkbox
+					if(!_self._isRowSelected(row)) {
+						_self._setRowSelected(row, true);
+					}else{
+						_self._setRowSelected(row, false);
+					}
+				}
+			}
+		},
+		
+		// 行的双击事件
+		_rowDoubleClickEvent: function(target){
+			var _self = this,
+				row = _self._findRow(target),
+				cell = _self._findCell(target),
+				data = null;
+			if (row) {
+				data = DOM.data(row, DATA_ELEMENT);
+				if(cell) {
+					_self.fire('celldblclick', {data : data, row : row, cell : cell, field : DOM.attr(cell, ATTR_COLUMN_FIELD), domTarget : target});
+				}
+				_self.fire('rowdblclick', {data : data, row : row});
+			}
+		},
+		
+		//行的 mouseover 事件
+		_rowOverEvent : function (target) {
+			var _self = this,
+				row = _self._findRow(target);
+				
+			if(row) {
+				S.one(row).addClass(CLS_GRID_ROW_OVER);
+			}
+		},
+		
+		//行的 mouseout 事件
+		_rowOutEvent : function (target) {
+			var _self = this,
+				row = _self._findRow(target);
+			if (row) {
+				S.one(row).removeClass(CLS_GRID_ROW_OVER);
+			}
+		},		
+		
 		/**
 		* 显示数据
 		* @param {Array} data 显示的数据
 		* 
-		*/
+		*/		
 		showData : function (data) {
 			var _self = this;
 
@@ -237,7 +378,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
 		*/
 		_createRow : function (element, index) {
 			var _self = this,
-				rowTemplate = _self.trRender(element, _self.get('trTpl') ), // 手动全部显示 或者 根据 模板创建
+				rowTemplate = _self.trRender(element, _self.get('trTpl') ), // 暂时支持 用户 自定义tr模板 创建tr
 				rowEl = new Node(rowTemplate).appendTo( _self.tbody ),
 				dom = rowEl.getDOMNode();
 			DOM.data(dom, DATA_ELEMENT, element);
@@ -253,13 +394,12 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
 		*/
 		removeData : function (data) {
 			var _self = this,
-				tbody = _self.get('tbody'),
 				rows = S.makeArray(_self.tbody.rows);
 
             S.each(rows, function (row) {
                 var obj = DOM.data(row, DATA_ELEMENT);
                 if (obj && S.inArray(obj, data)) {
-					_self.fire('rowremoved',{data : obj,row : row});
+					_self.fire('rowremoved',{data: obj, row: row});
 					DOM.remove(row);
                 }
             });
@@ -302,84 +442,89 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
 
     		return creatNode;
     	},
-
-    	/*
-		* @description 公用方法--- 遍历 选中/取消 既定文档作用域, 指定cls钩子的 checkbox, 设置checked状态
-		* @param {string|boolean|document} class 钩子-- 是否选中 --- 文档作用域
-		* @return {array} 选中的checkbox value值 数组
-		*/
-    	selectedAllBox: function(thatDoc, cls, isChecked){
-    		var self = this,
-    		    selectedAry = [],	
-    			thatDoc = thatDoc || document, 
-                groupRadios = S.query(cls, thatDoc);
-                
-            S.each(groupRadios, function(el){
-            	var trID = DOM.val(el);
-
-				if(isChecked){
-					el.checked = 'checked';
-					selectedAry.push(trID);
-				}else{
-					el.checked = '';
-					DOM.removeAttr(el, 'checked');
-				}               
-            });
-
-			return selectedAry;
-    	},
 		
 		/**
-		* 取消选中的记录
+		* 取消选中的记录 
 		*/
-		clearSelection : function () {
+		clearSelection : function(){
 			var _self = this;
 			
 			_self._setAllRowsSelected(false);
+			_self._setHeaderChecked(false);
+		},
+		
+				
+		//设置表头选中状态
+		_setHeaderChecked : function (checked) {
+			var _self = this,
+				header = S.get('thead', _self.get('tableId') ),
+				checkEl = S.one(SELECTALLCLS, header);
+			
+			if(checkEl) {
+				checkEl.attr('checked', checked);
+			}
 		},
 		
 		//设置全选
 		_setAllRowsSelected : function (selected) {
-			var _self = this,
-				body = _self.get('tbody');
-			//_self._setHeaderChecked(true);
-			S.each(body.rows, function (row) {
+			var _self = this;			
+			
+			S.each(_self.tbody.rows, function(row) { 
 				_self._setRowSelected(row, selected);
 			});
 		},
+		
+		/**
+		* 获取选中的数据
+		* @return {Array} 返回选中的数据
+		*/
+		getSelection : function(){
+			var _self = this,
+				selectedRows = S.all('.' + CLS_GRID_ROW_SELECTED, _self.tbody),
+				objs = [];
+
+			S.each(selectedRows, function(row) {
+				var obj = DOM.data(row, DATA_ELEMENT);
+				if(obj) {
+					objs.push(obj);
+				}
+			});
+			return objs;
+		},
+		
 		//设置行选择
 		_setRowSelected : function (row, selected) {
 			var _self = this,
-				checkbox = DOM.get('.' + CLS_CHECKBOX, row),
+				checkbox = DOM.get(CLS_CHECKBOX, row),
 				data = DOM.data(row, DATA_ELEMENT),
 				hasSelected = DOM.hasClass(row, CLS_GRID_ROW_SELECTED);
-			if (hasSelected === selected) {
+				
+			if(hasSelected === selected) {
 				return;
 			}
 			
-			if (checkbox) {
+			if(checkbox) {
 				//如果选择框不可用，此行不能选中
 				if(DOM.attr(checkbox,'disabled')){
 					return;
 				}
 				checkbox.checked = selected;
 			}
-			if (selected) {
+			
+			if(selected) {
 				DOM.addClass(row, CLS_GRID_ROW_SELECTED);
-				//_self.fire('rowselected', {data : data, row : row});
 				_self._onRowSelectChanged(row, selected);
-			} else {
+			}else{
 				DOM.removeClass(row, CLS_GRID_ROW_SELECTED);
-				_self._setHeaderChecked(false);
-				//_self.fire('rowunselected', {data : data, row : row});
 				_self._onRowSelectChanged(row, selected);
 			}
-			//_self.fire('rowselectchanged', {data : data, row : row});
 		},
+		
 		//触发行选中，取消选中事件
-		_onRowSelectChanged : function(row,selected){
+		_onRowSelectChanged : function(row, selected){
 			var _self = this,
 				data = DOM.data(row, DATA_ELEMENT);
+				
 			if(selected){
 				_self.fire('rowselected', {data : data, row : row});
 			}else{
@@ -387,7 +532,8 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
 			}
 			_self.fire('rowselectchanged', {data : data, row : row, selected : selected});
 		},
-    	// 渲染data json 扁平化数据  delay
+    	
+		// 渲染data json 扁平化数据  delay
     	_renderTd: function(data, isPoolTr){
     		var _self = this,
     			htmlAry = [];
@@ -414,8 +560,9 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store) { // O,
 				});
 			}
     	}
+	
 	});
 
 return Grid;
 
-}, {'requires':['xtemplate', 'mui/gridstore', 'sizzle']}); // 'mui/overlay','mui/overlay/overlay.css',
+}, {'requires':['xtemplate', 'mui/gridstore', 'TL', 'gallery/pagination/2.0/index', 'sizzle']}); // 'mui/overlay','mui/overlay/overlay.css',

@@ -1,18 +1,18 @@
 /**
-* æ•°æ®ç¼“å†²ç±»ï¼Œç¼“å­˜æ•°æ®åœ¨æµè§ˆå™¨ä¸­
-* @class æ•°æ®ç¼“å†²ç±»
-* @param {Object} config é…ç½®é¡¹ï¼Œstoreä¸Šé¢çš„fieldå­—æ®µå¯ä»¥ä¼ å…¥é…ç½®é¡¹ä¸­
-* @property {String} url æ˜¯å­—æ®µ proxy.urlçš„ç®€å†™æ–¹å¼ï¼Œå¯ä»¥ç›´æ¥å†™åœ¨é…ç½®ä¿¡æ¯ä¸­
+* Êı¾İ»º³åÀà£¬»º´æÊı¾İÔÚä¯ÀÀÆ÷ÖĞ
+* @class Êı¾İ»º³åÀà
+* @param {Object} config ÅäÖÃÏî£¬storeÉÏÃæµÄfield×Ö¶Î¿ÉÒÔ´«ÈëÅäÖÃÏîÖĞ
+* @property {String} url ÊÇ×Ö¶Î proxy.urlµÄ¼òĞ´·½Ê½£¬¿ÉÒÔÖ±½ÓĞ´ÔÚÅäÖÃĞÅÏ¢ÖĞ
 * @example 
 * var store = new Store({ use
 *	url : 'data.php'
-	root: 'rows',  // æ ¹ç›®å½•
-	totalProperty: 'results',  // æ•°æ®æ¡æ•°
-	autoLoad: true,				// æ˜¯å¦è‡ªåŠ¨åŠ è½½
-	proxy: {url : 'data.php', method: 'get' } //æŒ‰ç…§'name' å­—æ®µé™åºæ’åº
-	params: {id:'124',type:1}//è‡ªå®šä¹‰å‚æ•°
+	root: 'rows',  // ¸ùÄ¿Â¼
+	totalProperty: 'results',  // Êı¾İÌõÊı
+	autoLoad: true,				// ÊÇ·ñ×Ô¶¯¼ÓÔØ
+	proxy: {url : 'data.php', method: 'get' } //°´ÕÕ'name' ×Ö¶Î½µĞòÅÅĞò
+	params: {id:'124',type:1}//×Ô¶¨Òå²ÎÊı
 	
-	matchFunction  // å¯¹è±¡åŒ¹é…å‡½æ•°	
+	matchFunction  // ¶ÔÏóÆ¥Åäº¯Êı	
 	
 	
 	
@@ -42,7 +42,7 @@ KISSY.add('mui/gridstore', function(S){
 		/** @lends Store.prototype */	
 		{
 			/**
-			* åŠ è½½æ•°æ®æ—¶ï¼Œè¿”å›æ•°æ®çš„æ ¹ç›®å½•
+			* ¼ÓÔØÊı¾İÊ±£¬·µ»ØÊı¾İµÄ¸ùÄ¿Â¼
 			* @field
 			* @type String
 			* @default  "rows"
@@ -52,7 +52,7 @@ KISSY.add('mui/gridstore', function(S){
 			root: 'rows', 
 
 			/**
-			* åŠ è½½æ•°æ®æ—¶ï¼Œç¬¦åˆæ¡ä»¶çš„æ•°æ®æ€»æ•°ï¼Œç”¨äºåˆ†é¡µ
+			* ¼ÓÔØÊı¾İÊ±£¬·ûºÏÌõ¼şµÄÊı¾İ×ÜÊı£¬ÓÃÓÚ·ÖÒ³
 			* @field
 			* @type String
 			* @default  "results"
@@ -63,7 +63,7 @@ KISSY.add('mui/gridstore', function(S){
 			totalProperty: 'results', 
 
 			/**
-			* åŠ è½½æ•°æ®æ—¶ï¼Œè¿”å›çš„æ ¼å¼,ç›®å‰åªæ”¯æŒ"jsonã€jsonp"æ ¼å¼
+			* ¼ÓÔØÊı¾İÊ±£¬·µ»ØµÄ¸ñÊ½,Ä¿Ç°Ö»Ö§³Ö"json¡¢jsonp"¸ñÊ½
 			* @field
 			* @type String
 			* @default "json"
@@ -71,7 +71,7 @@ KISSY.add('mui/gridstore', function(S){
 
 			dataType: 'json', 
 			/**
-			* åˆ›å»ºå¯¹è±¡æ—¶æ˜¯å¦è‡ªåŠ¨åŠ è½½
+			* ´´½¨¶ÔÏóÊ±ÊÇ·ñ×Ô¶¯¼ÓÔØ
 			* @field
 			* @type Boolean
 			* @default true
@@ -79,7 +79,7 @@ KISSY.add('mui/gridstore', function(S){
 			autoLoad: true,
 
 			/**
-			* æ’åºä¿¡æ¯
+			* ÅÅĞòĞÅÏ¢
 			* @field 
 			* @type Object
 			* @default { field: '', direction: 'ASC' }
@@ -87,41 +87,41 @@ KISSY.add('mui/gridstore', function(S){
 			* var store = new Store({
 			*		url : 'data.php',
 			*		autoLoad : true,
-			*		sortInfo: { field: 'name', direction: 'DESC' }//æŒ‰ç…§'name' å­—æ®µé™åºæ’åº
+			*		sortInfo: { field: 'name', direction: 'DESC' }//°´ÕÕ'name' ×Ö¶Î½µĞòÅÅĞò
 			*	});
 			*/
 			sortInfo: { field: '', direction: 'ASC' },
 
 			/**
-			* è¿æ¥ä¿¡æ¯ï¼ŒåŒ…å«2ä¸ªå­—æ®µ:<br>
-			* url : åŠ è½½æ•°æ®çš„åœ°å€<br>
-			* method : åŠ è½½æ•°æ®çš„æ–¹å¼"get","post"ï¼Œé»˜è®¤å€¼ä¸º"post"
+			* Á¬½ÓĞÅÏ¢£¬°üº¬2¸ö×Ö¶Î:<br>
+			* url : ¼ÓÔØÊı¾İµÄµØÖ·<br>
+			* method : ¼ÓÔØÊı¾İµÄ·½Ê½"get","post"£¬Ä¬ÈÏÖµÎª"post"
 			* @field 
 			* @type Object
 			* @default { method: 'post' }
 			* @example 
 			* var store = new Store({
 			*		autoLoad : true,
-			*		proxy: {url : 'data.php', method: 'get' }//æŒ‰ç…§'name' å­—æ®µé™åºæ’åº
+			*		proxy: {url : 'data.php', method: 'get' }//°´ÕÕ'name' ×Ö¶Î½µĞòÅÅĞò
 			*	});
 			*/			
 			proxy: { method: 'post' },
 
 			/**
-			* è‡ªå®šä¹‰å‚æ•°ï¼Œç”¨äºåŠ è½½æ•°æ®æ—¶å‘é€åˆ°åå°
+			* ×Ô¶¨Òå²ÎÊı£¬ÓÃÓÚ¼ÓÔØÊı¾İÊ±·¢ËÍµ½ºóÌ¨
 			* @field
 			* @type Object
 			* @example
 			* var store = new Store({
 			*		url :'data',
 			*		autoLoad : true,
-			*		params: {id:'124',type:1}//è‡ªå®šä¹‰å‚æ•°
+			*		params: {id:'124',type:1}//×Ô¶¨Òå²ÎÊı
 			*	});
 			*/
 			params:{},
 
 			/**
-			* æ˜¯å¦åç«¯æ’åºï¼Œå¦‚æœä¸ºåç«¯æ’åºï¼Œæ¯æ¬¡æ’åºå‘é€æ–°è¯·æ±‚ï¼Œå¦åˆ™ï¼Œç›´æ¥å‰ç«¯æ’åº
+			* ÊÇ·ñºó¶ËÅÅĞò£¬Èç¹ûÎªºó¶ËÅÅĞò£¬Ã¿´ÎÅÅĞò·¢ËÍĞÂÇëÇó£¬·ñÔò£¬Ö±½ÓÇ°¶ËÅÅĞò
 			* @field
 			* @type Boolean
 			* @default true
@@ -129,7 +129,7 @@ KISSY.add('mui/gridstore', function(S){
 			remoteSort: true,
 
 			/**
-			* å¯¹è±¡çš„åŒ¹é…å‡½æ•°ï¼ŒéªŒè¯ä¸¤ä¸ªå¯¹è±¡æ˜¯å¦ç›¸å½“
+			* ¶ÔÏóµÄÆ¥Åäº¯Êı£¬ÑéÖ¤Á½¸ö¶ÔÏóÊÇ·ñÏàµ±
 			* @field
 			* @type Function
 			* @default function(obj1,obj2){return obj1==obj2};
@@ -176,10 +176,10 @@ KISSY.add('mui/gridstore', function(S){
 			totalCount : 0
 		});
 
-		//å£°æ˜æ”¯æŒçš„äº‹ä»¶
+		//ÉùÃ÷Ö§³ÖµÄÊÂ¼ş
 		_self.events = [
 			/**  
-			* æ•°æ®æ¥å—æ”¹å˜ï¼Œæ‰€æœ‰å¢åŠ ã€åˆ é™¤ã€ä¿®æ”¹çš„æ•°æ®è®°å½•æ¸…ç©º
+			* Êı¾İ½ÓÊÜ¸Ä±ä£¬ËùÓĞÔö¼Ó¡¢É¾³ı¡¢ĞŞ¸ÄµÄÊı¾İ¼ÇÂ¼Çå¿Õ
 			* @name Store#acceptchanges
 			* @event  
 			*/
@@ -187,35 +187,35 @@ KISSY.add('mui/gridstore', function(S){
 
 
 			/**  
-			* å½“æ•°æ®åŠ è½½å®Œæˆå
+			* µ±Êı¾İ¼ÓÔØÍê³Éºó
 			* @name Store#load  
 			* @event  
-			* @param {event} e  äº‹ä»¶å¯¹è±¡ï¼ŒåŒ…å«åŠ è½½æ•°æ®æ—¶çš„å‚æ•°
+			* @param {event} e  ÊÂ¼ş¶ÔÏó£¬°üº¬¼ÓÔØÊı¾İÊ±µÄ²ÎÊı
 			*/
 			'load',
 
 			/**  
-			* å½“æ•°æ®åŠ è½½å‰
+			* µ±Êı¾İ¼ÓÔØÇ°
 			* @name Store#beforeload
 			* @event  
 			*/
 			'beforeload',
 
 			/**  
-			* å‘ç”Ÿåœ¨ï¼Œbeforeloadå’Œloadä¸­é—´ï¼Œæ•°æ®å·²ç»è·å–å®Œæˆï¼Œä½†æ˜¯è¿˜æœªè§¦å‘loadäº‹ä»¶ï¼Œç”¨äºè·å–è¿”å›çš„åŸå§‹æ•°æ®
+			* ·¢ÉúÔÚ£¬beforeloadºÍloadÖĞ¼ä£¬Êı¾İÒÑ¾­»ñÈ¡Íê³É£¬µ«ÊÇ»¹Î´´¥·¢loadÊÂ¼ş£¬ÓÃÓÚ»ñÈ¡·µ»ØµÄÔ­Ê¼Êı¾İ
 			* @name Store#beforeProcessLoad
 			* @event  
-			* @param {event} e  äº‹ä»¶å¯¹è±¡
-			* @param {Object} e.data ä»æœåŠ¡å™¨ç«¯è¿”å›çš„æ•°æ®
+			* @param {event} e  ÊÂ¼ş¶ÔÏó
+			* @param {Object} e.data ´Ó·şÎñÆ÷¶Ë·µ»ØµÄÊı¾İ
 			*/
 			'beforeProcessLoad',
 			
 			/**  
-			* å½“æ·»åŠ æ•°æ®æ—¶è§¦å‘è¯¥äº‹ä»¶
+			* µ±Ìí¼ÓÊı¾İÊ±´¥·¢¸ÃÊÂ¼ş
 			* @name Store#addrecords  
 			* @event  
-			* @param {event} e  äº‹ä»¶å¯¹è±¡
-			* @param {Array} e.data æ·»åŠ çš„æ•°æ®é›†åˆ
+			* @param {event} e  ÊÂ¼ş¶ÔÏó
+			* @param {Array} e.data Ìí¼ÓµÄÊı¾İ¼¯ºÏ
 			*/
 			'addrecords',
 
@@ -226,32 +226,32 @@ KISSY.add('mui/gridstore', function(S){
 
 
 			/**  
-			* å½“åˆ é™¤æ•°æ®æ˜¯è§¦å‘è¯¥äº‹ä»¶
+			* µ±É¾³ıÊı¾İÊÇ´¥·¢¸ÃÊÂ¼ş
 			* @name Store#removerecords  
 			* @event  
-			* @param {event} e  äº‹ä»¶å¯¹è±¡
-			* @param {Array} e.data åˆ é™¤çš„æ•°æ®é›†åˆ
+			* @param {event} e  ÊÂ¼ş¶ÔÏó
+			* @param {Array} e.data É¾³ıµÄÊı¾İ¼¯ºÏ
 			*/
 			'removerecords',
 			
 			/**  
-			* å½“æ›´æ–°æ•°æ®æŒ‡å®šå­—æ®µæ—¶è§¦å‘è¯¥äº‹ä»¶
+			* µ±¸üĞÂÊı¾İÖ¸¶¨×Ö¶ÎÊ±´¥·¢¸ÃÊÂ¼ş
 			* @name Store#updaterecord  
 			* @event  
-			* @param {event} e  äº‹ä»¶å¯¹è±¡
-			* @param {Object} e.record æ›´æ–°çš„æ•°æ®
-			* @param {Object} e.field æ›´æ–°çš„å­—æ®µ
-			* @param {Object} e.value æ›´æ–°çš„å€¼
+			* @param {event} e  ÊÂ¼ş¶ÔÏó
+			* @param {Object} e.record ¸üĞÂµÄÊı¾İ
+			* @param {Object} e.field ¸üĞÂµÄ×Ö¶Î
+			* @param {Object} e.value ¸üĞÂµÄÖµ
 			*/
 			'updaterecord',
 
 			/**  
-			* å‰ç«¯å‘ç”Ÿæ’åºæ—¶è§¦å‘
+			* Ç°¶Ë·¢ÉúÅÅĞòÊ±´¥·¢
 			* @name Store#localsort
 			* @event  
-			* @param {event} e  äº‹ä»¶å¯¹è±¡
-			* @param {Object} e.field æ’åºçš„å­—æ®µ
-			* @param {Object} e.direction æ’åºçš„æ–¹å‘ 'ASC'ï¼Œ'DESC'
+			* @param {event} e  ÊÂ¼ş¶ÔÏó
+			* @param {Object} e.field ÅÅĞòµÄ×Ö¶Î
+			* @param {Object} e.direction ÅÅĞòµÄ·½Ïò 'ASC'£¬'DESC'
 			*/
 			'localsort'
 		];
@@ -265,7 +265,7 @@ KISSY.add('mui/gridstore', function(S){
 	/** @lends Store.prototype */	
 	{
 		/**
-		* æ¥å—æ•°æ®æ”¹å˜ï¼Œå°†ç¼“å­˜çš„ä¿®æ”¹ã€æ–°å¢ã€åˆ é™¤çš„é›†åˆæ¸…é™¤
+		* ½ÓÊÜÊı¾İ¸Ä±ä£¬½«»º´æµÄĞŞ¸Ä¡¢ĞÂÔö¡¢É¾³ıµÄ¼¯ºÏÇå³ı
 		*/
 		acceptChanges : function(){
 			var _self = this;
@@ -275,27 +275,27 @@ KISSY.add('mui/gridstore', function(S){
 		},
 		
 		/**
-		* æ·»åŠ è®°å½•
-		* @param {Array|Object} data æ·»åŠ çš„æ•°æ®ï¼Œå¯ä»¥æ˜¯æ•°ç»„ï¼Œå¯ä»¥æ˜¯å•æ¡è®°å½•
-		* @param {Boolean} [noRepeat = false] æ˜¯å¦å»é‡,å¯ä»¥ä¸ºç©ºï¼Œé»˜è®¤ï¼š false 
-		* @param {Function} [match] åŒ¹é…å‡½æ•°ï¼Œå¯ä»¥ä¸ºç©ºï¼Œé»˜è®¤æ˜¯ï¼š<br>
+		* Ìí¼Ó¼ÇÂ¼
+		* @param {Array|Object} data Ìí¼ÓµÄÊı¾İ£¬¿ÉÒÔÊÇÊı×é£¬¿ÉÒÔÊÇµ¥Ìõ¼ÇÂ¼
+		* @param {Boolean} [noRepeat = false] ÊÇ·ñÈ¥ÖØ,¿ÉÒÔÎª¿Õ£¬Ä¬ÈÏ£º false 
+		* @param {Function} [match] Æ¥Åäº¯Êı£¬¿ÉÒÔÎª¿Õ£¬Ä¬ÈÏÊÇ£º<br>
 		*  function(obj1,obj2){
 		*	 return obj1 == obj2;
 		*  }
 		*  use
 		*/
-		add :function(data, noRepeat, match){
+		add: function(data, noRepeat, match){
 			var _self=this,
 				newData=[];
 
-			match = match || _self._getDefaultMatch();
+			match = S.isFunction(match) ? match : _self._getDefaultMatch();
 
 			if(!S.isArray(data)){
 				data = [data];
 			}
 
-			S.each(data,function(element){
-				if(!noRepeat || !_self.contains(element,match)){
+			S.each(data, function(element){
+				if(!noRepeat || !_self.contains(element, match)){
 					_self._addRecord(element);
 					newData.push(element);
 					_self.newRecords.push(element);
@@ -306,7 +306,7 @@ KISSY.add('mui/gridstore', function(S){
 			_self.fire('addrecords', {data:newData});
 		},
 		
-		/* æµ‹è¯•äº‹ä»¶ç›‘æ§ */
+		/* ²âÊÔÊÂ¼ş¼à¿Ø */
 		addData: function(data){
 			var _self = this;
 			_self.fire('dataChange', {});
@@ -314,7 +314,7 @@ KISSY.add('mui/gridstore', function(S){
 		
 
 		/**
-		* æ¸…é™¤æ•°æ®,æ¸…ç©ºæ‰€æœ‰æ•°æ® use
+		* Çå³ıÊı¾İ,Çå¿ÕËùÓĞÊı¾İ use
 		*/
 		clear : function(){ 
 			var _self = this;
@@ -322,15 +322,15 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* storeçš„æ¯”è¾ƒå‡½æ•°
-		* @param {Object} obj1 è¿›è¡Œæ¯”è¾ƒçš„è®°å½•1
-		* @param {Object} obj2 è¿›è¡Œæ¯”è¾ƒçš„è®°å½•2
-		* @param {String} [field] è¿›è¡Œæ’åºçš„å­—æ®µ,é»˜è®¤ä¸º sortInfo.field
-		* @param {String} [direction] è¿›è¡Œæ’åºçš„æ–¹å‘,é»˜è®¤ä¸º sortInfo.direction åŒ…æ‹¬â€˜ASCâ€™ï¼Œâ€˜DESC'
+		* storeµÄ±È½Ïº¯Êı
+		* @param {Object} obj1 ½øĞĞ±È½ÏµÄ¼ÇÂ¼1
+		* @param {Object} obj2 ½øĞĞ±È½ÏµÄ¼ÇÂ¼2
+		* @param {String} [field] ½øĞĞÅÅĞòµÄ×Ö¶Î,Ä¬ÈÏÎª sortInfo.field
+		* @param {String} [direction] ½øĞĞÅÅĞòµÄ·½Ïò,Ä¬ÈÏÎª sortInfo.direction °üÀ¨¡®ASC¡¯£¬¡®DESC'
 		* @return {Number} 
-		* å½“ obj1 > obj2 æ—¶è¿”å› 1
-		* å½“ obj1 = obj2 æ—¶è¿”å› 0 
-		* å½“ obj1 < obj2 æ—¶è¿”å› -1
+		* µ± obj1 > obj2 Ê±·µ»Ø 1
+		* µ± obj1 = obj2 Ê±·µ»Ø 0 
+		* µ± obj1 < obj2 Ê±·µ»Ø -1
 		*/
 		compare : function(obj1,obj2,field,direction){
 
@@ -338,7 +338,7 @@ KISSY.add('mui/gridstore', function(S){
 				dir = 1;
 			field = field || _self.sortInfo.field;
 			direction = direction || _self.sortInfo.direction;
-			//å¦‚æœæœªæŒ‡å®šæ’åºå­—æ®µï¼Œæˆ–æ–¹å‘ï¼Œåˆ™æŒ‰ç…§é»˜è®¤é¡ºåº
+			//Èç¹ûÎ´Ö¸¶¨ÅÅĞò×Ö¶Î£¬»ò·½Ïò£¬Ôò°´ÕÕÄ¬ÈÏË³Ğò
 			if(!field || !direction){
 				return 1;
 			}
@@ -348,31 +348,33 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* éªŒè¯æ˜¯å¦å­˜åœ¨æŒ‡å®šè®°å½•
-		* @param {Object} record æŒ‡å®šçš„è®°å½•
-		* @param {Function} [match = function(obj1,obj2){return obj1 == obj2}] é»˜è®¤ä¸ºæ¯”è¾ƒ2ä¸ªå¯¹è±¡æ˜¯å¦ç›¸åŒ
+		* ÑéÖ¤ÊÇ·ñ´æÔÚÖ¸¶¨¼ÇÂ¼
+		* @param {Object} record Ö¸¶¨µÄ¼ÇÂ¼
+		* @param {Function} [match = function(obj1,obj2){return obj1 == obj2}] Ä¬ÈÏÎª±È½Ï2¸ö¶ÔÏóÊÇ·ñÏàÍ¬
 		* @return {Boolean}
 		*/
-		contains :function(record,match){
-			return this.findIndexBy(record,match)!==-1;
+		contains: function(record, match){
+			return this.findIndexBy(record, match) !== -1;
 		},
 
 		/**
-		* æŸ¥æ‰¾æ•°æ®æ‰€åœ¨çš„ç´¢å¼•ä½ç½®,è‹¥ä¸å­˜åœ¨è¿”å›-1
-		* @param {Object} target æŒ‡å®šçš„è®°å½•
-		* @param {Function} [func = function(obj1,obj2){return obj1 == obj2}] é»˜è®¤ä¸ºæ¯”è¾ƒ2ä¸ªå¯¹è±¡æ˜¯å¦ç›¸åŒ
+		* ²éÕÒÊı¾İËùÔÚµÄË÷ÒıÎ»ÖÃ,Èô²»´æÔÚ·µ»Ø-1
+		* @param {Object} target Ö¸¶¨µÄ¼ÇÂ¼
+		* @param {Function} [func = function(obj1,obj2){return obj1 == obj2}] Ä¬ÈÏÎª±È½Ï2¸ö¶ÔÏóÊÇ·ñÏàÍ¬
 		* @return {Number}
 		*/
-		findIndexBy :function(target,func){
+		findIndexBy: function(target, func){
 			var _self = this,
 				position = -1,
 				records = this.resultRows;
-			func = func || _self._getDefaultMatch();
-			if(S.isUndefined(target)||S.isNull(target)){
+				
+			func = S.isFunction(func) ? func : _self._getDefaultMatch();
+			
+			if(S.isUndefined(target) || S.isNull(target)){
 				return -1;
 			}
-			S.each(records,function(record,index){
-				if(func(target,record)){
+			S.each(records, function(record, index){
+				if(func(target, record)){
 					position = index;
 					return false;
 				}
@@ -381,9 +383,9 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* æŸ¥æ‰¾è®°å½•ï¼Œä»…è¿”å›ç¬¬ä¸€æ¡  use
-		* @param {String} field å­—æ®µå
-		* @param {String|Function} value å­—æ®µå€¼ æˆ–è¿‡æ»¤æ–¹æ³•
+		* ²éÕÒ¼ÇÂ¼£¬½ö·µ»ØµÚÒ»Ìõ  use
+		* @param {String} field ×Ö¶ÎÃû
+		* @param {String|Function} value ×Ö¶ÎÖµ »ò¹ıÂË·½·¨
 		* @return {Object|null}
 		*/
 		find : function(field, value, func){ 
@@ -400,18 +402,18 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* æ ¹æ®ç´¢å¼•æŸ¥æ‰¾è®°å½•
-		* @param {Number} index ç´¢å¼• use
-		* @return {Object} æŸ¥æ‰¾çš„è®°å½•
+		* ¸ù¾İË÷Òı²éÕÒ¼ÇÂ¼
+		* @param {Number} index Ë÷Òı use
+		* @return {Object} ²éÕÒµÄ¼ÇÂ¼
 		*/
 		findByIndex : function(index){
 			return this.resultRows[index];
 		},
 
 		/**
-		* æŸ¥æ‰¾è®°å½•ï¼Œè¿”å›æ‰€æœ‰ç¬¦åˆæŸ¥è¯¢æ¡ä»¶çš„è®°å½•
-		* @param {String} field å­—æ®µå
-		* @param {String|Function} value å­—æ®µå€¼ æˆ–è¿‡æ»¤æ–¹æ³•
+		* ²éÕÒ¼ÇÂ¼£¬·µ»ØËùÓĞ·ûºÏ²éÑ¯Ìõ¼şµÄ¼ÇÂ¼
+		* @param {String} field ×Ö¶ÎÃû
+		* @param {String|Function} value ×Ö¶ÎÖµ »ò¹ıÂË·½·¨
 		* @return {Array}
 		*/
 		findAll : function(field, value, func){
@@ -426,9 +428,9 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* è·å–ä¸‹ä¸€æ¡è®°å½•
-		* @param {Object} record å½“å‰è®°å½•
-		* @return {Object} ä¸‹ä¸€æ¡è®°å½•
+		* »ñÈ¡ÏÂÒ»Ìõ¼ÇÂ¼
+		* @param {Object} record µ±Ç°¼ÇÂ¼
+		* @return {Object} ÏÂÒ»Ìõ¼ÇÂ¼
 		*/
 		findNextRecord : function(record){
 			var _self = this,
@@ -440,8 +442,8 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* åŠ è½½æ•°æ®,è‹¥ä¸æä¾›å‚æ•°æ—¶ï¼ŒæŒ‰ç…§ä¸Šæ¬¡è¯·æ±‚çš„å‚æ•°åŠ è½½æ•°æ®
-		* @param {Object} [params] è‡ªå®šä¹‰å‚æ•°ä»¥å¯¹è±¡å½¢å¼æä¾›
+		* ¼ÓÔØÊı¾İ,Èô²»Ìá¹©²ÎÊıÊ±£¬°´ÕÕÉÏ´ÎÇëÇóµÄ²ÎÊı¼ÓÔØÊı¾İ
+		* @param {Object} [params] ×Ô¶¨Òå²ÎÊıÒÔ¶ÔÏóĞÎÊ½Ìá¹©
 		* @example 
 		* store.load({id : 1234, type : 1});
 		*/
@@ -451,7 +453,7 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* è·å–åŠ è½½å®Œçš„æ•°æ® use
+		* »ñÈ¡¼ÓÔØÍêµÄÊı¾İ use
 		* @return {Array}
 		*/
 		getResult : function(){
@@ -459,7 +461,7 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* è·å–åŠ è½½å®Œçš„æ•°æ®çš„æ•°é‡ use
+		* »ñÈ¡¼ÓÔØÍêµÄÊı¾İµÄÊıÁ¿ use
 		* @return {Number}
 		*/
 		getCount : function () {
@@ -467,31 +469,31 @@ KISSY.add('mui/gridstore', function(S){
         },
 
 		/**
-		* è·å–æ·»åŠ çš„æ•°æ® use
-		* @return {Array} è¿”å›æ–°æ·»åŠ çš„æ•°æ®é›†åˆ
+		* »ñÈ¡Ìí¼ÓµÄÊı¾İ use
+		* @return {Array} ·µ»ØĞÂÌí¼ÓµÄÊı¾İ¼¯ºÏ
 		*/
 		getNewRecords : function(){
 			return this.newRecords;
 		},
 		
 		/**
-		* è·å–æ›´æ”¹çš„æ•°æ®
-		* @return {Array} è¿”å›æ›´æ”¹çš„æ•°æ®é›†åˆ
+		* »ñÈ¡¸ü¸ÄµÄÊı¾İ
+		* @return {Array} ·µ»Ø¸ü¸ÄµÄÊı¾İ¼¯ºÏ
 		*/
 		getModifiedRecords : function(){
 			return this.modifiedRecords;
 		},
 
 		/**
-		* è·å–åˆ é™¤çš„æ•°æ®
-		* @return {Array} è¿”å›åˆ é™¤çš„æ•°æ®é›†åˆ
+		* »ñÈ¡É¾³ıµÄÊı¾İ
+		* @return {Array} ·µ»ØÉ¾³ıµÄÊı¾İ¼¯ºÏ
 		*/
 		getDeletedRecords : function(){
 			return this.deletedRecords;
 		},
 
 		/**
-		* è·å–è¡¨æ ¼æºæ•°æ®çš„æ€»æ•°
+		* »ñÈ¡±í¸ñÔ´Êı¾İµÄ×ÜÊı
 		* @return {Number}
 		*/
         getTotalCount : function () {
@@ -499,21 +501,23 @@ KISSY.add('mui/gridstore', function(S){
         },
 
 		/**
-		* åˆ é™¤è®°å½•è§¦å‘ removerecords äº‹ä»¶. use
-		* @param {Array|Object} data æ·»åŠ çš„æ•°æ®ï¼Œå¯ä»¥æ˜¯æ•°ç»„ï¼Œå¯ä»¥æ˜¯å•æ¡è®°å½•
-		* @param {Function} [match = function(obj1, obj2){return obj1 == obj2}] åŒ¹é…å‡½æ•°ï¼Œå¯ä»¥ä¸ºç©º
+		* É¾³ı¼ÇÂ¼´¥·¢ removerecords ÊÂ¼ş. use
+		* @param {Array|Object} data Ìí¼ÓµÄÊı¾İ£¬¿ÉÒÔÊÇÊı×é£¬¿ÉÒÔÊÇµ¥Ìõ¼ÇÂ¼
+		* @param {Function} [match = function(obj1, obj2){return obj1 == obj2}] Æ¥Åäº¯Êı£¬¿ÉÒÔÎª¿Õ
 		*/
 		remove :function(data, match){ 
 			var _self =this,
 				delData=[];
-			match = match || _self._getDefaultMatch();
+				
+			match = S.isFunction(match) ? match : _self._getDefaultMatch();
+			
 			if(!S.isArray(data)){
 				data = [data];
 			}
 			S.each(data,function(element){
-				var index = _self.findIndexBy(element,match),
+				var index = _self.findIndexBy(element, match),
 				    record = _self._removeAt(index);
-				//æ·»åŠ åˆ°å·²åˆ é™¤é˜Ÿåˆ—ä¸­,å¦‚æœæ˜¯æ–°æ·»åŠ çš„æ•°æ®ï¼Œä¸è®¡å…¥åˆ é™¤çš„æ•°æ®é›†åˆä¸­
+				//Ìí¼Óµ½ÒÑÉ¾³ı¶ÓÁĞÖĞ,Èç¹ûÊÇĞÂÌí¼ÓµÄÊı¾İ£¬²»¼ÆÈëÉ¾³ıµÄÊı¾İ¼¯ºÏÖĞ
 				if(!S.inArray(record,_self.newRecords) && !S.inArray(record,_self.deletedRecords)){
 					_self.deletedRecords.push(record);
 				}
@@ -527,8 +531,8 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* è®¾ç½®æ•°æ®ï¼Œåœ¨ä¸è‡ªåŠ¨åŠ è½½æ•°æ®æ—¶ï¼Œå¯ä»¥è‡ªåŠ¨å¡«å……æ•°æ®ï¼Œä¼šè§¦å‘ loadäº‹ä»¶
-		* @param {Array} data è®¾ç½®çš„æ•°æ®é›†åˆï¼Œæ˜¯ä¸€ä¸ªæ•°ç»„
+		* ÉèÖÃÊı¾İ£¬ÔÚ²»×Ô¶¯¼ÓÔØÊı¾İÊ±£¬¿ÉÒÔ×Ô¶¯Ìî³äÊı¾İ£¬»á´¥·¢ loadÊÂ¼ş
+		* @param {Array} data ÉèÖÃµÄÊı¾İ¼¯ºÏ£¬ÊÇÒ»¸öÊı×é
 		*/
 		setResult:function(data){
 			var _self = this,			
@@ -542,11 +546,11 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* è®¾ç½®è®°å½•çš„å€¼ ï¼Œè§¦å‘ updaterecord äº‹ä»¶
-		* @param {Object} obj ä¿®æ”¹çš„è®°å½•
-		* @param {String} field ä¿®æ”¹çš„å­—æ®µå
-		* @param {Any Type} value ä¿®æ”¹çš„å€¼
-		* @param {Boolean} [isMatch = false] æ˜¯å¦éœ€è¦è¿›è¡ŒåŒ¹é…ï¼Œæ£€æµ‹æŒ‡å®šçš„è®°å½•æ˜¯å¦åœ¨é›†åˆä¸­
+		* ÉèÖÃ¼ÇÂ¼µÄÖµ £¬´¥·¢ updaterecord ÊÂ¼ş
+		* @param {Object} obj ĞŞ¸ÄµÄ¼ÇÂ¼
+		* @param {String} field ĞŞ¸ÄµÄ×Ö¶ÎÃû
+		* @param {Any Type} value ĞŞ¸ÄµÄÖµ
+		* @param {Boolean} [isMatch = false] ÊÇ·ñĞèÒª½øĞĞÆ¥Åä£¬¼ì²âÖ¸¶¨µÄ¼ÇÂ¼ÊÇ·ñÔÚ¼¯ºÏÖĞ
 		*/
 		setValue : function(obj,field,value,isMatch){
 			var record = obj,
@@ -568,16 +572,16 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* æ’åºï¼Œæ ¹æ®Storeçš„é…ç½®è¿›è¡Œï¼Œå‰ç«¯æ’åºæˆ–å‘é€è¯·æ±‚é‡æ–°åŠ è½½æ•°æ®
-		* è¿œç¨‹æ’åºï¼Œè§¦å‘loadäº‹ä»¶ï¼Œå‰ç«¯æ’åºè§¦å‘localsortäº‹ä»¶
-		* @param {String} field æ’åºå­—æ®µ
-		* @param {String} direction æ’åºæ–¹å‘
+		* ÅÅĞò£¬¸ù¾İStoreµÄÅäÖÃ½øĞĞ£¬Ç°¶ËÅÅĞò»ò·¢ËÍÇëÇóÖØĞÂ¼ÓÔØÊı¾İ
+		* Ô¶³ÌÅÅĞò£¬´¥·¢loadÊÂ¼ş£¬Ç°¶ËÅÅĞò´¥·¢localsortÊÂ¼ş
+		* @param {String} field ÅÅĞò×Ö¶Î
+		* @param {String} direction ÅÅĞò·½Ïò
 		*/
 		sort : function(field,direction){
 			var _self =this;
 			_self.sortInfo.field = field || _self.sortInfo.field;
 			_self.sortInfo.direction = direction || _self.sortInfo.direction;
-			if(_self.remoteSort){	//å¦‚æœè¿œç¨‹æ’åºï¼Œé‡æ–°åŠ è½½æ•°æ®
+			if(_self.remoteSort){	//Èç¹ûÔ¶³ÌÅÅĞò£¬ÖØĞÂ¼ÓÔØÊı¾İ
 				this.load();
 			}else{
 				_self._sortData(field,direction);
@@ -586,9 +590,9 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* æ›´æ–°è®°å½• ï¼Œè§¦å‘ updaterecord äº‹ä»¶
-		* @param {Object} obj ä¿®æ”¹çš„è®°å½•
-		* @param {Boolean} [isMatch = false] æ˜¯å¦éœ€è¦è¿›è¡ŒåŒ¹é…ï¼Œæ£€æµ‹æŒ‡å®šçš„è®°å½•æ˜¯å¦åœ¨é›†åˆä¸­
+		* ¸üĞÂ¼ÇÂ¼ £¬´¥·¢ updaterecord ÊÂ¼ş
+		* @param {Object} obj ĞŞ¸ÄµÄ¼ÇÂ¼
+		* @param {Boolean} [isMatch = false] ÊÇ·ñĞèÒª½øĞĞÆ¥Åä£¬¼ì²âÖ¸¶¨µÄ¼ÇÂ¼ÊÇ·ñÔÚ¼¯ºÏÖĞ
 		*/
 		update : function(obj,isMatch){
 			var record = obj,
@@ -610,7 +614,7 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* é”€æ¯
+		* Ïú»Ù
 		*/
         destroy: function () {
 			var _self = this;
@@ -618,9 +622,11 @@ KISSY.add('mui/gridstore', function(S){
 			_self = null;
         },
 
-		//æ·»åŠ è®°å½• use
+		//Ìí¼Ó¼ÇÂ¼ use
 		_addRecord :function(record, index){
-			var records = this.resultRows;
+			var _self = this,
+				records = _self.resultRows;
+				
 			if(S.isUndefined(index)){
 				index = records.length;
 			}
@@ -628,7 +634,7 @@ KISSY.add('mui/gridstore', function(S){
 			_self.fire('recordadded',{record:record, index:index});
 		},
 
-		//æ¸…é™¤æ”¹å˜çš„æ•°æ®è®°å½•
+		//Çå³ı¸Ä±äµÄÊı¾İ¼ÇÂ¼
 		_clearChanges : function(){
 			var _self = this;
 			_self.newRecords.splice(0);
@@ -636,14 +642,14 @@ KISSY.add('mui/gridstore', function(S){
 			_self.deletedRecords.splice(0);
 		},
 
-		//åŠ è½½æ•°æ® use
+		//¼ÓÔØÊı¾İ use
 		_loadData : function(params){
 			var _self = this,
 				loadparams = params || {},
 				data = null;
 			
 			/**
-			* @private è®¾ç½®ç»“æœ
+			* @private ÉèÖÃ½á¹û
 			*/
 			function setResult(resultRows, rowCount, totalCount){
 				_self.resultRows=resultRows;
@@ -664,7 +670,7 @@ KISSY.add('mui/gridstore', function(S){
                 type: _self.proxy.method,
                 data: data,
                 success : function (data, textStatus, XMLHttpRequest) {
-					_self.fire('beforeProcessLoad',{data:data});
+					_self.fire('beforeProcessLoad', {data:data} );
 
 					var resultRows=[],
 						rowCount = 0,
@@ -713,7 +719,7 @@ KISSY.add('mui/gridstore', function(S){
 			
 		},
 
-		//ç§»é™¤æ•°æ® use
+		//ÒÆ³ıÊı¾İ use
 		_removeAt:function(index, array){
 			if(index < 0){
 				return;
@@ -732,14 +738,14 @@ KISSY.add('mui/gridstore', function(S){
 			}
 		},
 
-		//æ’åº
+		//ÅÅĞò
 		_sortData : function(field,direction){
 			var _self = this;
 
 			field = field || _self.sortInfo.field;
 			direction = direction || _self.sortInfo.direction;
 
-			//å¦‚æœæœªå®šä¹‰æ’åºå­—æ®µï¼Œåˆ™ä¸æ’åº
+			//Èç¹ûÎ´¶¨ÒåÅÅĞò×Ö¶Î£¬Ôò²»ÅÅĞò
 			if(!field || !direction){
 				return;
 			}
@@ -748,12 +754,12 @@ KISSY.add('mui/gridstore', function(S){
 			});
 		},
 
-		//è·å–é»˜è®¤çš„åŒ¹é…å‡½æ•°
+		//»ñÈ¡Ä¬ÈÏµÄÆ¥Åäº¯Êı
 		_getDefaultMatch :function(){
 			return this.matchFunction;
 		},
 
-		//åˆå§‹åŒ–
+		//³õÊ¼»¯
 		_init : function(){
 			var _self =this;
 

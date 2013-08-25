@@ -197,7 +197,7 @@ KISSY.add('TL', function(S, Calendar){
 		* @param {HTMLForm} form 表单元素
 		* @return {Object} 表单元素的
 		*/
-		serializeToObject:function(form){
+		serializeToObject: function(form){
 			var originElements = S.makeArray(form.elements),
 				elements = null,
 				arr =[],
