@@ -172,6 +172,11 @@
 
 	KISSY.ready(function(S){
 	    S.use('mui/selectGrid', function(S, SelectGrid){  
+		
+			var ss = {"a":1, "b":2},
+				ary = [ {}, {"c":34}, {"a":1, "b":2}];
+				
+			var p = S.indexOf(ss, ary);
  
 	        new SelectGrid({	
 			
@@ -181,7 +186,7 @@
 					isPagination:true,									// 是否有分页 默认 为false
 					isAjaxData:true,									// 是否是异步数据 默认 为false
 					ajaxUrl: 'result.php',     							 // 异步查询url  
-					trTpl: main_table									// 选择池 table tbody tr 模板												
+					trTpl: main_table									// 选择池 table tbody tr 模板	
 				},
 				
 				candGridConfig:{

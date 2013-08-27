@@ -186,8 +186,9 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 				data = TL.serializeToObject(_self.get('formEl'));				
 			
 			_self.store = new Store({
-				autoLoad: _self.get('autoLoad'),
-				url: _self.get('ajaxUrl'),
+				dataType:'jsonp',	
+				autoLoad: _self.get('autoLoad'),				
+				proxy: {url : _self.get('ajaxUrl'), method: 'get' },
 				params: TL.encodeURIParam(data)
 			});
 			

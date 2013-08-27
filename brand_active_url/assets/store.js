@@ -140,8 +140,8 @@ KISSY.add('mui/gridstore', function(S){
 			},
 
 			/**
-			*
-			*
+			* 排序方法 wait 
+			* field 排序字段
 			*/
 			compareFunction : function(obj1,obj2){
 				if(obj1 === undefined){
@@ -220,7 +220,7 @@ KISSY.add('mui/gridstore', function(S){
 			'addrecords',
 
 			/**
-			* 
+			* 抛出异常时候
 			*/
 			'exception',
 
@@ -298,9 +298,13 @@ KISSY.add('mui/gridstore', function(S){
 				if(!noRepeat || !_self.contains(element, match)){
 					_self._addRecord(element);
 					newData.push(element);
-					_self.newRecords.push(element);
-					_self._removeFrom(element,_self.deletedRecords);
-					_self._removeFrom(element,_self.modifiedRecords);
+					
+					// 全局 - 增加 新增 记录
+					_self.newRecords.push(element); 
+					
+					// 全局 - 新添加数据 抹去 在删除记录 - 更改记录 的数据历史 
+					_self._removeFrom(element, _self.deletedRecords);
+					_self._removeFrom(element, _self.modifiedRecords);
 				}
 			});
 			_self.fire('addrecords', {data:newData});
@@ -348,7 +352,7 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* 验证是否存在指定记录
+		* 验证是否存在指定记录 -- 数字转换boolean值 中间方法
 		* @param {Object} record 指定的记录
 		* @param {Function} [match = function(obj1,obj2){return obj1 == obj2}] 默认为比较2个对象是否相同
 		* @return {Boolean}
@@ -358,7 +362,7 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* 查找数据所在的索引位置,若不存在返回-1
+		* 查找数据所在的索引位置,若不存在返回-1 公用方法 -- 已经存在数据(添加过的) 则返回相应加载数据的index值
 		* @param {Object} target 指定的记录
 		* @param {Function} [func = function(obj1,obj2){return obj1 == obj2}] 默认为比较2个对象是否相同
 		* @return {Number}
@@ -531,7 +535,7 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* 设置数据，在不自动加载数据时，可以自动填充数据，会触发 load事件
+		* 设置数据，在不自动加载数据时，可以手动填充数据，会触发 load事件
 		* @param {Array} data 设置的数据集合，是一个数组
 		*/
 		setResult:function(data){
@@ -622,7 +626,7 @@ KISSY.add('mui/gridstore', function(S){
 			_self = null;
         },
 
-		//添加记录 use
+		//添加记录  -- 可以指定序号-添加/替换； 增加index数组号
 		_addRecord :function(record, index){
 			var _self = this,
 				records = _self.resultRows;
@@ -652,15 +656,17 @@ KISSY.add('mui/gridstore', function(S){
 			* @private 设置结果
 			*/
 			function setResult(resultRows, rowCount, totalCount){
-				_self.resultRows=resultRows;
-				_self.rowCount=rowCount;
-				_self.totalCount=totalCount;
-
+				_self.resultRows = resultRows;
+				_self.rowCount = rowCount;
+				_self.totalCount = totalCount;
 			}
 			_self.fire('beforeload');
-
+			
+			// 设置 params参数 -上次请求参数 - 排序参数 - 新parms
 			loadparams = S.merge(_self.oldParams, _self.sortInfo, loadparams);
 			_self.oldParams = loadparams;
+			
+			// post vs get 方式参数格式化
 			data = _self.proxy.method === 'post' ? loadparams : (loadparams ? S.param(loadparams) : '');
 
 			S.ajax({
@@ -669,19 +675,21 @@ KISSY.add('mui/gridstore', function(S){
                 dataType: _self.dataType,
                 type: _self.proxy.method,
                 data: data,
-                success : function (data, textStatus, XMLHttpRequest) {
+                success : function (data, textStatus, XMLHttpRequest){
 					_self.fire('beforeProcessLoad', {data:data} );
 
 					var resultRows=[],
 						rowCount = 0,
 						totalCount = 0;
-
+					
+					// 出错 
 					if(data.hasError){
 						setResult(resultRows,rowCount,totalCount);
 						_self.fire('exception',{error:data.error});
 						return;
 					}
-
+					
+					// jsonp支持
 					if(S.isString(data)){
 						data = S.json.parse(data);
 					}
@@ -730,9 +738,10 @@ KISSY.add('mui/gridstore', function(S){
 			records.splice(index,1);
 			return record;
 		},
-		_removeFrom :function(record,array){
+		_removeFrom :function(record, array){
 			var _self = this,
-				index = S.indexOf(record,array);
+				index = S.indexOf(record, array);
+				
 			if(index >= 0){
 				_self._removeAt(index,array);
 			}
@@ -759,11 +768,11 @@ KISSY.add('mui/gridstore', function(S){
 			return this.matchFunction;
 		},
 
-		//初始化
+		//初始化 -- params -- url -- resultRows
 		_init : function(){
 			var _self =this;
 
-			_self.oldParams = _self.params ||{};
+			_self.oldParams = _self.params || {};
 			
 			if(!_self.proxy.url) {
                 _self.proxy.url = _self.url;
