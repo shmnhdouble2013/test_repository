@@ -100,14 +100,17 @@ input:focus{
 .show-el{
     display: block!important;
 }
+.height-auto{
+	height:auto!important;
+	max-height:100%!important;
+	min-height:0!important;
+}
 
 
 /*input*/
 textarea, input{
     border: 1px solid #CCC;
-    color: #333333;
-    height: 20px; /* update by jiali */
-    line-height: 20px; 
+    color: #333333;  
     font-size: 14px;
     text-indent: 6px;
     -webkit-border-radius: 3px;
@@ -122,6 +125,11 @@ textarea, input{
     transition: border .25s linear, color .25s linear;
     -webkit-backface-visibility: hidden;
 }
+input{
+    height: 20px; /* update by jiali */
+    line-height: 20px; 
+}
+
 input[disabled],
 input[readonly],
 textarea[disabled],
@@ -616,14 +624,13 @@ li.tbsui-step-end-cur{
 }
 
 
-/*page*/
+/* page 分页器 by huangj */
 .tbsui-page{
     padding: 1em 0;
     overflow: hidden;
     clear: both;
 }
-
-
+/* 内容器 */
 .tbsui-page-wrap{
     color: #999999;
     font-size: 14px;
@@ -891,6 +898,10 @@ span.radoBox-icons{
 	border: 1px solid;
 	border-color:#999999;
 }
+.ui-btn-disable{
+    border-color:#ccc;
+}
+
 
 
 /* rewrite mui select */
@@ -910,7 +921,7 @@ span.radoBox-icons{
 }
 
 li.mui-select-item {
-    color: #B51800 !important;
+    color: #333333 !important;
 }
 
 li.mui-select-item-hover, .mui-select-multiple li.mui-select-item-hover {
@@ -997,27 +1008,26 @@ li.mui-select-item-hover, .mui-select-multiple li.mui-select-item-hover {
 }
 
 
-  /* mui li 布局高度 by huangj --- 与下方 validation联合使用 */
-  .ui-form-field{
-	margin-bottom: 0;	
-	height:auto !important;
-	height:50px;	  
-	min-height:50px;
-  }    
-  
-  /* tbsui validation 提示样式 by huangj */
-  .tbsUiValid-under .ok, .tbsUiValid-text .ok{
-	visibility: hidden;
-  }      
-  .tbsUiValid-under .error i{
-	display:inline-block;
-	width:20px;
-	height:18px;
-	background: url(http://a.tbcdn.cn/apps/tmall/mui/msg/img/msg.png) -65px -153px no-repeat;
-	vertical-align:middle;
-  }
-  .tbsUiValid-text .error{	
-	color:#F0983F;
-	overflow:hidden;
-  }
+/* mui li 布局高度 by huangj --- 与下方 validation联合使用 */
+.ui-form-field{
+    margin-bottom: 0;	
+    height:auto !important;
+    height:50px;	  
+    min-height:50px;
+}      
+/* tbsui validation 提示样式 by huangj */
+.tbsUiValid-under .ok, .tbsUiValid-text .ok{
+    visibility: hidden;
+}    
+.tbsUiValid-text .error, .tbsUiValid-under .error{	
+    color:#F0983F;
+    overflow:hidden;
+}
+.tbsUiValid-under .error .icon{
+    display:inline-block;
+    width:20px;
+    height:18px;
+    background: url(http://a.tbcdn.cn/apps/tmall/mui/msg/img/msg.png) -65px -153px no-repeat;
+}
+
   

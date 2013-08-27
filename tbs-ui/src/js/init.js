@@ -1,28 +1,41 @@
 KISSY.ready(function(S){
     S.use('tbsui,mui/select,calendar,node,calendar/assets/dpl.css',function(S,Tbsui,Select,Calendar,Node){
+
+        // 初始化全局 'select','radio','checkbox'
         // var OTbsui = new Tbsui({
         //     selector:['select','radio','checkbox']
         // });
-
-        var OTbsui = new Tbsui({
-                selector:[]
-            });
+    
+        // 也可以 仅仅 初始化 tbsui对象实例
+        var OTbsui = new Tbsui();
 			
-		//tbsui -- 模拟radio checkbox方法  -- by 黄甲	
-        OTbsui._renderRidoCheckbox("radio",Node.one("#J_radio"));
-        OTbsui._renderRidoCheckbox("checkbox",Node.one("#J_checkbox"));
+		//tbsui 指定容器范围 初始化 模拟的 radio checkbox，默认document  -- by 黄甲	
+        OTbsui._renderRidoCheckbox("radio", Node.one("#J_radio"));
+        OTbsui._renderRidoCheckbox("checkbox", Node.one("#J_checkbox"));
 
-
+        // checkbox radio 事件监控 -- by 黄甲 
         OTbsui.on('checkboxClick radioClick', function(el){
             console.log("fire事件外部接收到并执行："+el.inputTarget);
         });
         
-        S.Event.on('#abcd', 'click', function(el){
-            // el.stopPropagation();
+        S.Event.on('input', 'click', function(el){
             console.log('原生input触发了'+ el.target);
         });
 
 		
+        //tbsui -- 验证框架 提示样式 2种方式 -- by 黄甲
+        S.use('Validation', function(S, Validation){
+        
+            var form = new Validation('#J_form',{
+                style: 'tbsUiValid_under'  // 若只显示 校验文本 style则配置  tbsUiValid_text
+            });
+            
+            KISSY.Event.on('#sub_form', "click", function(){
+                alert('校验结果：'+form.isValid());
+            });
+        });
+
+
         // mui select
         var data = [{text:'10',value:10},{text:'20',value:20},{text:'30',value:30}];
         new Select({
@@ -66,18 +79,5 @@ KISSY.ready(function(S){
             Node.one("#calB").val(S_Date.format(e.date, 'yyyy年mm月dd日 HH:MM'));
         });
 		
-		
-		
-		//tbsui -- 验证框架 提示样式  -- by 黄甲
-		S.use('Validation', function(S, Validation){
-		
-			var form = new Validation('#J_form',{
-				style: 'tbsUiValid_under'
-			});
-			
-			KISSY.Event.on('#sub_form', "click", function(){
-				form.isValid();
-			});
-		});
-    })
+    });
 });

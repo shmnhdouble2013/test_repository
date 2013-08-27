@@ -3,10 +3,8 @@
  * @Author:      dafeng.xdf[at]taobao.com  jia.huangj
  * @Date:        2013.7.3
  */
-
 KISSY.add('tbsui', function (S, XTemplate) { // , TbsUiValid Validation,
     'use strict';
-
     var D = S.DOM,
         E = S.Event,
         EMPTY = '';
@@ -25,7 +23,6 @@ KISSY.add('tbsui', function (S, XTemplate) { // , TbsUiValid Validation,
 		
         self.init();
     }
-	
     S.augment(Tbsui, S.EventTarget, {
         init:function(){
             var self = this;
@@ -409,7 +406,7 @@ KISSY.add("Validation", function(S, Validation){
 
 			style: {			
 				tbsUiValid_under: {
-					template: '<div class="tbsUiValid-under"><p class="estate"><span class="label"></span></p></div>',
+					template: '<div class="tbsUiValid-under"><p class="estate"><i class="icon">&nbsp;</i><span class="label"></span></p></div>',
 					event: 'focus blur keyup'
 				},			
 				tbsUiValid_text: {
