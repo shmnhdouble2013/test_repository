@@ -1,21 +1,5 @@
 /* 后台mui样式 */
 
-/**
- * Button
- * 支持a标签模拟的按钮或者原生的Button标签
- * @author Jiayao 2012-4-10
- */
-
-/*
-* @log 2011-04-21
-*
-*	1.IE6/IE7 button颜色因为使用了chroma滤镜不能设置为black或#000纯黑色，会变成透明;
-*	2.IE6/IE7 button因为边框设为透明，会比其它浏览器多占用2个像素的宽高，点击时边框会消失;
-* 3.各浏览器自适应宽度不一致，可通过设置width属性来统一
-*
-*	不支持ie9以下的IE浏览器的按钮圆角
-*/
-
 .ui-btn-s-primary,
 .ui-btn-m-primary,
 .ui-btn-l-primary,
