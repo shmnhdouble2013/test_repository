@@ -1,4 +1,6 @@
-{
+<?php
+	$callback = $_REQUEST['callback'];
+    echo $callback.'({
 	"success":true,
 	"message":"",
 	"results":10,
@@ -14,4 +16,5 @@
         {"nos":9, "id":"fa32f3a2f9", "actype":"站外", "medianame":"youku.com"},
         {"nos":10, "id":"fa32fa2f10", "actype":"站外", "medianame":"youku.com"}
     ]
-}
+})'; 
+?>

@@ -7,7 +7,7 @@
 * @update 2013-08-21
 * @example
 *   new Grid({
-		tableId: '#poolTable',			// table 容器 id
+		tableContainerId: '#poolTable',	// table 容器 id
 		tr_tpl: tpltr,					// tr渲染模板
 		gridData:[{},{}],				// 指定数据
 		isAjaxData:true,				// 是否是异步数据 默认 为false
@@ -46,14 +46,19 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 		
 	// grid 默认配置
 	var POLLGRIDDEFAULT = {
-			tableId: null, 							// table id钩子			
+			tableContainerId: null, 				// table 容器 id钩子			
 			isPagination:false,						// 是否有分页 默认 为false
 			pageSize: 10, 							// 分页大小
 			isAjaxData:false,						// 是否是异步数据 默认 为false
 			ajaxUrl: null,      					// 异步查询url  
 			trTpl: null,							// 选择池 table tbody tr 模板
 			staticData: [],							// 选择池 静态数据 
-			checkable:true							// 是否复选框 checkbox
+			checkable:true,							// 是否复选框 checkbox
+			loadMaskTpl: '<div class="loading-mask"></div>', // 加载数据遮罩功能
+			currentPage:1,										// 默认分页起点
+			totalPage: 10,										// 分页总数
+			pageLenght:10,										// 分页长度
+			dataField:'id'							// 单条 josn 数据 标示
 		}
 	/**
 	* 	ajaxUrl 返回数据格式
@@ -81,8 +86,6 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 
 		Grid.superclass.constructor.call(_self, config);		
 		
-		_self.config = config;
-		
 		_self._init();
 	}
 
@@ -100,10 +103,16 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 		_init: function(){
 			var _self = this;
 
-			_self.tbody = S.get('tbody', _self.get('tableId'));
-			_self.thead = S.get('thead', _self.get('tableId'));
-			_self.tfoot = S.get('tfoot', _self.get('tableId'));
+			_self.container  = _self.get('tableContainerId');
+			_self.tbody = S.get('tbody', _self.container);
+			_self.thead = S.get('thead', _self.container);
+			_self.tfoot = S.get('tfoot', _self.container);
 			
+			if(!_self.container){
+				throw '未指定表格容器！';
+			}
+
+			_self.loadingMaster();
 			_self._initStore();	
 			_self._initGrid();
 			_self._eventRender();
@@ -125,11 +134,10 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 				_self._rowOverEvent(event.target);
 			}).on('mouseout', function (event) {
 				_self._rowOutEvent(event.target);
-			});			
-			
+			});				
 		},
 		
-		// 初始化gird
+		// 初始化gird 和 分页器
 		_initGrid: function(){
 			var _self = this,
 				pagContainer = _self.get('pageConterId') || '#J_Page';	
@@ -137,7 +145,10 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			// 如果异步 则异步加载数据，否则加载 静态数据 --Store
 			if(_self.get('isAjaxData')){
 				if(_self.get('ajaxUrl')){
-					_self.store.load();
+					_self.store.load({ 
+						limit: _self.get('limit'), 
+						totalPage: _self.get('totalPage') 
+					});
 				}else{
 					throw 'ajax url error！';
 				}				
@@ -147,19 +158,16 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			
 			// 是否分页
 			if(_self.get('isPagination')){
+
 				// 初始化组件实例
-				_self.pagination = new Pagination(pagContainer);
-				/*
-					{
-						currentPage: 1, 		// 默认选中第7页
-						totalPage: 12, 			// 一共有12页
-						firstPagesCount: 2, 	// 显示最前面的2页
-						preposePagesCount: 1, 	// 当前页的紧邻前置页为1页
-						postposePagesCount: 2,	// 当前页的紧邻后置页为2页
-						lastPagesCount: 1 		// 显示最后面的1页
-					}
-				
-				*/				
+				_self.pagination = new Pagination(pagContainer, {
+					currentPage: _self.get('currentPage'), 		// 默认选中第7页
+					totalPage: _self.get('totalPage'), 			// 一共有多少页
+					firstPagesCount: 3, 	// 显示最前面的3页
+					preposePagesCount: 2, 	// 当前页的紧邻前置页为1页
+					postposePagesCount: 2,	// 当前页的紧邻后置页为2页
+					lastPagesCount: 2 		// 显示最后面的1页
+				});	
 			}
 			
 			
@@ -183,12 +191,12 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 		// 初始化Store
 		_initStore: function(){
 			var _self = this,
-				data = TL.serializeToObject(_self.get('formEl'));				
+				data = TL.serializeToObject(_self.get('formEl')),
+				data = S.merge(data, {"currentPage": _self.get('currentPage')});				
 			
 			_self.store = new Store({
-				dataType:'jsonp',	
-				autoLoad: _self.get('autoLoad'),				
-				proxy: {url : _self.get('ajaxUrl'), method: 'get' },
+				autoLoad: _self.get('autoLoad'),
+				url: _self.get('ajaxUrl'),
 				params: TL.encodeURIParam(data)
 			});
 			
@@ -199,21 +207,19 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			
 			// 准备加载数据前 --- 添加 屏幕遮罩 delay
 			_self.store.on('beforeload', function(){
-				var loadMask = _self.get('loadMask');
-				if (loadMask) {
-					loadMask.show();
+				if (_self.loadMask) {
+					_self.loadMask.show();
 				}
 			});
 			
 			// 数据加载完成后 - 取消 屏幕遮罩 delay
 			_self.store.on('load', function(){
-				var results = this.getResult(),
-					loadMask = _self.get('loadMask');
+				var results = this.getResult();
 
 				_self.showData(results);
 
-				if(loadMask) {
-					loadMask.hide();
+				if(_self.loadMask) {
+					_self.loadMask.hide();
 				}
 			});
 
@@ -231,13 +237,24 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 
 			// 出错时候
 			_self.store.on('exception', function () {
-				var loadMask = _self.get('loadMask');
-				if (loadMask) {
-					loadMask.hide();
+				if (_self.loadMask) {
+					_self.loadMask.hide();
 				}
 			});
 		},
 		
+
+		// 添加遮罩功能
+		loadingMaster: function(){
+			var _self = this,
+				mastNode = DOM.create( _self.get('loadMaskTpl') );
+
+			if(mastNode){
+				DOM.prepend(mastNode, _self.container);
+				_self.loadMask = S.one(mastNode);
+			}				
+		},
+
 		// 全选事件
 		_allSlectEvt: function(target){
 			var _self = this,
@@ -277,8 +294,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			var _self = this,
 				row = _self._findRow(target),
 				cell = _self._findCell(target),
-				rowCheckable = _self.get('checkable'), // 是否有checkbox
-				
+				rowCheckable = _self.get('checkable'), // 是否有checkbox				
 				data = null,
 				eventResult = null;
 				
@@ -296,7 +312,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 				// 设置行选中状态
 				if(rowCheckable){// checkbox
 					if(!_self._isRowSelected(row)) {
-						_self._setRowSelected(row, true);
+						_self._setRowSelected(row, true);						
 					}else{
 						_self._setRowSelected(row, false);
 					}
@@ -407,7 +423,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 		},
 
 		/**
-		* 附加数据
+		* 附加数据 不依赖store 根据数据渲染表格
 		* @private
 		* @param {Array} data 添加到表格上的数据
 		*/
@@ -456,24 +472,97 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 		
 				
 		//设置表头选中状态
-		_setHeaderChecked : function (checked) {
+		_setHeaderChecked: function (checked) {
 			var _self = this,
-				header = S.get('thead', _self.get('tableId') ),
-				checkEl = S.one(SELECTALLCLS, header);
+				checkEl = S.one(SELECTALLCLS, _self.thead);
 			
 			if(checkEl) {
 				checkEl.attr('checked', checked);
 			}
 		},
 		
-		//设置全选
-		_setAllRowsSelected : function (selected) {
+		//设置row全选
+		_setAllRowsSelected: function (selected) {
 			var _self = this;			
 			
 			S.each(_self.tbody.rows, function(row) { 
 				_self._setRowSelected(row, selected);
 			});
 		},
+
+		// 根据row data 设定是否选中1
+		_setDataSelect: function(data, isSelected){
+			var _self = this;
+
+			if(!data || isSelected == undefined){
+				throw '必须传入相应数据或选中状态';
+				return;
+			}
+
+			data = S.isArray(data) ? data : [data];
+
+			S.each(data, function(obj){
+				_self._dataSetSelect(obj, isSelected);
+			});
+		},
+
+		// 根据data 设定选中2
+		_dataSetSelect: function(obj, isSelected){
+			var _self = this;
+
+			S.each(_self.tbody.rows, function(row){
+				_self._setRowSelectedData(row, obj, isSelected);
+			});
+		},
+
+		// 根据行数据 数据 设置行选择 方法  wait
+		_setRowSelectedData: function (row, compareData, selected){
+			var _self = this,
+				checkbox = DOM.get(CLS_CHECKBOX, row),
+				data = DOM.data(row, DATA_ELEMENT),
+				hasSelected = DOM.hasClass(row, CLS_GRID_ROW_SELECTED),
+				isSampple = _self.store.matchFunction(data, compareData);
+
+			if(!isSampple) { 
+				return;
+			}	
+			
+			if(checkbox) {
+				//如果选择框不可用，此行不能选中
+				if(DOM.attr(checkbox,'disabled')){
+					return;
+				}
+				checkbox.checked = selected;
+			}
+			
+			if(selected) {
+				DOM.addClass(row, CLS_GRID_ROW_SELECTED);
+				_self._onRowSelectChanged(row, selected);
+			}else{
+				DOM.removeClass(row, CLS_GRID_ROW_SELECTED);
+				_self._onRowSelectChanged(row, selected);
+			}
+		},
+
+
+		//是否row全部选中
+		_isAllRowsSelected: function(){
+			var _self = this,
+				rows = _self.tbody.rows,
+				val = true;
+
+			if(rows.length<1){
+				return;
+			}else{
+				S.each(rows, function(row) { 
+					if( !_self._isRowSelected(row) ){
+						val = false;
+					}
+				});				
+				return val;		
+			}					
+		},
+
 		
 		/**
 		* 获取选中的数据
@@ -493,7 +582,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			return objs;
 		},
 		
-		//设置行选择
+		// 设置行选择
 		_setRowSelected : function (row, selected) {
 			var _self = this,
 				checkbox = DOM.get(CLS_CHECKBOX, row),
@@ -521,15 +610,15 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			}
 		},
 		
-		//触发行选中，取消选中事件
+		// 触发行选中，取消选中事件
 		_onRowSelectChanged : function(row, selected){
 			var _self = this,
 				data = DOM.data(row, DATA_ELEMENT);
 				
 			if(selected){
-				_self.fire('rowselected', {data : data, row : row});
+				_self.fire('rowselected', {data : data, row : row, type:'rowselected'}); 
 			}else{
-				_self.fire('rowunselected', {data : data, row : row});
+				_self.fire('rowunselected', {data : data, row : row, type:'rowunselected'});
 			}
 			_self.fire('rowselectchanged', {data : data, row : row, selected : selected});
 		},
