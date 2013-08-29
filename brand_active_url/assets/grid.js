@@ -103,7 +103,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 		_init: function(){
 			var _self = this;
 
-			_self.container  = _self.get('tableContainerId');
+			_self.container = _self.get('tableContainerId');
 			_self.tbody = S.get('tbody', _self.container);
 			_self.thead = S.get('thead', _self.container);
 			_self.tfoot = S.get('tfoot', _self.container);
@@ -157,7 +157,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			}
 			
 			// 是否分页
-			if(_self.get('isPagination')){
+			//if(_self.get('isPagination')){
 
 				// 初始化组件实例
 				_self.pagination = new Pagination(pagContainer, {
@@ -168,7 +168,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 					postposePagesCount: 2,	// 当前页的紧邻后置页为2页
 					lastPagesCount: 2 		// 显示最后面的1页
 				});	
-			}
+			//}
 			
 			
 			// if (!_self._isAutoFitWidth()) {//如果设置了宽度，则使用此宽度
@@ -289,7 +289,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			return S.one(row).hasClass(CLS_GRID_ROW_SELECTED);
 		},
 		
-		//行的 click 事件
+		// 行 click 事件
 		_rowClickEvent: function (target) {
 			var _self = this,
 				row = _self._findRow(target),

@@ -209,6 +209,7 @@ KISSY.add('mui/gridstore', function(S){
 			newRecords : [],
 			modifiedRecords : [],
 			deletedRecords : [],
+			disableRecords : [],
 			rowCount : 0,
 			totalCount : 0
 		});
@@ -290,7 +291,25 @@ KISSY.add('mui/gridstore', function(S){
 			* @param {Object} e.field 排序的字段
 			* @param {Object} e.direction 排序的方向 'ASC'，'DESC'
 			*/
-			'localsort'
+			'localsort',
+
+			/**  
+			* 当禁用某条数据时触发该事件
+			* @name Store#disableRecords  
+			* @event  
+			* @param {event} e  事件对象
+			* @param {Object} e.record 禁用的数据对象
+			*/
+			'disableRecords',
+
+			/**  
+			* 当解禁某条数据时触发该事件
+			* @name Store#cancelDisableRecords  
+			* @event  
+			* @param {event} e  事件对象
+			* @param {Object} e.record 解禁的数据对象
+			*/
+			'cancelDisableRecords'
 		];
 
 		_self._init();
@@ -302,7 +321,7 @@ KISSY.add('mui/gridstore', function(S){
 	/** @lends Store.prototype */	
 	{
 		/**
-		* 接受数据改变，将缓存的修改、新增、删除的集合清除
+		* 接受数据改变，将缓存的修改、新增、删除、禁用的集合清除
 		*/
 		acceptChanges : function(){
 			var _self = this;
@@ -310,6 +329,8 @@ KISSY.add('mui/gridstore', function(S){
 			_self._clearChanges();
 			_self.fire('acceptchanges');
 		},
+
+
 		
 		/**
 		* 添加记录
@@ -338,8 +359,9 @@ KISSY.add('mui/gridstore', function(S){
 					// 全局 - 增加 新增 记录
 					_self.newRecords.push(element);
 					// 全局 - 新添加数据 抹去 在删除记录 - 更改记录 的数据历史 
-					_self._removeFrom(element,_self.deletedRecords);
-					_self._removeFrom(element,_self.modifiedRecords);
+					_self._removeFrom(element, _self.deletedRecords);
+					_self._removeFrom(element, _self.modifiedRecords);
+					_self._removeFrom(element, _self.disableRecords);
 				}
 			});
 			_self.fire('addrecords', {data:newData});
@@ -426,10 +448,10 @@ KISSY.add('mui/gridstore', function(S){
 			var result = null,
 				records = this.resultRows;
 				
-			S.each(records, function(record, index){
+			S.each(records, function(record, index){				
 				if((func && func.call(this, record[field], value)) || record[field] === value){
-						result = record;
-						return false;
+					result = record;
+					return false;
 				}
 			});
 			return result;
@@ -453,7 +475,8 @@ KISSY.add('mui/gridstore', function(S){
 		findAll : function(field, value, func){
 			var result = [],
 				records = this.resultRows;
-			S.each(records,function(record,index){
+
+			S.each(records, function(record, index){
 				if((func && func.call(this, record[field], value)) || record[field] === value){
 					result.push(record);
 				}
@@ -469,6 +492,7 @@ KISSY.add('mui/gridstore', function(S){
 		findNextRecord : function(record){
 			var _self = this,
 				index = _self.findIndexBy(record);
+
 			if(index >= 0){
 				return _self.findByIndex(index + 1);
 			}
@@ -527,6 +551,14 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
+		* 获取禁用的数据 use
+		* @return {Array}
+		*/ 
+		getDisableRecords : function(){
+			return this.disableRecords;
+		},
+
+		/**
 		* 获取表格源数据的总数
 		* @return {Number}
 		*/
@@ -551,8 +583,9 @@ KISSY.add('mui/gridstore', function(S){
 			S.each(data,function(element){
 				var index = _self.findIndexBy(element, match),
 				    record = _self._removeAt(index);
-				//添加到已删除队列中,如果是新添加的数据，不计入删除的数据集合中
-				if(!S.inArray(record,_self.newRecords) && !S.inArray(record,_self.deletedRecords)){
+
+				// 添加到已删除队列中, 如果是新添加的数据，不计入删除的数据集合中
+				if(!S.inArray(record, _self.newRecords) && !S.inArray(record, _self.deletedRecords)){
 					_self.deletedRecords.push(record);
 				}
 				_self._removeFrom(record,_self.newRecords);
@@ -639,6 +672,7 @@ KISSY.add('mui/gridstore', function(S){
 			if(isMatch){
 				match = _self._getDefaultMatch();
 				index = _self.findIndexBy(obj,match);
+
 				if(index >=0){
 					record = this.resultRows[index];
 				}
@@ -659,7 +693,7 @@ KISSY.add('mui/gridstore', function(S){
 			_self = null;
         },
 
-		//添加记录  -- 可以指定序号-添加/替换； 增加index数组号
+		// 添加记录  -- 可以指定序号-添加/替换； 增加index数组号
 		_addRecord :function(record, index){
 			var _self = this,
 				records = _self.resultRows;
@@ -671,12 +705,55 @@ KISSY.add('mui/gridstore', function(S){
 			_self.fire('recordadded',{record:record, index:index});
 		},
 
-		//清除改变的数据记录
+		// 清除改变的数据记录
 		_clearChanges : function(){
 			var _self = this;
 			_self.newRecords.splice(0);
 			_self.modifiedRecords.splice(0);
 			_self.deletedRecords.splice(0);
+			_self.disableRecords.splice(0);
+		},
+
+		/**
+		* 设定 禁用数据 此方法会触发 disableRecords 事件
+		* @method setDisableRecords
+		* @param {obj || array} 要禁用的数据
+		* @return {Object} 禁用的数据
+		*/
+		setDisableRecords: function(data){
+			var _self = this;
+
+			data = S.isArray(data) ? data : [data];
+
+			S.each(data, function(obj, index){
+				if( !S.inArray(obj, _self.disableRecords) ){
+					_self.disableRecords.push(obj);
+				};
+			});
+
+			_self.fire('disableRecords', {'data': data});
+		},
+
+		/**
+		* 解禁数据 此方法会触发 cancelDisableRecords 事件 
+		* @method cancelDisableRecords
+		* @param {obj || array} 要解禁的数据
+		* @return {Object} 解禁的数据
+		*/
+		cancelDisableRecords: function(data){
+			var _self = this;
+
+			data = S.isArray(data) ? data : [data];
+
+			S.each(data, function(obj){
+				var lindex = S.indexOf(obj, _self.disableRecords);
+
+				if(lindex > -1){
+					_self.disableRecords.splice(lindex, 1);
+				};
+			});
+
+			_self.fire('cancelDisableRecords', {'data': data});
 		},
 
 		//加载数据 use
@@ -771,11 +848,12 @@ KISSY.add('mui/gridstore', function(S){
 			records.splice(index,1);
 			return record;
 		},
-		_removeFrom :function(record,array){
+		_removeFrom :function(record, array){
 			var _self = this,
-				index = S.indexOf(record,array);
+				index = S.indexOf(record, array);
+
 			if(index >= 0){
-				_self._removeAt(index,array);
+				_self._removeAt(index, array);
 			}
 		},
 
