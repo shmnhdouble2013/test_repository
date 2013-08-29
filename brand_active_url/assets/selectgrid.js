@@ -8,7 +8,7 @@
 *   new SelectGrid({
 	});
 */	
-KISSY.add('mui/selectGrid', function(S, Grid, Validation, TL, placeholder, O) {
+KISSY.add('mui/selectGrid', function(S, Grid, Validation, TL) { // , placeholder, O
 	var DOM = S.DOM,
 		Ajax = S.IO,
 		JSON = S.JSON,
@@ -80,7 +80,7 @@ KISSY.add('mui/selectGrid', function(S, Grid, Validation, TL, placeholder, O) {
 			_self.poolStore = _self.poolGrid.store;
 
 			// input文本提示
-			placeholder.textHolder( S.query('.j_sourcesinput') );
+			// placeholder.textHolder( S.query('.j_sourcesinput') );
 		},
 
 		// 校验实例化
@@ -126,10 +126,10 @@ KISSY.add('mui/selectGrid', function(S, Grid, Validation, TL, placeholder, O) {
 				var data = _self.poolGrid.getSelection();
 				
 				if(data.length<1){
-					_self._alertFn('当前选择为空！');					
+					//_self._alertFn('当前选择为空！');					
 				}else{									
-					_self.candStore.add(data, true); 		// 添加数据 并 去重
-					//_self.poolGrid.clearSelection(); 		// 取消表格 所有checkbox 选中状态
+					_self.candStore.add(data, true); 			// 添加数据 并 去重
+					_self.poolGrid._setDataSelect(data, true);	// 取消表格 所有checkbox 选中状态
 				}				
 			});
 			
@@ -146,7 +146,7 @@ KISSY.add('mui/selectGrid', function(S, Grid, Validation, TL, placeholder, O) {
 				var data = _self.candGrid.getSelection();
 				
 				if(data.length<1){
-					_self._alertFn('当前选择为空！');					
+					//_self._alertFn('当前选择为空！');					
 				}else{									
 					_self.candStore.remove(data); 		// 删除数据 
 					_self.candGrid._setHeaderChecked(false); 
@@ -161,10 +161,9 @@ KISSY.add('mui/selectGrid', function(S, Grid, Validation, TL, placeholder, O) {
 				_self._candGridClick(event);						
 			});
 
-			// 根据候选区 表格数据 回显 选择池选中状态	-- 支持 异步查询 和 分页
+			// 根据候选区 表格数据 回显 选择池选中状态-并标示禁用	-- 支持 异步查询 和 分页
 			_self.poolGrid.on('aftershow', function(){
 				var candData = _self.candStore.getResult();
-
 				_self.poolGrid._setDataSelect(candData, true);	
 			}); 
 
@@ -175,7 +174,7 @@ KISSY.add('mui/selectGrid', function(S, Grid, Validation, TL, placeholder, O) {
 			});
 			_self.candGrid.on('rowselected rowunselected', function(ev){
 				_self.autoSelect.call(this, ev);
-			});			  	
+			});	
 
 			/******* 页面操作 *******/
 			
@@ -195,7 +194,7 @@ KISSY.add('mui/selectGrid', function(S, Grid, Validation, TL, placeholder, O) {
 				var selectLength = _self.candStore.getCount();
 
 				if(selectLength<1){
-					_self._alertFn('当前选择数据为空！');
+					//_self._alertFn('当前选择数据为空！');
 				}else{
 					_self.saveData('');
 				}
@@ -233,8 +232,8 @@ KISSY.add('mui/selectGrid', function(S, Grid, Validation, TL, placeholder, O) {
 
 			// 添加按钮	
 			if( DOM.hasClass(target, TROPRATIONCLS) ){
-				_self.candStore.add(data, true); 	 			// 添加数据 并 去重 
-				_self.poolGrid._setRowSelected(row, false);		// 取消tr 选中状态，cellClick 选中
+				_self.candStore.add(data, true); 	 			 // 添加数据 并 去重 				
+				_self.poolGrid.setSelectLock(row, true); 		// 锁定tr选中状态	
 			}	
 		},
 		
@@ -278,4 +277,4 @@ KISSY.add('mui/selectGrid', function(S, Grid, Validation, TL, placeholder, O) {
 
 return SelectGrid;
 
-}, {'requires':['mui/grid', 'Validation', 'TL', 'mui/placeholder', 'mui/overlay','mui/overlay/overlay.css', 'sizzle']});
+}, {'requires':['mui/grid', 'Validation', 'TL', 'sizzle']}); // 'mui/placeholder', 'mui/overlay','mui/overlay/overlay.css', 

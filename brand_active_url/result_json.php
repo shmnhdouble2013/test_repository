@@ -1,3 +1,6 @@
+<?php
+	sleep(3);
+?>
 {
 	"success":true,
 	"message":"",

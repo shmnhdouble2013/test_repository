@@ -134,7 +134,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 				_self._rowOverEvent(event.target);
 			}).on('mouseout', function (event) {
 				_self._rowOutEvent(event.target);
-			});				
+			});		
 		},
 		
 		// 初始化gird 和 分页器
@@ -490,7 +490,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			});
 		},
 
-		// 根据row data 设定是否选中1
+		// 纯根据 外界 传入的 data --- 设定表格中的 对应的row选中状态
 		_setDataSelect: function(data, isSelected){
 			var _self = this;
 
@@ -502,48 +502,60 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			data = S.isArray(data) ? data : [data];
 
 			S.each(data, function(obj){
-				_self._dataSetSelect(obj, isSelected);
+				transition(obj, isSelected);
 			});
+			
+			function transition(obj, isSelected){
+				S.each(_self.tbody.rows, function(row){
+					_self._setLockRecords(row, obj, isSelected);
+				});
+			}
 		},
 
-		// 根据data 设定选中2
-		_dataSetSelect: function(obj, isSelected){
+		// 设定表格 选中状态 --带锁定
+		_setLockRecords: function (row, compareData, selected){
+			var _self = this,
+				data = DOM.data(row, DATA_ELEMENT),
+				isFind = _self.store.matchFunction(data, compareData);
+
+			if(isFind) { 
+				_self.setSelectLock(row, selected);		
+			}		
+		},
+		
+		// 锁定rows状态
+		_isLocalRows: function(rows, isDisabled){
 			var _self = this;
-
-			S.each(_self.tbody.rows, function(row){
-				_self._setRowSelectedData(row, obj, isSelected);
-			});
+			
+			rows = S.isArray(rows) ? rows : [rows];
+			
+			S.each(rows, function(row){
+				var checkbox = DOM.get(CLS_CHECKBOX, row),
+					data = DOM.data(row, DATA_ELEMENT);
+			
+				// 禁用复选 保持选中状态
+				if(checkbox){
+					DOM.attr(checkbox, 'disabled', isDisabled);
+				}			
+			});						
 		},
-
-		// 根据行数据 数据 设置行选择 方法  wait
-		_setRowSelectedData: function (row, compareData, selected){
+		
+		// 设定选中情况 及 锁定情况
+		setSelectLock: function(row, selected){
 			var _self = this,
 				checkbox = DOM.get(CLS_CHECKBOX, row),
-				data = DOM.data(row, DATA_ELEMENT),
-				hasSelected = DOM.hasClass(row, CLS_GRID_ROW_SELECTED),
-				isSampple = _self.store.matchFunction(data, compareData);
-
-			if(!isSampple) { 
-				return;
-			}	
+				isDisabled = DOM.attr(checkbox, 'disabled');
 			
-			if(checkbox) {
-				//如果选择框不可用，此行不能选中
-				if(DOM.attr(checkbox,'disabled')){
-					return;
-				}
-				checkbox.checked = selected;
+			// 若是锁定状态，首选解锁			
+			if(isDisabled) {
+				DOM.attr(checkbox, 'disabled', false);
 			}
 			
-			if(selected) {
-				DOM.addClass(row, CLS_GRID_ROW_SELECTED);
-				_self._onRowSelectChanged(row, selected);
-			}else{
-				DOM.removeClass(row, CLS_GRID_ROW_SELECTED);
-				_self._onRowSelectChanged(row, selected);
-			}
+			// 设定选中 及 锁定 状态
+			_self._setRowSelected(row, selected);		
+			_self._isLocalRows(row, selected);	
 		},
-
+		
 
 		//是否row全部选中
 		_isAllRowsSelected: function(){

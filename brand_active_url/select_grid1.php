@@ -144,6 +144,7 @@ $lab_version = '1.1.4';
 			'</td>'+	
         '</tr>';
 
+	KISSY.Config.debug = true; 
 
 	KISSY.ready(function(S){
 	    S.use('mui/selectGrid', function(S, SelectGrid){  

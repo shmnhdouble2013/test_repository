@@ -22,7 +22,7 @@
 <div style="padding:20px;">
 
 	<!-- 步骤条 -->   
-	<div class="tbsui-step-3 els-height">
+	<div class="tbsui-step-3">
 	    <ol class="tbsui-step-bar">
 	        <li class="tbsui-step-cur">选择投放媒体</li>
 	        <li class="tbsui-step-done"><i></i>描述投放</li>
@@ -33,18 +33,19 @@
 	<div class="select-data-container">	
 
 		<!-- 主操作table容器 -->
-		<div class="main-table-container">
+		<div class="main-table-container" id="J_selectPoolTable">
 
 			<!--- 查询模板 data-valid="{maxLength:[30, false, ' 最大长度为{0}个字符']}" -->
 			<form name="hideform" action="#" method="post" id="J_hideform">
 				<input type="hidden" value="sd5fsd5f6afafafa3" name="_csrf_token" id="J_csrf_token"> <!-- _csrf_token -->  
 				<input type="hidden" value="0" name="currentPage" id="J_currentPage"> 				 <!-- 当前页分页信息 -->  
 				<input type="hidden" value="" name="selectedData" id="J_selectTableData"> 				 <!-- 当前页分页信息 -->  
+					<input type="hidden" value="" name="resetActive" id="J_resetActive"> 				 <!--重新选择活动标示 --> 
 			
-				<div class="j_serch-container">
-					<span>媒体一级域名：</span>
+					<div class="search-index">
+						<span class="lab-cls">媒体一级域名：</span>
 					<label>
-						<input value="" type="text" class="large-inpt" name="acname" id="J_inptuEle" title="媒体一级域名(如:youku.com)">
+		                    <input value="" type="text" class="large-inpt j_search-input" name="acname" id="J_inptuEle" placeholder="如:youku.com" /> 
 						<a href="javascript:void(0)" class="ui-btn-s" id="J_search_btn" data-type="findall">查询</a>
 						<span class="ui-form-tip">?</span>   
 					</label>      			
@@ -53,14 +54,14 @@
 			
 			<!-- 选择池 表格模板 -->
 			<div class="table-container">
-				<table class="ui-table" id="J_selectPoolTable">			       
+					<table class="ui-table">			       
 					<thead>			           
-						<tr class="capitons grid-row">
-							<th style="width:30px;"><input type="checkbox" value="all" name="seletall" class="j_select_all">全选</th>
-							<th>id</th>
-							<th style="width:50px;">活动类型</th>
-							<th>媒体名称</th>
-							<th style="width:50px;">操 作</th>
+							<tr class="capitons grid-row">
+								<th style="width:30px;"><input type="checkbox" value="all" name="seletall" class="j_select_all"></th>
+								<th>id</th>
+								<th>活动类型</th>
+								<th>媒体名称</th>
+								<th style="width:65px;">操 作</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
@@ -68,7 +69,7 @@
 			</div>	
 						
 			<!-- 分页 -->	
-			<div class="page-container" id="J_Page"></div>
+				<div class="page-container skin-tb" id="J_Page"></div>
 		</div>
 
 		<div class="tr-opraition-btn">
@@ -77,18 +78,18 @@
 		</div>
 
 		<!-- 表格选中模板 -->
-		<div class="select-talbe-container">
-			<p class="text-agncener">已选中区</p>	
+		<div class="select-talbe-container" id="J_selectCandTable">
+			<p class="text-agncener margin-top20">已选中区</p>	
 			
-			<div class="table-container">
-				<table class="ui-table" id="J_selectCandTable">			       
+			<div class="table-container selet-table-container">
+				<table class="ui-table">			       
 					<thead>			           
 						<tr class="capitons grid-row">
-							<th style="width:30px;"><input type="checkbox" value="all" name="seletall" class="j_select_all">全选</th>
+							<th style="width:30px;"><input type="checkbox" value="all" name="seletall" class="j_select_all"></th>
 							<th>id</th>
-							<th style="width:50px;">活动类型</th>
-							<th>媒体名称</th>
-							<th style="width:50px;">操 作</th>
+							<th>活动类型</th>
+			                <th>媒体名称</th>
+			                <th style="width:65px;">操 作</th>
 						</tr>
 					</thead> 
 					<tbody></tbody>
@@ -96,12 +97,12 @@
 			</div>			
 			
 			<!-- 分页 -->	
-			<div class="page-container" id="J_Page-selct"></div>
+			<div class="page-container skin-tb" id="J_Page-selct"></div>
 		</div>    
 
 	</div>
 	
-	<div class="els-height btn-style">
+	<div class="text-agncener margin-top50">
 		<a href="javascript:void(0)" class="ui-btn-m-primary" id="J_resetBack">重新选择活动</a>&nbsp;&nbsp;
 		<a href="javascript:void(0)" class="ui-btn-m center-btn" id="J_saveSelectData">保存选择</a> 
 	</div>
@@ -114,18 +115,7 @@
 <script type="text/javascript">
 
 	// 选择池 静态数据
-	var mainData = [
-        {nos:1, id:"fa32f3a2f3", actype:"站外", medianame:"youku.com" },
-        {nos:2, id:"2152afaf5525", actype:"站外2", medianame:"youku2.com" },
-        {nos:3, id:"fa32faf63a2f3", actype:"站外3", medianame:"youku3.com" },
-        {nos:4, id:"fafa6f65", actype:"站外4", medianame:"youku4.com" },
-        {nos:5, id:"fa2666666", actype:"站外5", medianame:"youku4.com" },
-        {nos:6, id:"faf2a2f6", actype:"站外6", medianame:"youku6.com" },
-        {nos:7, id:"faf262f6a66", actype:"站外7", medianame:"youku7.com" },
-        {nos:8, id:"afa236f23a62f", actype:"站外8", medianame:"youku8.com" },
-        {nos:9, id:"faf23a2fa6", actype:"站外9", medianame:"youku9.com" },
-        {nos:10, id:"faf36af6a6", actype:"站外10", medianame:"youku10.com" }
-    ];
+	var mainData = [];
 
 	/*
 	
@@ -140,8 +130,10 @@
 	
     // 候选区 选中数据
     var selectData = [
-    	{nos:7, id:"faf262f6a66_1", actype:"站外7", medianame:"youku7.com" },
-    	{nos:11, id:"afa266969fa_2", actype:"站外11", medianame:"youku11.com" }
+    	{"nos":5, "id":"fa32f3a2f5", "actype":"站外", "medianame":"youku.com"},
+    	{"nos":7, "id":"faf262f6a66_1", "actype":"站外7", "medianame":"youku7.com" },
+    	{"nos":11, "id":"afa266969fa_2", "actype":"站外11", "medianame":"youku11.com" },    
+        {"nos":7, "id":"fa32f3a2f7", "actype":"站外", "medianame":"youku.com"}
     ];
 
     // 选择池table tr模板 class="selected-tr" '{{#each data}}'+ +'{{/each}}'
@@ -181,23 +173,25 @@
 	        new SelectGrid({	
 			
 				poolGridConfig:{
-					tableId: '#J_selectPoolTable', 						// 选择池 table id钩子
-					staticData: mainData, 								// 选择池 静态数据 
+					tableContainerId: '#J_selectPoolTable',				// table 容器 id
 					isPagination:true,									// 是否有分页 默认 为false
+					totalPage:10,										// 分页总数
+					limit: 10,											// 分页大小
 					isAjaxData:true,									// 是否是异步数据 默认 为false
 					ajaxUrl: 'result.php',     							 // 异步查询url  
-					trTpl: main_table									// 选择池 table tbody tr 模板	
+					trTpl: main_table									// 选择池 table tbody tr 模板												
 				},
 				
 				candGridConfig:{
-					tableId: '#J_selectCandTable', 						// 候选 table id钩子
+					tableContainerId: '#J_selectCandTable',				// table 容器 id
 					staticData: selectData, 							// 候选 table 静态数据 
 					trTpl: select_table									// 候选 table tbody tr 模板
 				},
 				
 				//isMoveData: false,								// 是否 移动 选择池数据? 默认copy数据 false
 				addMoreId: '#J_addMore', 							// 批量添加 id
-	        	removeMoreId: '#J_removeMore' 						// 批量移除 id
+	        	removeMoreId: '#J_removeMore', 						// 批量移除 id
+	        	trIndex:'id'										// 数据对比依据 默认 为id 
 	        });
 	    });
 	});
