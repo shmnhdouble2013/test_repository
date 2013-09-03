@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+	    <meta charset="gbk" />
+	    <title>品牌运营后台</title>
+
+		<!--#def{
+			"hostName" : "g.assets.daily.taobao.net",
+		    "lab_version" : "1.1.9"
+		}-->
+
+		<link rel="stylesheet" href="http://g.assets.daily.taobao.net/tm/tbs-ui/1.0.5/css/??mui.css,tbsui.css" />
+		<link rel='stylesheet' type='text/css' href='http://${hostName}/tm/tbs-back/${lab_version}/brand_active_url/grid.css'/>
+
+		<script src="http://a.tbcdn.cn/s/kissy/1.3.0/kissy.js"></script>
+		<script type="text/javascript" src='http://${hostName}/tm/tbs-back/${lab_version}/blue_print/uicommon.js'></script>
+		<script type="text/javascript" src='http://${hostName}/tm/tbs-back/${lab_version}/brand_active_url/??store.js,grids.js'></script>
+    </head>
+<body>
+
+	<h3>grid示例~</h3>
+
+	<div style="margin:50px;"> 
+
+	    <!-- 表格选中模板 -->
+		<div id="J_selectCandTable"></div>		
+
+	</div>
+
+<script type="text/javascript">
+
+    // 候选区 选中数据
+    var selectData = [
+    	{"nos":5, "id":"fa32f3a2f5", "actype":"站外", "medianame":"youku.com"},
+    	{"nos":7, "id":"faf262f6a66_1", "actype":"站外7", "medianame":"youku7.com" },
+    	{"nos":11, "id":"afa266969fa_2", "actype":"站外11", "medianame":"youku11.com" },    
+        {"nos":7, "id":"fa32f3a2f7", "actype":"站外", "medianame":"youku.com"}
+    ];
+
+	KISSY.ready(function(S){
+	    S.use('mui/grid', function(S, Grid){ 
+	        new Grid({	
+					containerId: '#J_selectCandTable',				// table 容器 id
+					ajaxUrl: 'result.php', 							// 异步接口
+					checkable:true,									// 是否复选框 checkbox
+					isShowBoxIndex: true, 							// 是否显示 checkbox 序号
+					isPagination:true,								// 是否有分页 默认 为false
+					staticData: selectData, 						// 候选 table 静态数据 
+					columns: [
+						{title: 'id', width: 110, sortable: true, dataIndex: 'id'},
+						{title: '活动类型',width: 110, sortable: true, dataIndex: 'actype'},
+						{title: '媒体名称',width: 100, sortable: true, dataIndex: 'medianame'},
+						{title: '操作',width: 100, sortable: true, dataIndex: '', render:function(value, obj){
+							return '';
+						}}
+					] 
+
+	   		});
+	});
+</script>
+</body>
+</html>
