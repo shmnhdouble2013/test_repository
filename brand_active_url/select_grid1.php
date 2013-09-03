@@ -157,7 +157,7 @@ $lab_version = '1.1.4';
 					totalPage:10,										// 分页总数
 					limit: 10,											// 分页大小
 					isAjaxData:true,									// 是否是异步数据 默认 为false
-					ajaxUrl: 'result.php',     							 // 异步查询url  
+					ajaxUrl: 'result_json.php',     							 // 异步查询url  
 					trTpl: main_table									// 选择池 table tbody tr 模板												
 				},
 				

@@ -6,8 +6,7 @@
 * @version 1.0  
 * @update 2013-08-30
 * @example
-*   new Grid({
-		tableContainerId: '#poolTable',	// table 容器 id
+*   new Grid('#poolTable', {
 		tr_tpl: tpltr,					// tr渲染模板
 		gridData:[{},{}],				// 指定数据
 		isAjaxData:true,				// 是否是异步数据 默认 为false
@@ -16,7 +15,7 @@
 	});
 */
 
-KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
+KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL, 
 	var DOM = S.DOM,
 		Node = S.Node,
 		Ajax = S.IO,
@@ -38,6 +37,9 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 		CLS_GRID_ROW = 'grid-row',					// grid tr row标示
 		CLS_GRID_TH = 'grid-th',					// grid th
 		CLS_GRID_CELL = 'grid-cell',				// grid cell标示
+		
+		CLS_ROW_ODD = 'odd-tr', 					// 奇数 tr cls
+		CLS_ROW_EVEN = 'even-tr', 					// 偶数 tr cls
 		
 		CLS_CHECKBOX = 'grid-checkbox', 			// checkbox row
 		
@@ -71,13 +73,12 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 
 			'</div>',										// table tpl		
 
-	    LOADMASKTPL: '<div class="loading-mask"></div>'; 	// 加载数据遮罩功能
+	    LOADMASKTPL = '<div class="loading-mask"></div>'; 	// 加载数据遮罩功能
 		
 
 
 	// grid 默认配置
 	var POLLGRIDDEFAULT = {
-			tableContainerId: null, 				// table 容器 id钩子
 			columns:[],								// row 数组 配置对象 例如：{title: 'id', width: 110, sortable: true, dataIndex: 'id'}	
 
 			ajaxUrl: null,      					// 异步查询url  
@@ -275,9 +276,6 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 		_init: function(){
 			var _self = this;
 
-
-
-			// _self.loadingMaster();
 			_self._initStore();	
 			_self._initGrid();
 			// _self._eventRender();
@@ -303,7 +301,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 		},
 		
 		// 初始化 table Dom 结构
-		_initTableDom: function(){
+		_initTableDom: function(data){
 			var _self = this,
 				thRow = '',
 				table = DOM.create(GRIDTPL);
@@ -319,12 +317,9 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			_self.thead = S.get(THEADCLS, table);
 			_self.tfoot = S.get(TFOOTCLS, table);
 
-			if(_self.getResult){
-				thRow = DOM.create(_self._getThRowTemplate(_self.getResult, 0));
-			}	
-
-			// 添加遮罩div
-			_self.loadingMaster();
+			if(data){
+				thRow = DOM.create(_self._getThRowTemplate(data, 0));
+			}
 
 			// 添加 头	
 			DOM.append(thRow, _self.thead);	
@@ -332,21 +327,13 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			// 是否分页
 			if(_self.get('isPagination')){
 				_self.addPagePation(_self.tfoot);
-			}	
-
+			}
+			
 			// 一次性放入 dom树中
 			DOM.append(_self.table, _self.container);	
 		},
 
-		// 添加 th头 - 脚分页 tble框架 到页面
-		_initHeadFoot: function(obj, index){
-			var _self = this,
-				
-
-			
-		},
-
-		// 获取行的模版 -- th vs tr
+		// 获取行的模版 -- tr
 		_getThTemplate: function(dataOjb){
 			var _self = this,
 				thAry = [],
@@ -362,8 +349,6 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 
 			DOM.append( DOM.create(), _self.thead);
 			DOM.append( DOM.create(), _self.tbody);
-
-
 		},
 
 
@@ -379,7 +364,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			
 			// 如果有 checkbox 则先添加			
 			if(_self.get('checkable')) {
-				cellTemp =  _self._getCheckedCellTemplate(CLS_GRID_CELL, CLS_CHECKBOX, index);
+				cellTemp = _self._getCheckedCellTemplate(CLS_GRID_CELL, CLS_CHECKBOX, index);
 				cellTempArray.push(cellTemp);
 			}
 
@@ -400,9 +385,10 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 		_getCellTemplate: function (index, column, text){
 			var _self = this;
 
-			var	dataIndex = column.dataIndex,
+			var	width = S.isNumber(column.width) ? column.width+'px' : column.width,
+				dataIndex = column.dataIndex,
 				hideText = column.hide ? CLS_HIDDEN : '',
-				template = ['<td class="', CLS_GRID_CELL, hideText, '" colindex="', index, '" data-field= "',dataIndex,'">', text, '</td>'].join('');
+				template = ['<td width="'+width+'" class="', CLS_GRID_CELL, hideText, '" colindex="', index, '" data-field="',dataIndex,'">', text, '</td>'].join('');
 			
 			return template;
 		},
@@ -412,7 +398,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			var _self = this,
 				index = _self.get('isShowBoxIndex') ? '' : ++index;
 
-			return '<td class="'+clscell+'"><input type="checkbox" value="" name="checkboxs" class="'+clsCheck+'">'+index+'</td>';
+			return '<td width="30px" class="'+clscell+'"><input type="checkbox" value="" name="checkboxs" class="'+clsCheck+'">'+index+'</td>';
 		},	
 
 
@@ -433,7 +419,16 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			var	cellTempArray = [],
 				rowTemplate = null,
 				cellTemp = null,
-				emptyTd = ' ';
+				thTpl = '',
+				emptyTd = ' ',
+				defWidth = _self.get('isShowCheckboxText') ? '45px': '30px',	
+				selectAllText = _self.get('isShowCheckboxText') ? '全选': ''; // 是否显示 全选 字符
+			
+			// 复选框	
+			if( _self.get('checkable') ){
+				thTpl = '<th width="'+defWidth+'" class="'+CLS_GRID_TH + emptyTd +'"><input type="checkbox" value="" name="checkboxs" class="'+SELECTALLCLS+'" data-field="">'+selectAllText+'</th>';
+				cellTempArray.push(thTpl);
+			}		
 
 			S.each(_self.columns, function(column, index) {
 				var value = _self._getFieldValue(column, column.dataIndex), //obj[column.dataIndex.*.*],
@@ -456,28 +451,20 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			var _self = this;
 
 			var	hideCls = obj.hide ? CLS_HIDDEN : '',
-				width = obj.width,
+				width = S.isNumber(obj.width) ? obj.width+'px' : obj.width,
 				title = obj.title,
 				isSortCols = obj.sortable,
-				dataIndex = obj.dataIndex,
-				defWidth = _self.get('isShowCheckboxText') ? '45px': '30px',	
-				selectAllText = _self.get('isShowCheckboxText') ? '全选': '', // 是否显示 全选 字符
+				dataIndex = obj.dataIndex,				
 				text = text || title,
 				emptyTd = ' ',
 				thTpl = '',
-				thAry = [];				
-
-			// 复选框	
-			if(_self.get('checkable')){
-				thTpl = '<th width="'+defWidth+'" class="'+CLS_GRID_TH + emptyTd +'"><input type="checkbox" value="" name="checkboxs" class="'+SELECTALLCLS+'" data-field="'+dataIndex+'">'+selectAllText+'</th>';
-				thAry.push(thTpl);
-			}	
+				thAry = [];					
 
 			// 有无排序
 			if(isSortCols){
-				thTpl = '<th width="'+width+'" class="'+CLS_GRID_TH + emptyTd + hideCls+'"><a href="javascript:void(0)" title="点击排序" data-value="views">'+text+'<i class="drection-tags" data-field="'+dataIndex+'">&nbsp;</i></a></th>';
+				thTpl = '<th width="'+width+'" class="'+CLS_GRID_TH + emptyTd + hideCls+'"><a href="javascript:void(0)" title="点击排序" data-field="'+dataIndex+'">'+text+'<i class="drection-tags asc">&nbsp;</i></a></th>';
 				thAry.push(thTpl);
-			}else(_self.get('checkable')){
+			}else{
 				thTpl = '<th width="'+width+'" class="'+CLS_GRID_TH + emptyTd + hideCls+'" data-field="'+dataIndex+'">'+text+'</th>';
 				thAry.push(thTpl);
 			}	
@@ -537,26 +524,24 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 		// 初始化gird 和 分页器
 		_initGrid: function(){
 			var _self = this;					
-			
-			// 初始化表格 容器
-
+		
+			// 添加遮罩div
+			_self.loadingMaster();
+		
 			// 如果异步 则异步加载数据，否则加载 静态数据 --Store
-			if(_self.get('isAjaxData')){
-				if(_self.get('ajaxUrl')){
-					_self.store.load({ 
-						limit: _self.get('limit'), 
-						totalPage: _self.get('totalPage') 
-					});
-				}else{
-					throw 'ajax url error！';
-				}				
+			if(_self.get('ajaxUrl')){
+				_self.store.load({ 
+					url: _self.get('ajaxUrl'),
+					limit: _self.get('limit'), 
+					totalPage: _self.get('totalPage') 
+				});
 			}else if(_self.get('staticData')){
 				_self.store.setResult( _self.get('staticData') );				
-			}
+			}else{
+				throw 'render data error！';
+			}	
 			
-			
-			// 载入 基本table结构
-			_self._initTableDom();
+
 			
 			
 			// if (!_self._isAutoFitWidth()) {//如果设置了宽度，则使用此宽度
@@ -603,7 +588,10 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			// 数据加载完成后 - 取消 屏幕遮罩 delay
 			_self.store.on('load', function(){
 				var results = this.getResult();
-
+							
+				// 载入 基本table结构
+				_self._initTableDom(results);
+			
 				_self.showData(results);
 
 				if(_self.loadMask) {
@@ -766,18 +754,21 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 		* 
 		*/		
 		showData : function (data) {
-			var _self = this;
+			var _self = this,
+				trs = [];
 
 			_self.fire('beginshow');
 
 			_self.clearData();
 
 			S.each(data, function (obj, index) {
-				_self._createRow(obj, index);
+				trs.push(_self._createRow(obj, index));
 			});
 
 			// _self._afterShow(); 自适应宽高 方法
-
+			
+			DOM.html(_self.tbody, trs.join(''));
+			
 			_self.fire('aftershow');
 		},
 
@@ -815,7 +806,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 			DOM.data(dom, DATA_ELEMENT, element);
 			_self.fire('rowcreated',{data: element, row: dom});
 
-            return rowEl;
+            return rowTemplate;
 		},
 
 		/**
@@ -1054,4 +1045,4 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, TL, Pagination) { // O,
 
 return Grid;
 
-}, {'requires':['xtemplate', 'mui/gridstore', 'TL', 'gallery/pagination/2.0/index', 'sizzle']}); // 'mui/overlay','mui/overlay/overlay.css',
+}, {'requires':['xtemplate', 'mui/gridstore', 'gallery/pagination/2.0/index', 'sizzle']}); // 'TL', 'mui/overlay','mui/overlay/overlay.css',

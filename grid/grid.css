@@ -4,6 +4,7 @@
 	overflow: hidden;
 	margin: 5px;
 	position: relative;
+	border: 1px solid gray;
 }
 
 .tbody-container{

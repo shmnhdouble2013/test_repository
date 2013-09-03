@@ -1,62 +1,66 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-	    <meta charset="gbk" />
-	    <title>å“ç‰Œè¿è¥åå°</title>
+		<meta http-equiv="content-type" content="text/html; charset=gbk">
+	    <title>Æ·ÅÆÔËÓªºóÌ¨</title>
 
 		<!--#def{
 			"hostName" : "g.assets.daily.taobao.net",
 		    "lab_version" : "1.1.9"
 		}-->
 
-		<link rel="stylesheet" href="http://g.assets.daily.taobao.net/tm/tbs-ui/1.0.5/css/??mui.css,tbsui.css" />
+		<link rel="stylesheet" href="http://g.tbcdn.cn/tm/tbs-ui/1.0.5/css/??mui.css,tbsui.css" />
 		<link rel='stylesheet' type='text/css' href='http://${hostName}/tm/tbs-back/${lab_version}/brand_active_url/grid.css'/>
+		<link rel='stylesheet' type='text/css' href='./grid.css'/>
 
 		<script src="http://a.tbcdn.cn/s/kissy/1.3.0/kissy.js"></script>
 		<script type="text/javascript" src='http://${hostName}/tm/tbs-back/${lab_version}/blue_print/uicommon.js'></script>
 		<script type="text/javascript" src='http://${hostName}/tm/tbs-back/${lab_version}/brand_active_url/??store.js,grids.js'></script>
+		
+		
+		<script type="text/javascript" src='./store.js'></script>
+		<script type="text/javascript" src='./grids.js'></script>
     </head>
 <body>
 
-	<h3>gridç¤ºä¾‹~</h3>
+	<h3>gridÊ¾Àı~</h3>
 
-	<div style="margin:50px;"> 
+	<div style="margin:10px;"> 
 
-	    <!-- è¡¨æ ¼é€‰ä¸­æ¨¡æ¿ -->
-		<div id="J_selectCandTable"></div>		
+	    <!-- ±í¸ñÑ¡ÖĞÄ£°å -->
+		<div id="J_selectCandTable" style="height:100px;"></div>		
 
 	</div>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 
-    // å€™é€‰åŒº é€‰ä¸­æ•°æ®
-    var selectData = [
-    	{"nos":5, "id":"fa32f3a2f5", "actype":"ç«™å¤–", "medianame":"youku.com"},
-    	{"nos":7, "id":"faf262f6a66_1", "actype":"ç«™å¤–7", "medianame":"youku7.com" },
-    	{"nos":11, "id":"afa266969fa_2", "actype":"ç«™å¤–11", "medianame":"youku11.com" },    
-        {"nos":7, "id":"fa32f3a2f7", "actype":"ç«™å¤–", "medianame":"youku.com"}
-    ];
+		// ºòÑ¡Çø Ñ¡ÖĞÊı¾İ
+		var selectData = [
+			{"nos":5, "id":"fa32f3a2f5", "actype":"Õ¾Íâ", "medianame":"youku.com"},
+			{"nos":7, "id":"faf262f6a66_1", "actype":"Õ¾Íâ7", "medianame":"youku7.com" },
+			{"nos":11, "id":"afa266969fa_2", "actype":"Õ¾Íâ11", "medianame":"youku11.com" },    
+			{"nos":7, "id":"fa32f3a2f7", "actype":"Õ¾Íâ", "medianame":"youku.com"}
+		];
 
-	KISSY.ready(function(S){
-	    S.use('mui/grid', function(S, Grid){ 
-	        new Grid({	
-					containerId: '#J_selectCandTable',				// table å®¹å™¨ id
-					ajaxUrl: 'result.php', 							// å¼‚æ­¥æ¥å£
-					checkable:true,									// æ˜¯å¦å¤é€‰æ¡† checkbox
-					isShowBoxIndex: true, 							// æ˜¯å¦æ˜¾ç¤º checkbox åºå·
-					isPagination:true,								// æ˜¯å¦æœ‰åˆ†é¡µ é»˜è®¤ ä¸ºfalse
-					staticData: selectData, 						// å€™é€‰ table é™æ€æ•°æ® 
+		KISSY.ready(function(S){
+			S.use('mui/grid', function(S, Grid){ 
+				new Grid('#J_selectCandTable', {	
+					ajaxUrl: 'result.php', 							// Òì²½½Ó¿Ú
+					checkable:true,									// ÊÇ·ñ¸´Ñ¡¿ò checkbox
+					isShowBoxIndex: true, 							// ÊÇ·ñÏÔÊ¾ checkbox ĞòºÅ
+					isPagination:true,								// ÊÇ·ñÓĞ·ÖÒ³ Ä¬ÈÏ Îªfalse
+					staticData: selectData, 						// ºòÑ¡ table ¾²Ì¬Êı¾İ 
 					columns: [
-						{title: 'id', width: 110, sortable: true, dataIndex: 'id'},
-						{title: 'æ´»åŠ¨ç±»å‹',width: 110, sortable: true, dataIndex: 'actype'},
-						{title: 'åª’ä½“åç§°',width: 100, sortable: true, dataIndex: 'medianame'},
-						{title: 'æ“ä½œ',width: 100, sortable: true, dataIndex: '', render:function(value, obj){
+						{title: 'id', width: 100, sortable: true, dataIndex: 'id'},
+						{title: '»î¶¯ÀàĞÍ',width: 100, sortable: false, dataIndex: 'actype'},
+						{title: 'Ã½ÌåÃû³Æ',width: 200, sortable: true, dataIndex: 'medianame'},
+						{title: '²Ù×÷',width: 150, sortable: true, dataIndex: '', render:function(value, obj){
 							return '';
 						}}
 					] 
-
-	   		});
-	});
-</script>
+				});
+			});	
+		});
+	</script>
 </body>
 </html>
