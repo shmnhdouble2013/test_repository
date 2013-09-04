@@ -1,0 +1,86 @@
+/* 分页器样式 */
+.page-container{
+	margin: 3px 0;
+	margin-right: 5px;
+	overflow: hidden;
+	float: right;
+}
+.page-container a:hover{
+	text-decoration: none;
+}
+
+.skin-tb .pagination-start,
+.skin-tb .pagination-prev,
+.skin-tb .pagination-next,
+.skin-tb .pagination-end{
+	width: 36px;
+	background: url(http://img04.taobaocdn.com/tps/i4/T1cP85XihuXXXXXXXX-13-101.png) no-repeat;
+}
+
+.skin-tb .pagination-start,
+.skin-tb .pagination-prev,
+.skin-tb .pagination-next,
+.skin-tb .pagination-end,
+.skin-tb .pagination-spec,
+.skin-tb .pagination-curr,
+.skin-tb .pagination-break{
+	min-width: 15px;
+	_width: 15px;
+	border-left: 1px solid #E5E5E5;
+	display: inline;
+	float: left;
+	height: 20px;
+	line-height: 20px;
+	padding: 0 3px;
+	text-align: center;
+	font-family: Tahoma,SimSun,Arial;
+	vertical-align: top;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.skin-tb .pagination-start, .skin-tb .pagination-curr{
+	border: 1px solid #E5E5E5;
+}
+
+.skin-tb .pagination-start,
+.skin-tb .pagination-prev,
+.skin-tb .pagination-end{
+	padding-left: 12px;
+}
+.skin-tb .pagination-start {	
+	background-position: 5px 8px;
+}
+.skin-tb .pagination-prev {
+	background-position: 0 -12px;
+}
+
+.skin-tb .pagination-curr {
+	font-weight: 700;
+	background-color: #E5E5E5;
+}
+
+.skin-tb .pagination-break {
+	color: #c0c0c0;
+	border: 0;
+}
+
+.skin-tb .pagination-next {
+	padding-right:13px;
+	background-position: 42px -50px;
+}
+
+.skin-tb .pagination-end {
+	background-position: 47px -31px;
+}
+
+.skin-tb a {
+	background-color: #fff;
+	border: 1px solid #E5E5E5;
+	color: #2953A6;
+	cursor: pointer;
+}
+
+.skin-tb a:hover {
+	background-color: #F3F2F2;
+}
