@@ -887,8 +887,6 @@ KISSY.add('mui/gridstore', function(S){
 			return this.matchFunction;
 		},
 
-		pageInfo: {currentPage: 1, limit: 10, totalPage: 3}
-
 		// 获取当前页面
 		getCurrentPage: function(){
 			var _self = this;
