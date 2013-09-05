@@ -628,12 +628,16 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 		// 设置Grid Body的高度
 		setHeight: function(height){
 			var _self = this,
-				outerHeight = DOM.height(_self.container), 
-				height = parseInt( _self.setPxCheck(height) );
+				tbodyContainer = S.get('.tbody-container', _self.container), 
+				theadHeight = DOM.height(_self.thead), 
+				tfootHeight = DOM.height(_self.tfoot), 
+				height = parseInt( _self.setPxCheck(height) ),
+				height = height - theadHeight - tfootHeight;
 
-			if(height){ //  && height >= outerHeight
-				DOM.css(_self.table, 'height', height+'px' );
+			if(height>0){ //  && height >= outerHeight
+				DOM.css(tbodyContainer, 'height', height+'px' );
 			}	
+			_self.tbodyContainer = tbodyContainer;
 		},
 		
 		// 公共 设定 像素宽高过滤函数

@@ -53,8 +53,8 @@
 
 		S.use('mui/grid', function(S, Grid){ 
 			new Grid('#J_selectCandTable', {	
-				width:500,
-				height:300,
+				width:1000,
+				height:520,										// 根据数据 条数 设定高度
 				ajaxUrl: 'result.php', 							// 异步接口
 				checkable:true,									// 是否复选框 checkbox
 				isShowCheckboxText: true, 						// 是否显示 checkbox 序号 和 全选文字
@@ -62,6 +62,13 @@
 				staticData: selectData, 						// 候选 table 静态数据 
 				columns: [
 					{title: 'id', width: 'auto', sortable: true, dataIndex: 'id'},
+					{title: '活动类型',width: 'auto', sortable: false, dataIndex: 'actype'},
+					{title: '媒体名称',width: 'auto', sortable: true, dataIndex: 'medianame'},
+
+					{title: 'ifa3d', width: 'auto', sortable: true, dataIndex: 'id'},
+					{title: '活活动类型',width: 'auto', sortable: false, dataIndex: 'actype'},
+					{title: '媒体名称3',width: 'auto', sortable: true, dataIndex: 'medianame'},
+					
 					{title: '活动类型',width: 'auto', sortable: false, dataIndex: 'actype'},
 					{title: '媒体名称',width: 'auto', sortable: true, dataIndex: 'medianame'},
 
