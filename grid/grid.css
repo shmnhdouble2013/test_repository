@@ -1,14 +1,20 @@
 
-/* grid 表格样式 */
+/**
+* grid 表格样式 1.0
+* 水木年华double 旺旺
+**/
+
+/* 容器 */
 .table-container{
-	overflow: hidden;
+	overflow:auto;
 	margin: 5px;
 	position: relative;
-	border: 1px solid gray;
+	/*border: 1px solid #ccc;*/
 }
 
 .tbody-container{
-	overflow-y:scroll;
+	overflow-x:hidden;
+	overflow-y:auto;	
 }
 
 /* table */
@@ -35,7 +41,13 @@
 	display: none;
 }
 
-
+/* 带序号的 checkbox 文字水平对齐*/
+td.checkbox-index{
+	font-size: 13px;
+}
+.ui-table tbody td{
+	vertical-align: bottom;
+}
 
 /* 排序样式	 */
 th a, th a:hover {
@@ -67,6 +79,11 @@ th a, th a:hover {
 /* tr 鼠标移动hover样式 */
 .grid-row-over td{
 	background-color: #DCF4F8;
+}
+
+ /*偶数tr td 颜色*/
+.even-tr{
+	/*background-color: #f4f4f4;*/
 }
 
 

@@ -27,12 +27,12 @@
     </head>
 <body>
 
-	<h3>grid示例~</h3>
+	<h3>Grid 控件示例:</h3>
 
 	<div style="margin:10px;"> 
 
 	    <!-- 表格选中模板 -->
-		<div id="J_selectCandTable" style="height:100px;"></div>		
+		<div id="J_selectCandTable"></div>		
 
 	</div>
 
@@ -53,22 +53,29 @@
 
 		S.use('mui/grid', function(S, Grid){ 
 			new Grid('#J_selectCandTable', {	
+				width:500,
+				height:300,
 				ajaxUrl: 'result.php', 							// 异步接口
 				checkable:true,									// 是否复选框 checkbox
-				isShowBoxIndex: true, 							// 是否显示 checkbox 序号
+				isShowCheckboxText: true, 						// 是否显示 checkbox 序号 和 全选文字
 				isPagination:true,								// 是否有分页 默认 为false
 				staticData: selectData, 						// 候选 table 静态数据 
 				columns: [
-					{title: 'id', width: 100, sortable: true, dataIndex: 'id'},
-					{title: '活动类型',width: 100, sortable: false, dataIndex: 'actype'},
-					{title: '媒体名称',width: 200, sortable: true, dataIndex: 'medianame'},
-					{title: '操作',width: 150, sortable: true, dataIndex: '', render:function(value, obj){
+					{title: 'id', width: 'auto', sortable: true, dataIndex: 'id'},
+					{title: '活动类型',width: 'auto', sortable: false, dataIndex: 'actype'},
+					{title: '媒体名称',width: 'auto', sortable: true, dataIndex: 'medianame'},
+
+					{title: 'ifa3d', width: 'auto', sortable: true, dataIndex: 'id'},
+					{title: '活活动类型',width: 'auto', sortable: false, dataIndex: 'actype'},
+					{title: '媒体名称3',width: 'auto', sortable: true, dataIndex: 'medianame'},
+
+					{title: '操作',width: '.', sortable: false, dataIndex: '', render:function(value, obj){
 						return '666';
 					}}
 				] 
 			});
 		});	
-		
+
 	});
 
 
