@@ -1,1 +1,0 @@
-KISSY.add(function(c){var d=c.DOM,a=c.Event;function b(f){var e=this;f=c.merge(b.config,f);b.superclass.constructor.call(e,f)}b.config={resultType:"path"};c.extend(b,c.LP.SelectTree);c.augment(b,{});c.namespace("LP");c.LP.SelectCity=b},{requires:["lpmodule/selecttree"]});

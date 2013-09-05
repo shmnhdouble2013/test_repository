@@ -198,7 +198,7 @@ KISSY.add('mui/gridstore', function(S){
 			* @param {string} 
 			* @return {}
 			*/
-			pageInfo: {currentPage: 1, limit: 10, totalPage: 10}
+			pageInfo: {currentPage: 1, limit: 10, totalPage: 3}
 
 		}, config);
 
@@ -609,7 +609,7 @@ KISSY.add('mui/gridstore', function(S){
 			_self.rowCount = data.length;
 			_self.totalCount = data.length;
 			// _self._sortData();
-			_self.fire('load', _self.oldParams);
+			_self.fire('load',  {loadparams:_self.oldParams, data:data} );
 		},
 
 		/**
@@ -777,6 +777,9 @@ KISSY.add('mui/gridstore', function(S){
 			var loadparamses = S.merge(_self.oldParams, _self.sortInfo, _self.pageInfo, loadparams);
 			_self.oldParams = loadparamses;
 
+			// 更新 排序 -- 分页 信息 
+			_self.sortInfo = S.mix(_self.sortInfo, loadparams, true, ['field', 'direction']);
+			_self.pageInfo = S.mix(_self.pageInfo, loadparams, true, ['currentPage', 'limit', 'totalPage']);
 			// post vs get 方式参数格式化
 			data = _self.proxy.method === 'post' ? loadparamses : (loadparamses ? S.param(loadparamses) : '');
 
@@ -826,7 +829,7 @@ KISSY.add('mui/gridstore', function(S){
                         _self._sortData();
                     } 
 					
-					_self.fire('load', loadparams);
+					_self.fire('load', {loadparams:loadparamses, data:data});
 					_self._clearChanges();
                 },
 
@@ -884,7 +887,43 @@ KISSY.add('mui/gridstore', function(S){
 			return this.matchFunction;
 		},
 
-		//初始化 -- params -- url -- resultRows
+		pageInfo: {currentPage: 1, limit: 10, totalPage: 3}
+
+		// 获取当前页面
+		getCurrentPage: function(){
+			var _self = this;
+			return _self.pageInfo.currentPage;
+		},
+
+		// 获取分页大小
+		getPageSize: function(){
+			var _self = this;
+			return _self.pageInfo.limit;
+		},
+
+		// 获取总页数
+		getTotalPage: function(){
+			var _self = this;
+			return _self.pageInfo.totalPage;
+		},
+
+		/**
+		* 设置总页数 此方法会触发 totalPageChange事件
+		* @param {number} 设定总页数
+		* @return {Object} 分页数据对象
+		*/
+		setTotalPage:function(totalPage){
+			var _self = this;
+
+			if(totalPage >= 0){
+				_self.pageInfo.totalPage = totalPage;
+				_self.fire('totalPageChange');
+			}	
+
+			return _self.pageInfo;
+		},
+
+		//初始化 -- oldParams对象 -- url别名 -- resultRows
 		_init : function(){
 			var _self =this;
 
@@ -898,9 +937,11 @@ KISSY.add('mui/gridstore', function(S){
             if(!_self.pageInfo.totalPage) {
                 _self.pageInfo.totalPage = _self.totalPage;
             }
-
             if(!_self.pageInfo.limit) {
                 _self.pageInfo.limit = _self.limit;
+            }
+            if(!_self.pageInfo.currentPage) {
+                _self.pageInfo.currentPage = _self.currentPage;
             }
 
 			_self.resultRows = [];

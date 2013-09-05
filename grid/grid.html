@@ -11,15 +11,19 @@
 
 		<link rel="stylesheet" href="http://g.tbcdn.cn/tm/tbs-ui/1.0.5/css/??mui.css,tbsui.css" />
 		<link rel='stylesheet' type='text/css' href='http://${hostName}/tm/tbs-back/${lab_version}/brand_active_url/grid.css'/>
-		<link rel='stylesheet' type='text/css' href='./grid.css'/>
 
+		<link rel='stylesheet' type='text/css' href='./grid.css'/>
+		
 		<script src="http://a.tbcdn.cn/s/kissy/1.3.0/kissy.js"></script>
+
+		<script type="text/javascript" src="http://g.tbcdn.cn/mui/seed/1.1.3/seed.js"></script>
 		<script type="text/javascript" src='http://${hostName}/tm/tbs-back/${lab_version}/blue_print/uicommon.js'></script>
-		<script type="text/javascript" src='http://${hostName}/tm/tbs-back/${lab_version}/brand_active_url/??store.js,grids.js'></script>
+
+		<script type="text/javascript" src='http://${hostName}/tm/tbs-back/${lab_version}/brand_active_url/??store.js,grid.js'></script>
 		
 		
 		<script type="text/javascript" src='./store.js'></script>
-		<script type="text/javascript" src='./grids.js'></script>
+		<script type="text/javascript" src='./grid.js'></script>
     </head>
 <body>
 
@@ -32,35 +36,42 @@
 
 	</div>
 
-	<script type="text/javascript">
 
-		// 候选区 选中数据
-		var selectData = [
-			{"nos":5, "id":"fa32f3a2f5", "actype":"站外", "medianame":"youku.com"},
-			{"nos":7, "id":"faf262f6a66_1", "actype":"站外7", "medianame":"youku7.com" },
-			{"nos":11, "id":"afa266969fa_2", "actype":"站外11", "medianame":"youku11.com" },    
-			{"nos":7, "id":"fa32f3a2f7", "actype":"站外", "medianame":"youku.com"}
-		];
 
-		KISSY.ready(function(S){
-			S.use('mui/grid', function(S, Grid){ 
-				new Grid('#J_selectCandTable', {	
-					ajaxUrl: 'result.php', 							// 异步接口
-					checkable:true,									// 是否复选框 checkbox
-					isShowBoxIndex: true, 							// 是否显示 checkbox 序号
-					isPagination:true,								// 是否有分页 默认 为false
-					staticData: selectData, 						// 候选 table 静态数据 
-					columns: [
-						{title: 'id', width: 100, sortable: true, dataIndex: 'id'},
-						{title: '活动类型',width: 100, sortable: false, dataIndex: 'actype'},
-						{title: '媒体名称',width: 200, sortable: true, dataIndex: 'medianame'},
-						{title: '操作',width: 150, sortable: true, dataIndex: '', render:function(value, obj){
-							return '';
-						}}
-					] 
-				});
-			});	
-		});
-	</script>
+<script type="text/javascript">
+
+	// 候选区 选中数据
+	var selectData = [
+		{"nos":5, "id":"fa32f3a2f5", "actype":"站外", "medianame":"youku.com"},
+		{"nos":7, "id":"faf262f6a66_1", "actype":"站外7", "medianame":"youku7.com" },
+		{"nos":11, "id":"afa266969fa_2", "actype":"站外11", "medianame":"youku11.com" },    
+		{"nos":7, "id":"fa32f3a2f7", "actype":"站外", "medianame":"youku.com"}
+	];
+
+
+	KISSY.ready(function(S){
+
+		S.use('mui/grid', function(S, Grid){ 
+			new Grid('#J_selectCandTable', {	
+				ajaxUrl: 'result.php', 							// 异步接口
+				checkable:true,									// 是否复选框 checkbox
+				isShowBoxIndex: true, 							// 是否显示 checkbox 序号
+				isPagination:true,								// 是否有分页 默认 为false
+				staticData: selectData, 						// 候选 table 静态数据 
+				columns: [
+					{title: 'id', width: 100, sortable: true, dataIndex: 'id'},
+					{title: '活动类型',width: 100, sortable: false, dataIndex: 'actype'},
+					{title: '媒体名称',width: 200, sortable: true, dataIndex: 'medianame'},
+					{title: '操作',width: 150, sortable: true, dataIndex: '', render:function(value, obj){
+						return '666';
+					}}
+				] 
+			});
+		});	
+		
+	});
+
+
+</script>
 </body>
 </html>

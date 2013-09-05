@@ -1,11 +1,12 @@
 <?php 
-    sleep(3);
+    sleep(1);
 ?>
 
 {
 	"success":true,
 	"message":"",
-	"results":10,
+	"results":30,
+    "totalPage":5,
 	"rows": [
         {"nos":1, "id":"fa32f3a2f1", "actype":"站外", "medianame":"youku.com"},
         {"nos":2, "id":"fa32f3a2f2", "actype":"站外", "medianame":"youku.com"},
