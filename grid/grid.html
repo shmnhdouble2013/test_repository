@@ -50,15 +50,19 @@
 
 
 	KISSY.ready(function(S){
-
 		S.use('mui/grid', function(S, Grid){ 
 			new Grid('#J_selectCandTable', {	
 				width:1000,
 				height:520,										// 根据数据 条数 设定高度
-				ajaxUrl: 'result.php', 							// 异步接口
+
+				ajaxUrl: 'result.php', 							// 异步接口 result.php   result_jsonp.php
+				isJsonp: false,									// 是否 为jsonp 默认为false		
+
 				checkable:true,									// 是否复选框 checkbox
-				isShowCheckboxText: true, 						// 是否显示 checkbox 序号 和 全选文字
+				isShowCheckboxText: false, 						// 是否显示 checkbox 序号 和 全选文字
+
 				isPagination:true,								// 是否有分页 默认 为false
+
 				staticData: selectData, 						// 候选 table 静态数据 
 				columns: [
 					{title: 'id', width: 'auto', sortable: true, dataIndex: 'id'},

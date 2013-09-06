@@ -50,7 +50,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 		
 		CLS_GRID_ROW_OVER = 'grid-row-over',		// 行 mouseover class 样式
 		
-		SELECTALLCLS = '.j_select_all',				// 全部选中 checkbox cls钩子
+		SELECTALLCLS = 'j_select_all',				// 全部选中 checkbox cls钩子
 
 		THEADCLS = '.j_thead',						// thead css 钩子
 		TBODYCLS = '.j_tbody',						// tbody css 钩子
@@ -87,11 +87,11 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 			columns:[],								// row 数组 配置对象 例如：{title: 'id', width: 110, sortable: true, dataIndex: 'id'}	
 
 			ajaxUrl: null,      					// 异步查询url  
-			isJsonp:false,							// 是否 为jsonp 默认为false			
+			isJsonp: false,							// 是否 为jsonp 默认为false			
 
 			staticData: [],							// 选择池 静态数据 
 
-			checkable:false,							// 是否复选框 checkbox
+			checkable:false,						// 是否复选框 checkbox
 			isShowCheckboxText: false, 				// checkbox情况下，是否th表头是否显示 全选 字符 和  checkbox 序号
 			
 			isPagination:false,						// 是否有分页 默认 为false
@@ -139,69 +139,74 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 		Grid.superclass.constructor.call(_self, config);		
 		
 
-		//支持的事件
+		// 支持的事件
 		_self.events = [
 			/**  
 			* 开始附加数据
-			* @name S.LP.Grid#beginappend 
+			* @name Grid#beginappend 
 			* @event  
 			* @param {event} e  事件对象
 			* @param {Array} e.data 附加显示的数据
 			*/
 			'beginappend',
+			
 			/**  
 			* 附加数据完成
-			* @name S.LP.Grid#afterappend 
+			* @name Grid#afterappend 
 			* @event  
 			* @param {event} e  事件对象
 			* @param {Array} e.data 附加显示的数据
 			* @param {Array} e.rows 附加显示的数据行DOM结构
 			*/
 			'afterappend',
+
 			/**  
 			* 开始显示数据，一般是数据源加载完数据，开始在表格上显示数据
-			* @name S.LP.Grid#beginshow
+			* @name Grid#beginshow
 			* @event  
 			* @param {event} e  事件对象
-			*/
+			*/			
 			'beginshow',
+
 			/**  
 			* 显示数据完成，一般是数据源加载完数据，并在表格上显示完成
-			* @name S.LP.Grid#aftershow
+			* @name Grid#aftershow
 			* @event  
 			* @param {event} e  事件对象
 			*/
 			'aftershow',
+
 			/**  
 			* 移除行，一般是数据源移除数据后，表格移除对应的行数据
-			* @name S.LP.Grid#rowremoved
+			* @name Grid#rowremoved
 			* @event  
 			* @param {event} e  事件对象
 			* @param {Object} e.data 行对应的记录
 			* @param {Object} e.row 行对应的DOM对象
 			*/
 			'rowremoved',
+
 			/**  
 			* 添加行，一般是数据源添加数据、加载数据后，表格显示对应的行后触发
-			* @name S.LP.Grid#rowcreated
+			* @name Grid#rowcreated
 			* @event  
 			* @param {event} e  事件对象
 			* @param {Object} e.data 行对应的记录
 			* @param {Object} e.row 行对应的DOM对象
 			*/
 			'rowcreated',
+
 			/**  
-			* 翻页前触发，可以通过 return false ,阻止翻页
-			* @name S.LP.Grid#beforepagechange
+			* 翻页前触发 引自 mui/Pagination 分页, 转发分页事件
+			* @name Grid# afterPageChanged
 			* @event  
-			* @param {event} e  事件对象
-			* @param {Number} e.from 当前页
-			* @param {Number} e.to 目标页
+			* @return 分页信息对象
 			*/
-			'beforepagechange',
+			'afterPageChanged',
+
 			/**  
 			* 行点击事件
-			* @name S.LP.Grid#rowclick
+			* @name Grid#rowclick
 			* @event  
 			* @param {event} e  事件对象
 			* @param {Object} e.data 行对应的记录
@@ -209,18 +214,20 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 			* 
 			*/
 			'rowclick',
+
 			/**  
 			* 单元格点击事件
-			* @name S.LP.Grid#cellclick
+			* @name Grid#cellclick
 			* @event  
 			* @param {event} e  事件对象
 			* @param {Object} e.data 行对应的记录
 			* @param {Object} e.row 点击行对应的DOM对象
 			*/
 			'cellclick',
+
 			/**  
 			* 行双击事件
-			* @name S.LP.Grid#rowdblclick
+			* @name Grid#rowdblclick
 			* @event  
 			* @param {event} e  事件对象
 			* @param {Object} e.data 行对应的记录
@@ -228,43 +235,61 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 			* 
 			*/
 			'rowdblclick',
+
 			/**  
 			* 单元格双击事件
-			* @name S.LP.Grid#celldblclick
+			* @name Grid#celldblclick
 			* @event  
 			* @param {event} e  事件对象
 			* @param {Object} e.data 行对应的记录
 			* @param {Object} e.row 点击行对应的DOM对象
 			*/
 			'celldblclick',
+
 			/**  
 			* 行选中事件
-			* @name S.LP.Grid#rowselected
+			* @name Grid#rowselected
 			* @event  
 			* @param {event} e  事件对象
 			* @param {Object} e.data 行对应的记录
 			* @param {Object} e.row 行对应的DOM对象
 			*/
 			'rowselected',
+
 			/**  
 			* 行取消选中事件
-			* @name S.LP.Grid#rowunselected
+			* @name Grid#rowunselected
 			* @event  
 			* @param {event} e  事件对象
 			* @param {Object} e.data 行对应的记录
 			* @param {Object} e.row 行对应的DOM对象
 			*/
 			'rowunselected',
+
 			/**  
 			* 行选中状态改变事件
-			* @name S.LP.Grid#rowselectchanged
+			* @name Grid#rowselectchanged
 			* @event  
 			* @param {event} e  事件对象
 			* @param {Object} e.data 行对应的记录
 			* @param {Object} e.row 行对应的DOM对象
 			* @param {Object} e.selected 选中的状态
 			*/
-			'rowselectchanged'
+			'rowselectchanged',			 
+
+			/**  
+			* 全选事件 发生
+			* @name Grid#allRowsSelected
+			* @event  
+			*/
+			'allRowsSelected',
+
+			/**  
+			* 取消全选事件 发生
+			* @name Grid#unAllRowsSelected
+			* @event  
+			*/
+			'unAllRowsSelected'
 		];
 
 		_self._init();
@@ -279,19 +304,33 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 		_init: function(){
 			var _self = this;
 
+			_self._ajaxConfig();
 			_self._initStore();	
 			_self._initGrid();
-			// _self._eventRender();
+			_self._eventRender();
+		},
+
+		// 参数初始化
+		_ajaxConfig: function(){
+			var _self = this;
+		
+			
 		},
 
 		// 事件初始化 -- click -- mouseout -- mouseover
 		_eventRender: function(){
 			var _self = this;
-			
-			// thead事件
-			Event.on(_self.thead, 'click', function(event){
-				_self._allSlectEvt(event.target);	
-			});
+
+			// thead事件 -- 前端 排序 vs 全选 
+			Event.delegate(_self.thead , 'click', function(ev){
+				var target = ev.target;
+				// 'th a',  前端 排序
+				// _self.sortable(); _sortData	
+
+				// 全选
+				_self._allSlectEvt(target);	
+			}); 
+
 						
 			// tbody事件
 			S.one(_self.tbody).on('click', function (event) {
@@ -300,6 +339,23 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 				_self._rowOverEvent(event.target);
 			}).on('mouseout', function (event) {
 				_self._rowOutEvent(event.target);
+			});		
+
+			// 转发 分页事件 afterPageChange --> afterPageChanged
+			_self.pagination.on('afterPageChange', function(e) {
+				var curPage = e.idx;
+				
+				_self.store.load({ 		
+					currentPage: curPage
+				});
+
+				_self.fire('afterPageChanged', _self.store.pageInfo);
+			});	
+
+
+			// 行选中 vs 全选 自动匹配 
+			_self.on('rowselected rowunselected', function(ev){
+				_self.autoSelect(ev);
 			});				
 		},
 		
@@ -337,26 +393,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 
 			// 放入Dom树中
 			DOM.append(_self.table, _self.container);
-		},
-
-		// 获取行的模版 -- tr
-		_getThTemplate: function(dataOjb){
-			var _self = this,
-				thAry = [],
-				trAry = [];
-
-			S.each(dataOjb, function(obj, index){
-				trAry.push( _self._getThRowTemplate(obj, index) );
-	
-			});	
-
-
-			return thAry.join('');
-
-			DOM.append( DOM.create(), _self.thead);
-			DOM.append( DOM.create(), _self.tbody);
-		},
-
+		},		
 
 		//获取行的模版 -- tr
 		_getRowTemplate: function (obj, index){
@@ -408,8 +445,6 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 			return '<td width="'+defWidth+'" class="'+clscell+emptyTd+CHECKBOX_TD_INDEX+'"><input type="checkbox" value="" name="checkboxs" class="'+clsCheck+'">'+index+'</td>';
 		},	
 
-
-
 		/**
 		* 获取行的模版 -- th
 		* @param {obj || string} 表格 数据对象 和 相应的index
@@ -449,6 +484,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 			
 			return rowTemplate;
 		},
+
 		/**
 		* 获取 th html
 		* @param {obj||string} 列配置数据项obj、render方法html、dataIndex获取的值
@@ -478,6 +514,18 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 
 			return thAry.join('');
 		},	
+
+		// 根据 数据勾选状态, 自动判断 全选与否 显示状态
+		autoSelect: function(ev){
+			var _self = this,
+				type = 	ev.type;
+
+			if(type === 'rowselected'){
+				_self._isAllRowsSelected() && _self._setHeaderChecked(true);
+			}else{
+				_self._setHeaderChecked(false); 
+			}
+		},
 
 		// 根据路径 获取对象值
 		_getFieldValue: function(obj, dataIndex){
@@ -525,7 +573,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 
 		// 初始化gird 和 分页器
 		_initGrid: function(){
-			var _self = this,
+			var _self = this,				
 				width = _self.get('width'),
 				height = _self.get('height');							
 			
@@ -542,29 +590,25 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 
 			// 如果异步 则异步加载数据，否则加载 静态数据 --Store
 			if(_self.get('ajaxUrl')){
-				_self.store.load({ 
-					url: _self.get('ajaxUrl'),
-					limit: _self.get('limit'), 
-					totalPage: _self.get('totalPage') 
-				});
+				_self.store.load();
 			}else if(_self.get('staticData')){
 				_self.store.setResult( _self.get('staticData') );				
 			}else{
-				throw 'ajax url undefined！';
+				throw 'Grid Data Source Error!';
 			}	
 		},
 		
-		// 初始化Store
-		_initStore: function(){
+		// 初始化Store jsonp
+		_initStore: function(data){
 			var _self = this,
-				// data = TL.serializeToObject(_self.get('formEl')),
-				data = S.merge({}, {"currentPage": _self.get('currentPage')});				
-			
-			_self.store = new Store({
-				currentPage: _self.get('currentPage'),
-				autoLoad: _self.get('autoLoad'),
+				dataType = _self.get('isJsonp') ? 'jsonp': 'json';
+
+			// 初始化Store 指定 url、是否jsonp、	若有分页(分页大小 和 分页总数)
+			_self.store = new Store({ 
 				url: _self.get('ajaxUrl'),
-				params: data //TL.encodeURIParam(data)
+				dataType: dataType,
+				limit: _self.get('limit'), 
+				totalPage: _self.get('totalPage') 
 			});
 			
 			// 若无store则推出绑定
@@ -662,7 +706,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 					hasPx = px.split('px');
 
 				if(isPercentage.length>1){
-					throw 'The percentage of CSS values is not supported!'; 
+					console.log('The percentage of CSS values is not supported!'); 
 					return;
 				}	
 
@@ -670,7 +714,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 					endVaue = px;
 				}
 			}else{
-				throw 'Invalid height or width value!'; 
+				console.log('Invalid height or width value!'); 
 			}
 
 			return endVaue;
@@ -703,9 +747,6 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 				totalPage = _self.store.pageInfo.totalPage,
 				curPage = S.isNumber(curPage) ? curPage : parseInt(curPage, 10);
 
-				// limit = _self.store.pageInfo.limit,
-				// curPage = Math.round(dataResults/limit),
-
 			if(curPage<=1){
 				curPage = 1;
 			}
@@ -726,9 +767,6 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 				_self.loadMask = S.one(mastNode);
 			}				
 		},
-
-
-
 
 
 		// 全选事件
@@ -962,20 +1000,26 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 		//设置表头选中状态
 		_setHeaderChecked: function (checked) {
 			var _self = this,
-				checkEl = S.one(SELECTALLCLS, _self.thead);
+				checkEl = S.one('.'+SELECTALLCLS, _self.thead);
 			
 			if(checkEl) {
 				checkEl.attr('checked', checked);
 			}
 		},
 		
-		//设置row全选
+		//设置row 全选
 		_setAllRowsSelected: function (selected) {
 			var _self = this;			
 			
 			S.each(_self.tbody.rows, function(row) { 
 				_self._setRowSelected(row, selected);
 			});
+
+			if(selected){
+				_self.fire('allRowsSelected'); 
+			}else{
+				_self.fire('unAllRowsSelected');
+			}
 		},
 
 		// 纯根据 外界 传入的 data --- 设定表格中的 对应的row选中状态
@@ -983,7 +1027,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 			var _self = this;
 
 			if(!data || isSelected == undefined){
-				throw '必须传入相应数据或选中状态';
+				console.log('必须传入相应数据或选中状态');
 				return;
 			}
 

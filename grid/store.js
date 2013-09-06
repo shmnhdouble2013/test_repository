@@ -8,7 +8,6 @@
 *	url : 'data.php'
 	root: 'rows',  // 根目录
 	totalProperty: 'results',  // 数据条数
-	autoLoad: true,				// 是否自动加载
 	proxy: {url : 'data.php', method: 'get' } //按照'name' 字段降序排序
 	params: {id:'124', type:1}//自定义参数
 	
@@ -49,7 +48,7 @@ KISSY.add('mui/gridstore', function(S){
 			root: 'rows', 
 
 			/**
-			* 加载数据时，符合条件的数据总数，用于分页
+			* 加载数据时，符合条件的数据总数，用于 前端 分页
 			* @field
 			* @type String
 			* @default  "results"
@@ -60,49 +59,34 @@ KISSY.add('mui/gridstore', function(S){
 			totalProperty: 'results', 
 
 			/**
-			* 加载数据时，返回的格式,目前只支持"json、jsonp"格式
-			* @field
-			* @type String
-			* @default "json"
-			*/
-			dataType: 'json', 
-
-			/**
-			* 创建对象时是否自动加载
-			* @field
-			* @type Boolean
-			* @default true
-			*/
-			autoLoad: true,
-
-			/**
-			* 排序信息
-			* @field 
+			* 排序信息 
+			* @field 2个字段 -- 排序字段、排序方向
 			* @type Object
 			* @default { field: '', direction: 'ASC' }
 			* @example 
 			* var store = new Store({
 			*		url : 'data.php',
-			*		autoLoad : true,
 			*		sortInfo: { field: 'name', direction: 'DESC' }//按照'name' 字段降序排序
 			*	});
 			*/
 			sortInfo: { field: '', direction: 'ASC' },
 
 			/**
-			* 连接信息，包含2个字段:<br>
-			* url : 加载数据的地址<br>
-			* method : 加载数据的方式"get","post"，默认值为"post"
+			* ajax config 包含3个字段:
+			* url : 数据的url
+			* method : 数据的方式"get","post"，默认值为"post"
+			* dataType: 数据返回的格式,目前只支持"json、jsonp"格式(此种情况下 强制 method为 get方式  )
 			* @field 
 			* @type Object
-			* @default { method: 'post' }
+			* @default { method: 'post', dataType: 'json', url:null }
 			* @example 
 			* var store = new Store({
-			*		autoLoad : true,
-			*		proxy: {url : 'data.php', method: 'get' }//按照'name' 字段降序排序
+			*		url : 'data.php',
+			*		method: 'get',
+			*		dataType: 'json'
 			*	});
 			*/			
-			proxy: { method: 'post' },
+			proxy: { url:null, method: 'post', dataType: 'json' },
 
 			/**
 			* 自定义参数，用于加载数据时发送到后台
@@ -111,7 +95,6 @@ KISSY.add('mui/gridstore', function(S){
 			* @example
 			* var store = new Store({
 			*		url :'data',
-			*		autoLoad : true,
 			*		params: {id:'124',type:1}//自定义参数
 			*	});
 			*/
@@ -125,7 +108,6 @@ KISSY.add('mui/gridstore', function(S){
 			*/
 			remoteSort: true,
 
-
 			/**
 			* josn 数据 - 根据 指定字段 验证2条数据是否相同
 			* @ field string
@@ -134,71 +116,11 @@ KISSY.add('mui/gridstore', function(S){
 			dataField: 'id', 
 
 			/**
-			* 对象的匹配函数，验证两个对象是否相当
-			* @field
-			* @type Function
-			* @default function(obj1,obj2){return obj1==obj2};
-			* 
-			*/
-			matchFunction : function(obj1, obj2){
-				var _self = this,
-					dataField = _self.dataField,
-					obj1Field = obj1[dataField],
-					obj2Field = obj2[dataField];
-
-				if( obj1Field !== undefined && obj2Field !== undefined){
-					return obj1Field === obj2Field;
-				}else{
-					return obj1 === obj2;
-				}				
-			},
-
-			/**
-			* 排序方法 -- 支持 string || float || int || date
-			* field 排序字段
-			*/
-			compareFunction: function(obj1, obj2, dataType){
-				var _self = this,
-					obj1 = _self.dataMachining(obj1, dataType) || '',
-					obj2 = _self.dataMachining(obj2, dataType) || '';
-					
-				if(S.isString(obj1)){
-					return obj1.localeCompare(obj2);
-				}else if(S.isNumber(obj1)){
-					return obj1-obj2;
-				}
-			},
-
-			/**
-			* 根据指定类型  处理 排序数据
-			* @param {string}
-			* @return 处理过的数据
-			*/
-			dataMachining: function(value, valueType){
-				if(!value){
-					return;
-				}
-
-				switch(valueType){
-					case 'float': return parseFloat(value); 
-						break;
-
-					case 'int': return parseInt(value, 10);
-						break;
-
-					case 'date': return new Date( Date.parse(value.replace(/\-/g,'/') ) );
-						break;		
-
-					default : return value.toString();	
-				}	
-			},
-
-			/**
 			* 分页信息 pageInfo {currentPage:'当前页', limit:'分页大小', totalPage:'总页数'' }
 			* @param {string} 
 			* @return {}
 			*/
-			pageInfo: {currentPage: 1, limit: 10, totalPage: 3}
+			pageInfo: {remotePagination:true, currentPage: 1, limit: 10, totalPage: 3}
 
 		}, config);
 
@@ -309,7 +231,25 @@ KISSY.add('mui/gridstore', function(S){
 			* @param {event} e  事件对象
 			* @param {Object} e.record 解禁的数据对象
 			*/
-			'cancelDisableRecords'
+			'cancelDisableRecords',
+
+			/**  
+			* 总页数改变 totalPageChange 事件
+			* @name Store#totalPageChange  
+			* @event  
+			* @param {event} e  事件对象
+			* @return {obj} 返回 分页信息 对象
+			*/
+			'totalPageChange',
+
+			/**  
+			* currentPageChanged
+			* @name Store#currentPageChanged  
+			* @event  
+			* @param {event} e  事件对象
+			* @return {number} 返回当前页面
+			*/
+			'currentPageChanged'			  
 		];
 
 		_self._init();
@@ -329,8 +269,6 @@ KISSY.add('mui/gridstore', function(S){
 			_self._clearChanges();
 			_self.fire('acceptchanges');
 		},
-
-
 		
 		/**
 		* 添加记录
@@ -654,7 +592,7 @@ KISSY.add('mui/gridstore', function(S){
 			if(_self.remoteSort){	//如果远程排序，重新加载数据
 				this.load();
 			}else{
-				_self._sortData(field,direction);
+				_self._sortData(field, direction);
 				_self.fire('localsort',{field : field , direction : direction});
 			}
 		},
@@ -777,16 +715,21 @@ KISSY.add('mui/gridstore', function(S){
 			var loadparamses = S.merge(_self.oldParams, _self.sortInfo, _self.pageInfo, loadparams);
 			_self.oldParams = loadparamses;
 
-			// 更新 排序 -- 分页 信息 
-			_self.sortInfo = S.mix(_self.sortInfo, loadparams, true, ['field', 'direction']);
-			_self.pageInfo = S.mix(_self.pageInfo, loadparams, true, ['currentPage', 'limit', 'totalPage']);
+			// 更新分页、排序、ajax config 信息
+			_self.attrUpdater(loadparams);
+
+			// 当数据为 jsonp 时候 method为get
+			if(_self.proxy.dataType === 'jsonp'){
+				_self.proxy.method = 'get';
+			}
+			
 			// post vs get 方式参数格式化
 			data = _self.proxy.method === 'post' ? loadparamses : (loadparamses ? S.param(loadparamses) : '');
 
 			S.ajax({
 				cache: false,
                 url: _self.proxy.url,
-                dataType: _self.dataType,
+                dataType: _self.proxy.dataType,
                 type: _self.proxy.method,
                 data: data,
                 success : function (data, textStatus, XMLHttpRequest) {
@@ -796,7 +739,7 @@ KISSY.add('mui/gridstore', function(S){
 						rowCount = 0,
 						totalCount = 0;
 
-					// 出错 
+					// 数据出错 
 					if(data.hasError){
 						setResult(resultRows,rowCount,totalCount);
 						_self.fire('exception',{error:data.error});
@@ -808,6 +751,7 @@ KISSY.add('mui/gridstore', function(S){
 						data = S.json.parse(data);
 					}
 
+					// 处理数据
                     if (S.isArray(data) || S.isObject(data)) {
 						if(S.isArray(data)){
 							resultRows = data;
@@ -825,6 +769,7 @@ KISSY.add('mui/gridstore', function(S){
 
 					setResult(resultRows, rowCount, totalCount);
 
+					// 前端 数据排序
                     if (!_self.remoteSort) {
                         _self._sortData();
                     } 
@@ -839,6 +784,16 @@ KISSY.add('mui/gridstore', function(S){
                 }
 			});			
 			
+		},
+
+		// 更新内置属性信息
+		attrUpdater: function(loadparams){
+			var _self = this;
+
+			// ajax Config、 排序、分页信息 
+			_self.proxy = S.mix(_self.proxy, loadparams, true, ['dataType', 'method']);
+			_self.sortInfo = S.mix(_self.sortInfo, loadparams, true, ['field', 'direction']);
+			_self.pageInfo = S.mix(_self.pageInfo, loadparams, true, ['currentPage', 'limit', 'totalPage']);
 		},
 
 		//移除数据 use
@@ -861,7 +816,7 @@ KISSY.add('mui/gridstore', function(S){
 			}
 		},
 
-		//排序  排序字段 -- 排序方向 ASC || DSC -- 字段值类型
+		// 排序  排序字段 -- 排序方向 ASC || DSC -- 字段值类型
 		/**
 		* 排序方法 根据指定字段排序
 		* @param {string} 
@@ -877,7 +832,7 @@ KISSY.add('mui/gridstore', function(S){
 			if(!field || !direction){
 				return;
 			}
-			_self.resultRows.sort(function(obj1,obj2){
+			_self.resultRows.sort(function(obj1, obj2){
 				return _self.compare(obj1, obj2, field, direction, dataType);
 			});
 		},
@@ -887,10 +842,43 @@ KISSY.add('mui/gridstore', function(S){
 			return this.matchFunction;
 		},
 
+		// 本地分页方法
+		localPagination: function(){
+			var _self = this,
+				recordNos = _self.getTotalCount(),
+				limit = _self.getPageSize();
+
+			if(_self.pageInfo.remotePagination){
+				return;
+			}
+
+
+			// limit = _self.store.pageInfo.limit,
+			// curPage = Math.round(dataResults/limit),
+
+			// _self.setCurrentPage();
+
+			// _self.setTotalPage();
+
+		},
+			
 		// 获取当前页面
 		getCurrentPage: function(){
 			var _self = this;
 			return _self.pageInfo.currentPage;
+		},
+
+		// 设定当前页面
+		setCurrentPage: function(curPage){
+			var _self = this;
+
+			if(S.isNumber(curPage) && curPage >= 0 ){				
+				_self.pageInfo.currentPage = curPage;
+				_self.fire('currentPageChanged', {curPage: curPage});
+				return curPage;
+			}else{
+				console.log('Invalid pagination value!');
+			}
 		},
 
 		// 获取分页大小
@@ -906,7 +894,7 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* 设置总页数 此方法会触发 totalPageChange事件
+		* 设置总页数 此方法会触发 totalPageChange事件  
 		* @param {number} 设定总页数
 		* @return {Object} 分页数据对象
 		*/
@@ -921,31 +909,98 @@ KISSY.add('mui/gridstore', function(S){
 			return _self.pageInfo;
 		},
 
+		/**
+		* 对象的匹配函数，验证两个对象是否相当
+		* @field
+		* @type Function
+		* @default function(obj1,obj2){return obj1==obj2};
+		* 
+		*/
+		matchFunction : function(obj1, obj2){
+			var _self = this,
+				dataField = _self.dataField,
+				obj1Field = obj1[dataField],
+				obj2Field = obj2[dataField];
+
+			if( obj1Field !== undefined && obj2Field !== undefined){
+				return obj1Field === obj2Field;
+			}else{
+				return obj1 === obj2;
+			}				
+		},
+
+		/**
+		* 排序方法 -- 支持 string || float || int || date
+		* field 排序字段
+		*/
+		compareFunction: function(obj1, obj2, dataType){
+			var _self = this,
+				obj1 = _self.dataMachining(obj1, dataType) || '',
+				obj2 = _self.dataMachining(obj2, dataType) || '';
+				
+			if(S.isString(obj1)){
+				return obj1.localeCompare(obj2);
+			}else if(S.isNumber(obj1)){
+				return obj1-obj2;
+			}
+		},
+
+		/**
+		* 根据指定类型  处理 排序数据
+		* @param {string}
+		* @return 处理过的数据
+		*/
+		dataMachining: function(value, valueType){
+			if(!value){
+				return;
+			}
+
+			switch(valueType){
+				case 'float': return parseFloat(value); 
+					break;
+
+				case 'int': return parseInt(value, 10);
+					break;
+
+				case 'date': return new Date( Date.parse(value.replace(/\-/g,'/') ) );
+					break;		
+
+				default : return value.toString();	
+			}	
+		},
+
 		//初始化 -- oldParams对象 -- url别名 -- resultRows
 		_init : function(){
 			var _self =this;
 
 			_self.oldParams = _self.params || {};
 			
-			if(!_self.proxy.url) {
+			// ajax 配置 -- 简洁配置
+			if(_self.url) {
                 _self.proxy.url = _self.url;
             }
+            if(_self.method) {
+                _self.proxy.method = _self.method;
+            }
+            if(_self.dataType) {
+                _self.proxy.dataType = _self.dataType;
+            }
 
-            // 分页信息
-            if(!_self.pageInfo.totalPage) {
+            // 分页信息 -- 简洁配置             
+            if(S.isBoolean(_self.remotePagination) ) {
+                _self.pageInfo.remotePagination = _self.remotePagination;
+            }
+            if(S.isNumber(_self.totalPage) ) {
                 _self.pageInfo.totalPage = _self.totalPage;
             }
-            if(!_self.pageInfo.limit) {
+            if(S.isNumber(_self.limit) ) {
                 _self.pageInfo.limit = _self.limit;
             }
-            if(!_self.pageInfo.currentPage) {
+            if(S.isNumber(_self.currentPage) ) {
                 _self.pageInfo.currentPage = _self.currentPage;
             }
 
 			_self.resultRows = [];
-			/*if(_self.autoLoad){
-				_self._loadData();
-			}*/
 		}
 	});
 

@@ -217,7 +217,6 @@ th a, th a:hover {
 	background-color: #F3F2F2;
 }
 
-
 /* loading узуж */
 .loading-mask{
 	position: absolute;
@@ -225,7 +224,9 @@ th a, th a:hover {
 	height:100%;
 	background: #C7F4FA url("http://img02.taobaocdn.com/tps/i2/T115PmXipeXXaY1rfd-32-32.gif") center center no-repeat;	
 	opacity: 0.3;
+	filter:alpha(opacity=30);
+    -moz-opacity:0.3;
+    -khtml-opacity:0.3;
 	z-index: 100;
 }
-
 
