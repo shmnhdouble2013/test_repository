@@ -15,6 +15,7 @@
 		<link rel='stylesheet' type='text/css' href='./grid.css'/>
 		
 		<script src="http://a.tbcdn.cn/s/kissy/1.3.0/kissy.js"></script>
+		<script src="./uicommon.js"></script>
 
 		<script type="text/javascript" src="http://g.tbcdn.cn/mui/seed/1.1.3/seed.js"></script>
 		<script type="text/javascript" src='http://${hostName}/tm/tbs-back/${lab_version}/blue_print/uicommon.js'></script>
@@ -25,71 +26,62 @@
 		<script type="text/javascript" src='./store.js'></script>
 		<script type="text/javascript" src='./grid.js'></script>
     </head>
-<body>
-
+<body style="padding:10px;">
 	<h3>Grid 控件示例:</h3>
 
-	<div style="margin:10px;"> 
+	<!-- 表格选中模板 -->
+	<div id="J_selectCandTable"></div>	
 
-	    <!-- 表格选中模板 -->
-		<div id="J_selectCandTable"></div>		
+	
+	<script type="text/javascript">
 
-	</div>
-
-
-
-<script type="text/javascript">
-
-	// 候选区 选中数据
-	var selectData = [
-		{"nos":5, "id":"fa32f3a2f5", "actype":"站外", "medianame":"youku.com"},
-		{"nos":7, "id":"faf262f6a66_1", "actype":"站外7", "medianame":"youku7.com" },
-		{"nos":11, "id":"afa266969fa_2", "actype":"站外11", "medianame":"youku11.com" },    
-		{"nos":7, "id":"fa32f3a2f7", "actype":"站外", "medianame":"youku.com"}
-	];
+		// 候选区 选中数据
+		var selectData = [
+			{"nos":5, "id":"fa32f3a2f5", "actype":"站外", "medianame":"youku.com"},
+			{"nos":7, "id":"faf262f6a66_1", "actype":"站外7", "medianame":"youku7.com" },
+			{"nos":11, "id":"afa266969fa_2", "actype":"站外11", "medianame":"youku11.com" },    
+			{"nos":7, "id":"fa32f3a2f7", "actype":"站外", "medianame":"youku.com"}
+		];
 
 
-	KISSY.ready(function(S){
-		S.use('mui/grid', function(S, Grid){ 
-			new Grid('#J_selectCandTable', {	
-				width:1000,
-				height:520,										// 根据数据 条数 设定高度
+		KISSY.ready(function(S){
+		
+			S.use('mui/grid', function(S, Grid){ 
+				// 支持 string || float || int || date
+				// var dataType = S.TL.strToDataType(value);	
+				
+				
+				new Grid('#J_selectCandTable', {	
+					width:1000,
+					height:520,										// 根据数据 条数 设定高度
 
-				ajaxUrl: 'result.php', 							// 异步接口 result.php   result_jsonp.php
-				isJsonp: false,									// 是否 为jsonp 默认为false		
+					ajaxUrl: 'result.php', 							// 异步接口 result.php   result_jsonp.php
+					isJsonp: false,									// 是否 为jsonp 默认为false	
 
-				checkable:true,									// 是否复选框 checkbox
-				isShowCheckboxText: false, 						// 是否显示 checkbox 序号 和 全选文字
+					isLocalSort: true, 								// 排序方式 是否 本地 排序，默认后端排序-- columns数组里需要配置 是否排序sortable 以及 排序数据类型
+		
+					checkable: true,									// 是否复选框 checkbox
+					isShowCheckboxText: true, 						// 是否显示 checkbox 序号 和 全选文字
 
-				isPagination:true,								// 是否有分页 默认 为false
+					isPagination: true,								// 是否有分页 默认 为false
+					isLocalPagination: true, 						// 是否本地分页 默认后端分页
 
-				staticData: selectData, 						// 候选 table 静态数据 
-				columns: [
-					{title: 'id', width: 'auto', sortable: true, dataIndex: 'id'},
-					{title: '活动类型',width: 'auto', sortable: false, dataIndex: 'actype'},
-					{title: '媒体名称',width: 'auto', sortable: true, dataIndex: 'medianame'},
-
-					{title: 'ifa3d', width: 'auto', sortable: true, dataIndex: 'id'},
-					{title: '活活动类型',width: 'auto', sortable: false, dataIndex: 'actype'},
-					{title: '媒体名称3',width: 'auto', sortable: true, dataIndex: 'medianame'},
+					staticData: selectData, 						// 候选 table 静态数据 
 					
-					{title: '活动类型',width: 'auto', sortable: false, dataIndex: 'actype'},
-					{title: '媒体名称',width: 'auto', sortable: true, dataIndex: 'medianame'},
+					columns: [
+						{title: 'id', width: 'auto', sortable: true, dataType: 'float', dataIndex: 'id'},
+						{title: '活动类型',width: 'auto', sortable: true, dataType: 'string', dataIndex: 'actype'},
+						{title: '媒体名称',width: 'auto', sortable: true, dataType: 'string', dataIndex: 'medianame'},
+						{title: '时间',width: 'auto', sortable: true, dataType: 'int', dataIndex: 'time', renderer: S.TL.dateRenderer},					
+						{title: '操作', width: '.', sortable: false, dataIndex: '', renderer: function(value, obj){ 
+							return '<a href="javascript:void(0)" class="command-btn">编辑</a>'; // 操作 标示 command-btn
+						}}
+					] 
+				});
+			});	
 
-					{title: 'ifa3d', width: 'auto', sortable: true, dataIndex: 'id'},
-					{title: '活活动类型',width: 'auto', sortable: false, dataIndex: 'actype'},
-					{title: '媒体名称3',width: 'auto', sortable: true, dataIndex: 'medianame'},
+		});
 
-					{title: '操作',width: '.', sortable: false, dataIndex: '', render:function(value, obj){
-						return '666';
-					}}
-				] 
-			});
-		});	
-
-	});
-
-
-</script>
+	</script>
 </body>
 </html>

@@ -63,12 +63,12 @@ th a, th a:hover {
 	margin-left: 1px;
 }
 /*½µÐò*/
-.dsc{
-	background-position: -30px -23px;
-}
-/*ÉýÐò*/
 .asc{
 	background-position: -46px -23px;
+}
+/*ÉýÐò*/
+.desc{
+	background-position: -30px -23px;
 }
 
 
@@ -89,8 +89,12 @@ th a, th a:hover {
 
 
 
-
-
+ /* checkboxÑùÊ½ */
+input[type=radio], input[type=checkbox] {
+	margin-right: 5px;
+	height:13px;
+	line-height:13px;
+}
 
 
 

@@ -123,6 +123,37 @@ KISSY.add('TL', function(S, Calendar){
 		},
 		
 		/*
+		* @description 根据字符串、数字值-- 判断数据类型 -- string || date、 float || int
+		* @param {Number|String|} 
+		* @return {string} 返回 数据类型
+		*/
+		strToDataType: function(value){
+			var dataType = 'string',
+				date = '',
+				val = parseInt(value, 10),
+				isNumber = S.isNumber(value),
+				isString = S.isString(value);
+			
+			if(!value){
+				return;
+			}
+			
+			if(isNumber){				
+				if(/\./g.test(value)){					
+					dataType = 'float';
+				}else{
+					dataType = 'int';
+				}				
+			}else if(isString){
+				date = this.getDateParse(value);
+				if(date.getFullYear){
+					dataType = 'date';
+				}
+			}
+			return dataType;
+		},	
+		
+		/*
 		* @description 将财务数据分转换成元
 		* @param {Number|String} 
 		* @return {Number} 返回将 分转换成 元的数字

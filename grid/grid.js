@@ -15,7 +15,7 @@
 	});
 */
 
-KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL, 
+KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,  
 	var DOM = S.DOM,
 		Node = S.Node,
 		Ajax = S.IO,
@@ -39,9 +39,14 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 		CLS_GRID_ROW = 'grid-row',					// grid tr row标示
 		CLS_GRID_TH = 'grid-th',					// grid th
 		CLS_GRID_CELL = 'grid-cell',				// grid cell标示
+		COMMAND_BTN = 'command-btn',				// 操作栏 btn 标示 -- 主要阻止 选中状态
 
 		CHECKBOXW = '45px',  						// checkbox 显示 带有序列号 的宽度
 		CHECKBOXS = '30px',							// checkbox 不显示 序号 默认 宽度
+		
+		DRECTION_TAGS = 'drection-tags',			// 排序字段标示
+		DRECTION_ASC = 'asc',						// 升序 cls
+		DRECTION_DSC = 'desc',						// 降序 cls
 		
 		CLS_ROW_ODD = 'odd-tr', 					// 奇数 tr cls
 		CLS_ROW_EVEN = 'even-tr', 					// 偶数 tr cls
@@ -319,19 +324,18 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 
 		// 事件初始化 -- click -- mouseout -- mouseover
 		_eventRender: function(){
-			var _self = this;
+			var _self = this,
+				hedEv = S.query('.'+CLS_GRID_TH, _self.thead);
 
 			// thead事件 -- 前端 排序 vs 全选 
-			Event.delegate(_self.thead , 'click', function(ev){
-				var target = ev.target;
-				// 'th a',  前端 排序
-				// _self.sortable(); _sortData	
+			Event.delegate(hedEv, 'click', function(ev){				
+				// 前端 排序
+				_self.sortableFn(ev); 
 
 				// 全选
-				_self._allSlectEvt(target);	
+				_self._allSlectEvt(ev);	
 			}); 
-
-						
+			
 			// tbody事件
 			S.one(_self.tbody).on('click', function (event) {
 				_self._rowClickEvent(event.target);
@@ -381,7 +385,10 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 			// }
 
 			// 添加 头	
-			DOM.append(thRow, _self.thead);			
+			DOM.append(thRow, _self.thead);	
+
+			// 排序a 标签 标示 i	
+			_self.sortAui = S.query('.'+DRECTION_TAGS, _self.thead);
 
 			// 是否分页
 			if(_self.get('isPagination')){
@@ -475,7 +482,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 			S.each(_self.columns, function(column, index) {
 				var value = _self._getFieldValue(column, column.dataIndex), //obj[column.dataIndex.*.*],
 					text = _self._getRenderText(column, value, obj),
-					temp = _self._getThTemplate(column, text);
+					temp = _self._getThTemplate(column, text, value);
 
 				cellTempArray.push(temp);
 			});
@@ -490,22 +497,25 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 		* @param {obj||string} 列配置数据项obj、render方法html、dataIndex获取的值
 		* @return {string} th html
 		*/
-		_getThTemplate: function(obj, text){
+		_getThTemplate: function(obj, text, value){
 			var _self = this;
-
+				
 			var	hideCls = obj.hide ? CLS_HIDDEN : '',
 				width = _self.setPxCheck(obj.width),
 				title = obj.title,
 				isSortCols = obj.sortable,
 				dataIndex = obj.dataIndex,				
-				text = text || title,
+				text = title || text,
 				emptyTd = ' ',
 				thTpl = '',
-				thAry = [];					
+				thAry = [];	
+			
+			// 支持 string || float || int || date
+			var dataType = obj.dataType || S.TL.strToDataType(value) || 'string';	
 
 			// 有无排序
 			if(isSortCols){
-				thTpl = '<th width="'+width+'" class="'+CLS_GRID_TH + emptyTd + hideCls+'"><a href="javascript:void(0)" title="点击排序" data-field="'+dataIndex+'">'+text+'<i class="drection-tags asc">&nbsp;</i></a></th>';
+				thTpl = '<th width="'+width+'" class="'+CLS_GRID_TH + emptyTd + hideCls+'"><a href="javascript:void(0)" title="点击排序" data-field="'+dataIndex+'" data-dataType="'+dataType+'">'+text+'<i class="'+DRECTION_TAGS+'">&nbsp;</i></a></th>';
 				thAry.push(thTpl);
 			}else{
 				thTpl = '<th width="'+width+'" class="'+CLS_GRID_TH + emptyTd + hideCls+'" data-field="'+dataIndex+'">'+text+'</th>';
@@ -515,6 +525,8 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 			return thAry.join('');
 		},	
 
+		
+		
 		// 根据 数据勾选状态, 自动判断 全选与否 显示状态
 		autoSelect: function(ev){
 			var _self = this,
@@ -527,6 +539,36 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 			}
 		},
 
+		sortableFn: function(ev){
+			var _self = this,
+				direction = '',
+				itagIndex = DOM.first(ev, 'i'),
+				field = DOM.attr(ev, 'data-field'),
+				cssCls = DOM.attr(itagIndex, 'class'),
+				dataType = DOM.attr(ev, 'data-dataType'),
+				isSort = DOM.hasClass(itagIndex, DRECTION_TAGS);
+				
+			if(!isSort){
+				return;
+			}
+			
+			// 第一次点击 vs 后续点击
+			if(cssCls === DRECTION_TAGS){
+				direction = (_self.store.sortInfo.direction).toLowerCase() === DRECTION_ASC ? DRECTION_DSC : DRECTION_ASC; // 获取store默认排序方式 asc 升序
+			}else{
+				direction = DOM.hasClass(itagIndex, DRECTION_ASC) ? DRECTION_DSC : DRECTION_ASC;
+			}
+			
+			_self.store.sort(field, direction.toLocaleUpperCase(), dataType); 	
+			
+			// 移除所有 排序标记标示  -- 显示当前 排序标记 
+			S.each(_self.sortAui, function(tag){
+				DOM.removeClass(tag, DRECTION_ASC);
+				DOM.removeClass(tag, DRECTION_DSC);
+			});			
+			DOM.addClass(itagIndex, direction);
+		},
+		
 		// 根据路径 获取对象值
 		_getFieldValue: function(obj, dataIndex){
 			var _self = this;
@@ -580,6 +622,15 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 			// 载入 基本table结构
 			_self._initTableDom();		
 
+			// 如果异步 则异步加载数据，否则加载 静态数据 --Store
+			if(_self.get('ajaxUrl')){
+				_self.store.load();
+			}else if(_self.get('staticData')){			
+				_self.store._localPagination( _self.get('staticData') );				
+			}else{
+				throw 'Grid Data Source Error!';
+			}	
+			
 			// 设置Grid Body的 宽高 度
 			if(width) { 			
 				_self.setWidth(width);
@@ -587,15 +638,6 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 			if (height) { 			
 				_self.setHeight(height);
 			}
-
-			// 如果异步 则异步加载数据，否则加载 静态数据 --Store
-			if(_self.get('ajaxUrl')){
-				_self.store.load();
-			}else if(_self.get('staticData')){
-				_self.store.setResult( _self.get('staticData') );				
-			}else{
-				throw 'Grid Data Source Error!';
-			}	
 		},
 		
 		// 初始化Store jsonp
@@ -608,7 +650,9 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 				url: _self.get('ajaxUrl'),
 				dataType: dataType,
 				limit: _self.get('limit'), 
-				totalPage: _self.get('totalPage') 
+				totalPage: _self.get('totalPage'),
+				localSort: _self.get('isLocalSort'),
+				localPagination: _self.get('isLocalPagination')	
 			});
 			
 			// 若无store则推出绑定
@@ -628,7 +672,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 				var data = obj.data,
 					results = this.getResult();			
 			
-				_self.showData(results);
+				_self.showData(results); 	
 
 				_self._synPageTal(data.totalPage);
 
@@ -654,6 +698,12 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 				if (_self.loadMask) {
 					_self.loadMask.hide();
 				}
+			});
+			
+			// 前端排序发生
+			_self.store.on('localsort', function(){
+				var results = this.getResult();			
+				_self.showData(results); 
 			});
 		},
 		
@@ -722,7 +772,8 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 
 		// 添加分页
 		addPagePation: function(container){
-			var _self = this;
+			var _self = this
+				totalPage = _self.get('isLocalPagination') ? 1 : _self.get('totalPage');
 
 			if(!container){
 				return;
@@ -733,7 +784,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 			// 初始化
 			_self.pagination = new Pagination({
 				container: pagContainer,
-				totalPage: _self.get('totalPage')
+				totalPage: totalPage
 			});
 			// 防止 分页 表单提交
 		    Event.delegate(pagContainer, 'submit', 'form', function(e){
@@ -747,8 +798,12 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 				totalPage = _self.store.pageInfo.totalPage,
 				curPage = S.isNumber(curPage) ? curPage : parseInt(curPage, 10);
 
-			if(curPage<=1){
+			if(curPage<1){
 				curPage = 1;
+			}
+			
+			if(curPage>totalPage){
+				curPage = totalPage;
 			}
 
 			if(curPage !== totalPage && _self.pagination){
@@ -806,6 +861,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 		// 行 click 事件
 		_rowClickEvent: function (target) {
 			var _self = this,
+				isBtn = DOM.hasClass(target, COMMAND_BTN),
 				row = _self._findRow(target),
 				cell = _self._findCell(target),
 				rowCheckable = _self.get('checkable'), // 是否有checkbox				
@@ -822,6 +878,11 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 					}
 				}
 				_self.fire('rowclick', {data: data, row: row});
+				
+				// 如果是 btn
+				if(isBtn){
+					return;
+				}
 				
 				// 设置行选中状态
 				if(rowCheckable){// checkbox
@@ -1171,4 +1232,4 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination) { // O, TL,
 
 return Grid;
 
-}, {'requires':['xtemplate', 'mui/gridstore', 'mui/pagination', 'sizzle']}); // 'TL', 'mui/overlay','mui/overlay/overlay.css',}, {'requires':['xtemplate', 'mui/gridstore', 'TL', 'mui/pagination']}); // 'mui/overlay','mui/overlay/overlay.css',
+}, {'requires':['xtemplate', 'mui/gridstore', 'mui/pagination', 'TL', 'sizzle']}); // , 'mui/overlay','mui/overlay/overlay.css',}, {'requires':['xtemplate', 'mui/gridstore', 'TL', 'mui/pagination']}); // 'mui/overlay','mui/overlay/overlay.css',

@@ -13,7 +13,6 @@
 	
 	matchFunction  // 对象匹配函数	
 	
-*	hasLoad : false,
 *	resultRows : [],
 *	newRecords : [],
 *	modifiedRecords : [],
@@ -69,7 +68,7 @@ KISSY.add('mui/gridstore', function(S){
 			*		sortInfo: { field: 'name', direction: 'DESC' }//按照'name' 字段降序排序
 			*	});
 			*/
-			sortInfo: { field: '', direction: 'ASC' },
+			sortInfo: { field: '', direction: 'ASC', dataType:'string'},
 
 			/**
 			* ajax config 包含3个字段:
@@ -101,12 +100,12 @@ KISSY.add('mui/gridstore', function(S){
 			params:{},
 
 			/**
-			* 是否后端排序，如果为后端排序，每次排序发送新请求，否则，直接前端排序
-			* @field
+			* 是否后端排序，如果为后端排序，每次排序发送新请求，否则，直接前端排序 -- 默认后端排序
+			* @field 
 			* @type Boolean
 			* @default true
 			*/
-			remoteSort: true,
+			localSort: false,
 
 			/**
 			* josn 数据 - 根据 指定字段 验证2条数据是否相同
@@ -120,20 +119,27 @@ KISSY.add('mui/gridstore', function(S){
 			* @param {string} 
 			* @return {}
 			*/
-			pageInfo: {remotePagination:true, currentPage: 1, limit: 10, totalPage: 3}
-
+			pageInfo: {currentPage: 1, limit: 10, totalPage: 3},
+			
+			/**
+			* 是否后端分页，如果是则每次 分页 发送新请求，否则，直接前端分页 -- 默认后端分页
+			* @field 
+			* @type Boolean
+			* @default true
+			*/
+			localPagination: false
 		}, config);
 
 		S.mix(_self, config);
 		S.mix(_self, {
-			hasLoad : false,
 			resultRows : [],
 			newRecords : [],
 			modifiedRecords : [],
 			deletedRecords : [],
 			disableRecords : [],
 			rowCount : 0,
-			totalCount : 0
+			totalCount : 0,
+			totalData : [] // result数据暂存
 		});
 
 		//声明支持的事件
@@ -324,15 +330,16 @@ KISSY.add('mui/gridstore', function(S){
 		* 当 obj1 = obj2 时返回 0 
 		* 当 obj1 < obj2 时返回 -1
 		*/
-		compare : function(obj1, obj2, field, direction, dataType){
+		compare: function(obj1, obj2, field, direction, dataType){
 			var _self = this,
 				dir = 1;
 
 			field = field || _self.sortInfo.field;
 			direction = direction || _self.sortInfo.direction;
+			dataType = dataType || _self.sortInfo.dataType;
 
 			//如果未指定排序字段，或方向，则按照默认顺序
-			if( !field || !direction){
+			if(!field || !direction){
 				return 1;
 			}
 
@@ -443,13 +450,12 @@ KISSY.add('mui/gridstore', function(S){
 		* @example 
 		* store.load({id : 1234, type : 1});
 		*/
-		load :function (params){
-			//_self.hasLoad = true;
+		load: function (params){
 			this._loadData(params);
 		},
 
 		/**
-		* 获取加载完的数据 use
+		* 获取加载完的数据
 		* @return {Array}
 		*/
 		getResult : function(){
@@ -546,7 +552,7 @@ KISSY.add('mui/gridstore', function(S){
 			_self.resultRows = data;
 			_self.rowCount = data.length;
 			_self.totalCount = data.length;
-			// _self._sortData();
+			
 			_self.fire('load',  {loadparams:_self.oldParams, data:data} );
 		},
 
@@ -583,17 +589,19 @@ KISSY.add('mui/gridstore', function(S){
 		* @param {String} field 排序字段
 		* @param {String} direction 排序方向
 		*/
-		sort : function(field, direction){
+		sort : function(field, direction, dataType){
 			var _self = this;
 
 			_self.sortInfo.field = field || _self.sortInfo.field;
 			_self.sortInfo.direction = direction || _self.sortInfo.direction;
-
-			if(_self.remoteSort){	//如果远程排序，重新加载数据
+			_self.sortInfo.dataType = dataType || _self.sortInfo.dataType;
+	
+			//如果远程排序，重新加载数据
+			if(!_self.localSort){	
 				this.load();
 			}else{
-				_self._sortData(field, direction);
-				_self.fire('localsort',{field : field , direction : direction});
+				_self._sortData(field, direction, dataType);
+				_self.fire('localsort', _self.sortInfo);
 			}
 		},
 
@@ -646,6 +654,7 @@ KISSY.add('mui/gridstore', function(S){
 		// 清除改变的数据记录
 		_clearChanges : function(){
 			var _self = this;
+			
 			_self.newRecords.splice(0);
 			_self.modifiedRecords.splice(0);
 			_self.deletedRecords.splice(0);
@@ -694,7 +703,7 @@ KISSY.add('mui/gridstore', function(S){
 			_self.fire('cancelDisableRecords', {'data': data});
 		},
 
-		//加载数据 use
+		// 加载数据
 		_loadData : function(params){
 			var _self = this,
 				loadparams = params || {},
@@ -703,10 +712,10 @@ KISSY.add('mui/gridstore', function(S){
 			/**
 			* @private 设置结果
 			*/
-			function setResult(resultRows, rowCount, totalCount){
-				_self.resultRows=resultRows;
-				_self.rowCount=rowCount;
-				_self.totalCount=totalCount;
+			function setResultLocal(resultRows, rowCount, totalCount){
+				_self.resultRows = resultRows;
+				_self.rowCount = rowCount;
+				_self.totalCount = totalCount;
 
 			}
 			_self.fire('beforeload');
@@ -741,7 +750,7 @@ KISSY.add('mui/gridstore', function(S){
 
 					// 数据出错 
 					if(data.hasError){
-						setResult(resultRows,rowCount,totalCount);
+						setResultLocal(resultRows,rowCount,totalCount);
 						_self.fire('exception',{error:data.error});
 						return;
 					}
@@ -763,23 +772,29 @@ KISSY.add('mui/gridstore', function(S){
                                 resultRows = [];
                             }
                             rowCount = resultRows.length;
-                            totalCount = parseInt(data[_self.totalProperty], 10);
+                            totalCount = rowCount || parseInt(data[_self.totalProperty], 10);
                         } 
                     } 
 
-					setResult(resultRows, rowCount, totalCount);
+					setResultLocal(resultRows, rowCount, totalCount);
 
-					// 前端 数据排序
-                    if (!_self.remoteSort) {
+					// 前端 排序
+                    if (_self.localSort) {
                         _self._sortData();
                     } 
 					
-					_self.fire('load', {loadparams:loadparamses, data:data});
+					// 前端 分页
+                    if(_self.localPagination) {
+                        _self._localPagination();
+                    }else{
+						_self.fire('load', {loadparams:loadparamses, data:data});
+					}
+					
 					_self._clearChanges();
                 },
 
-                error : function (XMLHttpRequest, textStatus, errorThrown) {
-                   setResult([], 0, 0);
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                   setResultLocal([], 0, 0);
 				   _self.fire('exception',{error:textStatus,responseText:errorThrown.responseText});
                 }
 			});			
@@ -827,6 +842,7 @@ KISSY.add('mui/gridstore', function(S){
 
 			field = field || _self.sortInfo.field;
 			direction = direction || _self.sortInfo.direction;
+			dataType = dataType || _self.sortInfo.dataType;
 
 			//如果未定义排序字段，则不排序
 			if(!field || !direction){
@@ -842,26 +858,53 @@ KISSY.add('mui/gridstore', function(S){
 			return this.matchFunction;
 		},
 
-		// 本地分页方法
-		localPagination: function(){
-			var _self = this,
+		// 本地分页
+		_localPagination: function(data){
+			var _self = this,				
 				recordNos = _self.getTotalCount(),
-				limit = _self.getPageSize();
-
-			if(_self.pageInfo.remotePagination){
-				return;
-			}
-
-
-			// limit = _self.store.pageInfo.limit,
-			// curPage = Math.round(dataResults/limit),
-
-			// _self.setCurrentPage();
-
-			// _self.setTotalPage();
-
-		},
+				limit = _self.getPageSize(),
+				nubs = Math.ceil(recordNos/limit);
 			
+			// 暂存总数据	- 优先手动
+			_self.totalData = data || _self.getResult();
+			
+			// 设定总页数
+			_self.setTotalPage(nubs || 0 );
+			
+			// 设定 页数数据
+			_self._setPageResult();
+		},
+		
+		// 设定分页 数据 result
+		_setPageResult: function(page){
+			var _self = this,
+				start = 0,
+				end = 0,
+				curPageData = [],
+				totalLength = _self.getTotalPage(),
+				limit = _self.getPageSize(),
+				page = page || _self.getCurrentPage();
+				
+			if(page < 1){
+				page = 1;
+			} 
+			
+			if(page > totalLength){
+				page = totalLength;
+			}	
+			
+			// 起始范围
+			start = page === 1 ? 0 : page*limit;
+			end = page === 1 ? limit-1 : page*limit-1;
+			
+			curPageData = _self.totalData.slice( start, end+1);
+			
+			_self.setResult(curPageData);
+			
+			// 缓存 当前页
+			_self.setCurrentPage(page);
+		},
+		
 		// 获取当前页面
 		getCurrentPage: function(){
 			var _self = this;
@@ -930,7 +973,7 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		/**
-		* 排序方法 -- 支持 string || float || int || date
+		* 排序方法 -- 支持 string || number(float) || date
 		* field 排序字段
 		*/
 		compareFunction: function(obj1, obj2, dataType){
@@ -987,9 +1030,6 @@ KISSY.add('mui/gridstore', function(S){
             }
 
             // 分页信息 -- 简洁配置             
-            if(S.isBoolean(_self.remotePagination) ) {
-                _self.pageInfo.remotePagination = _self.remotePagination;
-            }
             if(S.isNumber(_self.totalPage) ) {
                 _self.pageInfo.totalPage = _self.totalPage;
             }
