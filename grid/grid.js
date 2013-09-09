@@ -108,6 +108,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 
 			isOuterTpl: false						// 是否外部自定义 tr 模板
 		}
+
 	/**
 	* 	ajaxUrl 返回数据格式
 	*	{ 	
@@ -348,10 +349,16 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			// 转发 分页事件 afterPageChange --> afterPageChanged
 			_self.pagination.on('afterPageChange', function(e) {
 				var curPage = e.idx;
-				
-				_self.store.load({ 		
-					currentPage: curPage
-				});
+
+				if(!_self.get('isLocalPagination')){
+					_self.store.load({ 		
+						currentPage: curPage
+					});
+				}else{
+					_self.store.setCurrentPage(curPage);
+					var results = _self.store._localPagination();			
+					_self.showData(results); 
+				}				
 
 				_self.fire('afterPageChanged', _self.store.pageInfo);
 			});	
@@ -625,8 +632,8 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			// 如果异步 则异步加载数据，否则加载 静态数据 --Store
 			if(_self.get('ajaxUrl')){
 				_self.store.load();
-			}else if(_self.get('staticData')){			
-				_self.store._localPagination( _self.get('staticData') );				
+			}else if(_self.get('staticData')){	
+				_self.store.setResult( _self.get('staticData') );				
 			}else{
 				throw 'Grid Data Source Error!';
 			}	
@@ -670,11 +677,15 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			// 数据加载完成后 - 取消 屏幕遮罩 delay
 			_self.store.on('load', function(obj){
 				var data = obj.data,
+					curPage = this.getTotalPage(),
 					results = this.getResult();			
 			
 				_self.showData(results); 	
 
-				_self._synPageTal(data.totalPage);
+				// 更新分页 实时总数
+				if(_self.pagination){		
+					_self.pagination.setTotalPage(curPage);
+				}	
 
 				if(_self.loadMask) {
 					_self.loadMask.hide();
@@ -705,6 +716,12 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				var results = this.getResult();			
 				_self.showData(results); 
 			});
+
+			// 前端分页 翻页发生
+			// _self.store.on('currentPageChanged', function(){
+			// 	var results = this._localPagination();			
+			// 	_self.showData(results); 
+			// });
 		},
 		
 
@@ -772,8 +789,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 
 		// 添加分页
 		addPagePation: function(container){
-			var _self = this
-				totalPage = _self.get('isLocalPagination') ? 1 : _self.get('totalPage');
+			var _self = this;
 
 			if(!container){
 				return;
@@ -784,7 +800,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			// 初始化
 			_self.pagination = new Pagination({
 				container: pagContainer,
-				totalPage: totalPage
+				totalPage: _self.get('totalPage')
 			});
 			// 防止 分页 表单提交
 		    Event.delegate(pagContainer, 'submit', 'form', function(e){
@@ -792,24 +808,24 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		    });
 		},
 
-		// 动态分页 总数
-		_synPageTal: function(curPage){
+		// 手动 强制 设定 分页总数
+		_enforcePageTal: function(totalPage){
 			var _self = this,
-				totalPage = _self.store.pageInfo.totalPage,
-				curPage = S.isNumber(curPage) ? curPage : parseInt(curPage, 10);
+				totalPage = _self.store.getTotalPage(),
+				totalPage = S.isNumber(totalPage) ? totalPage : parseInt(totalPage, 10);
 
-			if(curPage<1){
-				curPage = 1;
+			if(totalPage<1){
+				totalPage = 1;
+			}
+
+			if(totalPage > totalPage){
+				totalPage = totalPage;
 			}
 			
-			if(curPage>totalPage){
-				curPage = totalPage;
-			}
-
-			if(curPage !== totalPage && _self.pagination){
-				_self.store.pageInfo.totalPage = curPage;				
-				_self.pagination.setTotalPage(curPage);
-			}	
+			if(totalPage !== totalPage && _self.pagination){				
+				_self.pagination.setTotalPage(totalPage);
+				_self.store.setTotalPage(totalPage);
+			}			
 		},
 
 		// 添加遮罩功能 -- 自定义模板

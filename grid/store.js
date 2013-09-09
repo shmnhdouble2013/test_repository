@@ -552,8 +552,13 @@ KISSY.add('mui/gridstore', function(S){
 			_self.resultRows = data;
 			_self.rowCount = data.length;
 			_self.totalCount = data.length;
+
+			// 前端分页
+			if(_self.localPagination){
+				data = _self._localPagination();
+			}
 			
-			_self.fire('load',  {loadparams:_self.oldParams, data:data} );
+			_self.fire('load', {loadparams:_self.oldParams, data:data});
 		},
 
 		/**
@@ -783,6 +788,9 @@ KISSY.add('mui/gridstore', function(S){
                         _self._sortData();
                     } 
 					
+					// 主要 更新分页 信息
+					_self.attrUpdater(loadparams);
+
 					// 前端 分页
                     if(_self.localPagination) {
                         _self._localPagination();
@@ -859,32 +867,28 @@ KISSY.add('mui/gridstore', function(S){
 		},
 
 		// 本地分页
-		_localPagination: function(data){
+		_localPagination: function(){
 			var _self = this,				
 				recordNos = _self.getTotalCount(),
 				limit = _self.getPageSize(),
 				nubs = Math.ceil(recordNos/limit);
-			
-			// 暂存总数据	- 优先手动
-			_self.totalData = data || _self.getResult();
+
+			// 设定 页数数据	
+			var start = 0,
+				end = 0,
+				curPageData = [],
+				totalLength = _self.getTotalPage(),
+				page = _self.getCurrentPage();	
+
+			// 第一次 暂存总数据
+			if(!_self.totalData.length){
+				_self.totalData = _self.getResult();
+			} 	
 			
 			// 设定总页数
 			_self.setTotalPage(nubs || 0 );
 			
-			// 设定 页数数据
-			_self._setPageResult();
-		},
-		
-		// 设定分页 数据 result
-		_setPageResult: function(page){
-			var _self = this,
-				start = 0,
-				end = 0,
-				curPageData = [],
-				totalLength = _self.getTotalPage(),
-				limit = _self.getPageSize(),
-				page = page || _self.getCurrentPage();
-				
+			// 分页数据	
 			if(page < 1){
 				page = 1;
 			} 
@@ -893,16 +897,24 @@ KISSY.add('mui/gridstore', function(S){
 				page = totalLength;
 			}	
 			
-			// 起始范围
-			start = page === 1 ? 0 : page*limit;
-			end = page === 1 ? limit-1 : page*limit-1;
-			
-			curPageData = _self.totalData.slice( start, end+1);
-			
-			_self.setResult(curPageData);
-			
+			// 起始范围 -- 第一页
+			start = page === 1 ? 0 : page*limit - limit;
+			end = page === 1 ? limit : page*limit;
+
+			// 最后一页
+			if(page === totalLength){
+				end = undefined;
+			}
+
+			curPageData = _self.totalData.slice(start, end);
+
 			// 缓存 当前页
 			_self.setCurrentPage(page);
+
+			// 修改 result 数据对象
+			_self.resultRows = curPageData;
+
+			return curPageData;
 		},
 		
 		// 获取当前页面
@@ -917,7 +929,7 @@ KISSY.add('mui/gridstore', function(S){
 
 			if(S.isNumber(curPage) && curPage >= 0 ){				
 				_self.pageInfo.currentPage = curPage;
-				_self.fire('currentPageChanged', {curPage: curPage});
+				//_self.fire('currentPageChanged', {curPage: curPage});
 				return curPage;
 			}else{
 				console.log('Invalid pagination value!');
@@ -941,14 +953,14 @@ KISSY.add('mui/gridstore', function(S){
 		* @param {number} 设定总页数
 		* @return {Object} 分页数据对象
 		*/
-		setTotalPage:function(totalPage){
-			var _self = this;
-
-			if(totalPage >= 0){
+		setTotalPage: function(totalPage){
+			var _self = this,
+				beforTotalPage = _self.getTotalPage();
+			
+			if(totalPage !== beforTotalPage && totalPage >= 0){				
 				_self.pageInfo.totalPage = totalPage;
 				_self.fire('totalPageChange');
-			}	
-
+			}
 			return _self.pageInfo;
 		},
 
