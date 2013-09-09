@@ -766,20 +766,20 @@ KISSY.add('mui/gridstore', function(S){
 					}
 
 					// 处理数据
-                    if (S.isArray(data) || S.isObject(data)) {
-						if(S.isArray(data)){
-							resultRows = data;
-							rowCount = resultRows.length;
-							totalCount = rowCount;
-						}else if (data) {
-                            resultRows = data[_self.root];
-                            if (!resultRows) {
-                                resultRows = [];
-                            }
-                            rowCount = resultRows.length;
-                            totalCount = rowCount || parseInt(data[_self.totalProperty], 10);
-                        } 
-                    } 
+					if(S.isArray(data)){
+						resultRows = data;
+						rowCount = resultRows.length;
+						totalCount = rowCount;
+						
+					}else if (S.isObject(data)) {
+						resultRows = data[_self.root];
+						
+						if (!resultRows) {
+							resultRows = [];
+						}
+						rowCount = resultRows.length;
+						totalCount = rowCount || parseInt(data[_self.totalProperty], 10); // 优选 数组计算 length 	后选择："results":21,
+					} 
 
 					setResultLocal(resultRows, rowCount, totalCount);
 
@@ -788,15 +788,17 @@ KISSY.add('mui/gridstore', function(S){
                         _self._sortData();
                     } 
 					
-					// 主要 更新分页 信息
-					_self.attrUpdater(loadparams);
+					// 更新 总分页 信息					
+					_self.setTotalPage( _self.calculatePageTotal() );
 
 					// 前端 分页
-                    if(_self.localPagination) {
+					/*if(_self.localPagination) {
                         _self._localPagination();
-                    }else{
+                    }else{	
 						_self.fire('load', {loadparams:loadparamses, data:data});
-					}
+					} */
+					
+					_self.fire('load', {loadparams:loadparamses, data:data});
 					
 					_self._clearChanges();
                 },
@@ -865,13 +867,25 @@ KISSY.add('mui/gridstore', function(S){
 		_getDefaultMatch :function(){
 			return this.matchFunction;
 		},
-
+	
+		// 获取分页数
+		calculatePageTotal: function(totalRows, length){
+			var _self = this,
+				recordNos = _self.getTotalCount(),
+				limit = _self.getPageSize();
+								
+			if(!totalRows && !length){
+				return Math.ceil(recordNos/limit);
+			}
+			
+			return Math.ceil(totalRows/length); 
+		},
+		
 		// 本地分页
 		_localPagination: function(){
 			var _self = this,				
-				recordNos = _self.getTotalCount(),
 				limit = _self.getPageSize(),
-				nubs = Math.ceil(recordNos/limit);
+				nubs = _self.calculatePageTotal(); 
 
 			// 设定 页数数据	
 			var start = 0,
@@ -886,7 +900,7 @@ KISSY.add('mui/gridstore', function(S){
 			} 	
 			
 			// 设定总页数
-			_self.setTotalPage(nubs || 0 );
+			_self.setTotalPage(nubs);
 			
 			// 分页数据	
 			if(page < 1){
@@ -897,14 +911,9 @@ KISSY.add('mui/gridstore', function(S){
 				page = totalLength;
 			}	
 			
-			// 起始范围 -- 第一页
+			// 起始范围 -- 第一页 vs 最后一页
 			start = page === 1 ? 0 : page*limit - limit;
-			end = page === 1 ? limit : page*limit;
-
-			// 最后一页
-			if(page === totalLength){
-				end = undefined;
-			}
+			end = page === 1 ? limit : (page === totalLength ? undefined : page*limit);
 
 			curPageData = _self.totalData.slice(start, end);
 

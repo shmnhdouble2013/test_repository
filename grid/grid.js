@@ -102,7 +102,6 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			isPagination:false,						// 是否有分页 默认 为false
 			pageSize: 10, 							// 分页大小
 			currentPage:1,							// 默认分页起点
-			totalPage: 10,							// 分页总数
 
 			dataField:'id',							// 单条 josn 数据 标示
 
@@ -356,6 +355,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 					});
 				}else{
 					_self.store.setCurrentPage(curPage);
+					
 					var results = _self.store._localPagination();			
 					_self.showData(results); 
 				}				
@@ -452,9 +452,12 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		// 有checkbox 复选框 -- td checkbox
 		_getCheckedCellTemplate: function(clscell, clsCheck, index){
 			var _self = this,
+				currentPage = _self.store.getCurrentPage(),
+				pageSize = _self.store.getPageSize(), 
 				emptyTd = ' ',
 				defWidth = _self.get('isShowCheckboxText') ? CHECKBOXW : CHECKBOXS,	
-				index = _self.get('isShowCheckboxText') ? ++index : '';
+				index = _self.get('isShowCheckboxText') ? ++index : '',
+				index = currentPage === 1 ? index : pageSize + index;
 
 			return '<td width="'+defWidth+'" class="'+clscell+emptyTd+CHECKBOX_TD_INDEX+'"><input type="checkbox" value="" name="checkboxs" class="'+clsCheck+'">'+index+'</td>';
 		},	
@@ -656,8 +659,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			_self.store = new Store({ 
 				url: _self.get('ajaxUrl'),
 				dataType: dataType,
-				limit: _self.get('limit'), 
-				totalPage: _self.get('totalPage'),
+				limit: _self.get('pageSize'), 
 				localSort: _self.get('isLocalSort'),
 				localPagination: _self.get('isLocalPagination')	
 			});
@@ -716,12 +718,6 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				var results = this.getResult();			
 				_self.showData(results); 
 			});
-
-			// 前端分页 翻页发生
-			// _self.store.on('currentPageChanged', function(){
-			// 	var results = this._localPagination();			
-			// 	_self.showData(results); 
-			// });
 		},
 		
 
@@ -799,8 +795,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 
 			// 初始化
 			_self.pagination = new Pagination({
-				container: pagContainer,
-				totalPage: _self.get('totalPage')
+				container: pagContainer
 			});
 			// 防止 分页 表单提交
 		    Event.delegate(pagContainer, 'submit', 'form', function(e){

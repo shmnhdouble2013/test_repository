@@ -62,10 +62,10 @@
 				
 				
 				new Grid('#J_selectCandTable', {	
-					width:1000,
-					height:520,										// 根据数据 条数 设定高度
+					//width:1000,
+					//height:520,										// 根据数据 条数 设定高度
 
-					// ajaxUrl: 'result.php', 							// 异步接口 result.php   result_jsonp.php
+					ajaxUrl: 'result.php', 							// 异步接口 result.php   result_jsonp.php
 					isJsonp: false,									// 是否 为jsonp 默认为false	
 
 					isLocalSort: true, 								// 排序方式 是否 本地 排序，默认后端排序-- columns数组里需要配置 是否排序sortable 以及 排序数据类型
@@ -74,9 +74,10 @@
 					isShowCheckboxText: true, 						// 是否显示 checkbox 序号 和 全选文字
 
 					isPagination: true,								// 是否有分页 默认 为false
-					isLocalPagination: true, 						// 是否本地分页 默认后端分页
+					isLocalPagination: false, 						// 是否本地分页 默认后端分页, 当为本地分页时，必须为 静态数据
+					pageSize:5, 									// 分页大小  默认10条
 
-					staticData: selectData, 						// 候选 table 静态数据 
+					staticData: selectData, 						// table 静态数据，当ajaxUrl同时存在时候，优先异步数据
 					
 					columns: [
 						{title: 'id', width: 'auto', sortable: true, dataType: 'float', dataIndex: 'id'},
