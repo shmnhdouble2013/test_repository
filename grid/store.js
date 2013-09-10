@@ -100,12 +100,12 @@ KISSY.add('mui/gridstore', function(S){
 			params:{},
 
 			/**
-			* 是否后端排序，如果为后端排序，每次排序发送新请求，否则，直接前端排序 -- 默认后端排序
+			* 是否后端排序，如果为后端排序，每次排序发送新请求，否则，直接前端排序 -- 默认 前端排序
 			* @field 
 			* @type Boolean
 			* @default true
 			*/
-			localSort: false,
+			localSort: true,
 
 			/**
 			* josn 数据 - 根据 指定字段 验证2条数据是否相同
@@ -122,12 +122,22 @@ KISSY.add('mui/gridstore', function(S){
 			pageInfo: {currentPage: 1, limit: 10, totalPage: 3},
 			
 			/**
-			* 是否后端分页，如果是则每次 分页 发送新请求，否则，直接前端分页 -- 默认后端分页
+			* 是否后端分页数据，如果是则每次 分页 发送新请求，否则，直接前端分页 -- 默认后端分页
 			* @field 
 			* @type Boolean
 			* @default true
 			*/
-			localPagination: false
+			localPagination: false,
+
+
+			/**
+			* 是否有分页-- 默认有
+			* @field 
+			* @type Boolean
+			* @default true
+			*/
+			isPagination: true 
+
 		}, config);
 
 		S.mix(_self, config);
@@ -554,7 +564,7 @@ KISSY.add('mui/gridstore', function(S){
 			_self.totalCount = data.length;
 
 			// 前端分页
-			if(_self.localPagination){
+			if(_self.isPagination){
 				data = _self._localPagination();
 			}
 			
@@ -790,13 +800,6 @@ KISSY.add('mui/gridstore', function(S){
 					
 					// 更新 总分页 信息					
 					_self.setTotalPage( _self.calculatePageTotal() );
-
-					// 前端 分页
-					/*if(_self.localPagination) {
-                        _self._localPagination();
-                    }else{	
-						_self.fire('load', {loadparams:loadparamses, data:data});
-					} */
 					
 					_self.fire('load', {loadparams:loadparamses, data:data});
 					

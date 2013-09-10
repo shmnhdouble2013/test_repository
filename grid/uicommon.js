@@ -52,6 +52,7 @@ KISSY.add('TL', function(S, Calendar){
             }
             return S_Date.format(d,'yyyy-mm-dd');
         },
+        
 		/**
 			@description 日期时间格式化函数
 			@param {Number|Date} date 格式话的日期，一般为1970 年 1 月 1 日至今的毫秒数 
@@ -167,7 +168,52 @@ KISSY.add('TL', function(S, Calendar){
 			}
 			return v;
 		},
+		/**
+		* @description 根据路径 深层遍历对象,获取 最终值; 
+		* @param {object|String} String多个key 直接用'.'号隔开; 例如: object --> 'aa.bb.cc.dd.ee' 
+		* @return {value}
+		*/
+    	getFiledValue: function(obj, index){
+			if( !obj && !index){
+				return;
+			}
+
+			var resultData = obj,
+				aindex = index.split('.');
+
+			S.each(aindex, function(dataIndex){
+				if(resultData){
+					resultData = resultData[dataIndex];
+				}
+			});
+
+			return resultData;
+		},
 		
+		/*
+		* @description 公用方法--- 遍历 选中/取消 既定文档作用域, 指定cls钩子的 checkbox, 设置checked状态
+		* @param {string|boolean|document} class 钩子-- 是否选中 --- 文档作用域
+		* @return {array} 选中的checkbox value值 数组
+		*/
+    	selectedAllBox: function(cls, isChecked, thatDoc){
+    		var selectedAry = [],	
+    			thatDoc = thatDoc || document, 
+                groupRadios = S.query(cls, thatDoc);
+                
+            S.each(groupRadios, function(el){
+            	var trID = DOM.val(el);
+
+				if(isChecked){
+					el.checked = 'checked';
+					selectedAry.push(trID);
+				}else{
+					el.checked = '';
+					DOM.removeAttr(el, 'checked');
+				}               
+            });
+
+			return selectedAry;
+    	},
 		/**
 		* 将表单数据序列化成为字符串
 		* @param {HTMLForm} form 表单元素

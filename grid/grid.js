@@ -99,9 +99,10 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			checkable:false,						// 是否复选框 checkbox
 			isShowCheckboxText: false, 				// checkbox情况下，是否th表头是否显示 全选 字符 和  checkbox 序号
 			
-			isPagination:false,						// 是否有分页 默认 为false
+			isPagination:true,						// 是否有分页 默认 有
+
 			pageSize: 10, 							// 分页大小
-			currentPage:1,							// 默认分页起点
+			// isLocalPagination: false,			// 是否 本地分页
 
 			dataField:'id',							// 单条 josn 数据 标示
 
@@ -309,16 +310,15 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		_init: function(){
 			var _self = this;
 
-			_self._ajaxConfig();
+			_self._augmsConfig();
 			_self._initStore();	
 			_self._initGrid();
 			_self._eventRender();
 		},
 
 		// 参数初始化
-		_ajaxConfig: function(){
+		_augmsConfig: function(){
 			var _self = this;
-		
 			
 		},
 
@@ -346,10 +346,11 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			});		
 
 			// 转发 分页事件 afterPageChange --> afterPageChanged
-			_self.pagination.on('afterPageChange', function(e) {
+			_self.pagination && _self.pagination.on('afterPageChange', function(e) {
 				var curPage = e.idx;
 
-				if(!_self.get('isLocalPagination')){
+				// 若是异步则为 后端分页数据 否则 改为 本地分页 数据
+				if(_self.get('ajaxUrl')){
 					_self.store.load({ 		
 						currentPage: curPage
 					});
@@ -661,7 +662,8 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				dataType: dataType,
 				limit: _self.get('pageSize'), 
 				localSort: _self.get('isLocalSort'),
-				localPagination: _self.get('isLocalPagination')	
+				isPagination: _self.get('isPagination') 
+				// localPagination: _self.get('isLocalPagination')	
 			});
 			
 			// 若无store则推出绑定

@@ -39,17 +39,20 @@
 		var selectData = [
 			{"nos":52, "id":"fa32f3a2f5", "actype":"站外", "medianame":"youku.com", "time":5343543758045},
 			{"nos":71, "id":"faf262f6a66_1", "actype":"站外7", "medianame":"youku7.com","time":5343545453758584},
-			{"nos":11, "id":"afa266969fa_2", "actype":"站外11", "medianame":"youku11.com","time":5343944754584 },    
+			{"nos":11, "id":"afa266969fa_2", "actype":"站外11", "medianame":"youku11.com","time":5343944754584 }, 
+
 			{"nos":17, "id":"fa32f3a2f7", "actype":"站外", "medianame":"youku.com","time":5345932604584},
 			{"nos":1, "id":"111111111111111.09", "actype":"站外", "medianame":"youku.com", "time":5343543758584},
 	        {"nos":2, "id":"222222222222222", "actype":"我是", "medianame":"yahoo.com", "time":54542375684584},
+
 			{"nos":6, "id":"666666666666666", "actype":"黄蜂", "medianame":"juhuasuan.com", "time":545474658484},
 	        {"nos":4, "id":"444444444444444", "actype":"甜心", "medianame":"alibaba.com", "time":5234454758584},
-	        {"nos":5, "id":"555555555555555", "actype":"过我", "medianame":"taobao.com", "time":5454756784584},        
+	        {"nos":5, "id":"555555555555555", "actype":"过我", "medianame":"taobao.com", "time":5454756784584},  
+
 	        {"nos":7, "id":"777777777777777.8653", "actype":"口味", "medianame":"qiyi.com", "time":545475123584},
-	        {"nos":8, "id":"888888888888888", "actype":"不会", "medianame":"baidu.com", "time":5454766584584},		
-			{"nos":3, "id":"333333333333333", "actype":"出口", "medianame":"souhoo.com", "time":5454758409584},
-	        {"nos":9, "id":"999999999999999.72", "actype":"清楚", "medianame":"google.com", "time":545478458484},
+
+	        {"nos":8, "id":"888888888888888", "actype":"不会", "medianame":"baidu.com", "time":5454766584584},	
+
 	        {"nos":10, "id":"00000000000000", "actype":"后再", "medianame":"sina.com", "time":54546575584}
 		];
 
@@ -62,30 +65,32 @@
 				
 				
 				new Grid('#J_selectCandTable', {	
-					//width:1000,
-					//height:520,										// 根据数据 条数 设定高度
+					width:1000,									// 强制设定 表格 高度 1000 or '1000px'
+					// height:520,									
 
-					ajaxUrl: 'result.php', 							// 异步接口 result.php   result_jsonp.php
-					isJsonp: false,									// 是否 为jsonp 默认为false	
-
-					isLocalSort: true, 								// 排序方式 是否 本地 排序，默认后端排序-- columns数组里需要配置 是否排序sortable 以及 排序数据类型
-		
-					checkable: true,									// 是否复选框 checkbox
-					isShowCheckboxText: true, 						// 是否显示 checkbox 序号 和 全选文字
-
-					isPagination: true,								// 是否有分页 默认 为false
-					isLocalPagination: false, 						// 是否本地分页 默认后端分页, 当为本地分页时，必须为 静态数据
-					pageSize:5, 									// 分页大小  默认10条
+					// ajaxUrl: 'result.php', 						// 异步接口 result.php   result_jsonp.php
+					// isJsonp: false,									// 是否 为jsonp 默认为false	
 
 					staticData: selectData, 						// table 静态数据，当ajaxUrl同时存在时候，优先异步数据
-					
+
+					// isLocalSort: true, 							// 是否 本地 排序，默认 前端排序 --  另外，开启 排序列 请在 columns 配置 sortable 以及 dataType 排序数据类型
+		
+					checkable: true,								// 是否 开启 复选框 checkbox ---- 默认 false 不显示
+					// isShowCheckboxText: true, 						// 是否 显示 checkbox 序号 和 表头 全选文字， 默认 false 不显示
+
+	
+					// pageSize:10, 								// 分页大小  默认10条/页
+																	// 关于分页： 异步 默认 后端 分页数据，若为静态数据 则自动 前端 本地分页 
+
 					columns: [
 						{title: 'id', width: 'auto', sortable: true, dataType: 'float', dataIndex: 'id'},
 						{title: '活动类型',width: 'auto', sortable: true, dataType: 'string', dataIndex: 'actype'},
 						{title: '媒体名称',width: 'auto', sortable: true, dataType: 'string', dataIndex: 'medianame'},
 						{title: '时间',width: 'auto', sortable: true, dataType: 'int', dataIndex: 'time', renderer: S.TL.dateRenderer},					
 						{title: '操作', width: '.', sortable: false, dataIndex: '', renderer: function(value, obj){ 
-							return '<a href="javascript:void(0)" class="command-btn">编辑</a>'; // 操作 标示 command-btn
+
+							// 操作 标示 command-btn
+							return '<a href="javascript:void(0)" class="command-btn">编辑</a>';
 						}}
 					] 
 				});
