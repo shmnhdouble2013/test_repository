@@ -2,13 +2,15 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Git����ʼ�</title>
+		<title>Git读书笔记</title>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/default.css" id="theme">
+
+		<link rel="stylesheet" href="http://g.tbcdn.cn/tm/??tbs-ui/1.0.5/css/mui.css,tbs-ui/1.0.5/css/tbsui.css"/>
 
 		<!-- For syntax highlighting -->
 		<link rel="stylesheet" href="css/zenburn.css">
@@ -21,96 +23,98 @@
 		<!--[if lt IE 9]>
 		<script src="js/html5shiv.js"></script>
 		<![endif]-->
+
+		<style type="text/css">
+			.margin_top50{
+				margin-top: 50px !important;
+			}
+		</style>
 	</head>
 
 <body>
-
 		<div class="reveal">
-
 
 			<div class="slides">
       
 				<section>
-					<h1>Git����ʼ�</h1>
+					<h1>Git读书笔记</h1>
+					<p class="margin_top50">by 水木年华double</p>
 				</section>
 
 				<section>
-					<h2>Heads Up</h2>
-					<p>
-						reveal.js is a framework for easily creating beautiful presentations using HTML. You'll need a browser with
-						support for CSS 3D transforms to see it in its full glory.
-					</p>
-
-					<aside class="notes">
-						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
-					</aside>
+					<h2>知识点</h2>
+					<ul class="margin_top50">
+						<li><a href="#">git暂存区</a></li>
+						<li><a href="#">git diff比较差异</a></li>
+						<li><a href="#">git reset操作</a></li>
+						<li><a href="#">git checkout操作</a></li>
+					</ul>
 				</section>
 
-				<!-- Example of nested vertical slides -->
+
 				<section>
-					<section>
-						<h2>Vertical Slides</h2>
-						<p>
-							Slides can be nested inside of other slides,
-							try pressing <a href="#" class="navigate-down">down</a>.
-						</p>
-						<a href="#" class="image navigate-down">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-					</section>
+					<h2>暂存区</h2>
+					<p>原理、概念、替换本地改动等</p>
+				</section>
 
-					<section>
-						<h2>Basement Level 1</h2>
-						<p>Press down or up to navigate.</p>
-					</section>
+				<section>
+					<!-- 工作区_暂存区_版本库_关系图 -->
+					<img src="http://gtms03.alicdn.com/tps/i3/T1jrqSFblXXXXRGFTi-1239-659.jpg">
 
-					<section>
-						<h2>Basement Level 2</h2>
-						<p>Cornify</p>
-						<a class="test" href="http://cornify.com">
-							<img width="280" height="326" src="https://s3.amazonaws.com/hakim-static/reveal-js/cornify.gif" alt="Unicorn">
-						</a>
-					</section>
-
-					<section>
-						<h2>Basement Level 3</h2>
-						<p>That's it, time to go back up.</p>
-						<a href="#/2" class="image">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="-webkit-transform: rotate(180deg);">
-						</a>
-					</section>
+					<!-- git版本库构造 -->
+					<img src="http://gtms04.alicdn.com/tps/i4/T1KmKRFXFcXXb2hk6u-1143-965.jpg">
 
 				</section>
 
-				
+				<section>				   
+					<p>首先 必须明白 3个区： 工作区 --- 暂存区 --- HEAD头区，一个 文件实际上 存在 3种版本（工作区、暂存区、版本库（当前分支）中最新版本）,举例说明：</p> 
+	 				<p>当我们 修改了一个文件并add，其实只是修改了 head文件头，而没有加入到 暂存区(stage)中,  ps：此时 git diff  不带参数比的是 工作区与暂存区差异，所以是空的，
+	 				此时若 调用 git status 则会提示： 用 reset 撤销提交，否则就准备 提交到 暂存区啦；来真的咯；</p>
+
+					<h3>* 文件内容 存在 git对象库里，.git/objects目录中，文件索引 建立了 文件 和 对象库中 对象和实体的 映射对应, 见下图：</h3> 
+					<p>* commit提交, 暂存区的 目录树 会写到 版本库 对象中， HEAD会做相应的更新， 即 HEAD最新指向的目录树 就是提交时 原暂存区的目录树.</p>
+				</section>
+
+
 
 				<section>
-					<h2>Pretty Code</h2>
-					<pre><code data-trim contenteditable>          
-			            function linkify( selector ) {
-			              if( supports3DTransforms ) {
+					<h2>比较差异Diff</h2>				
 
-			                var nodes = document.querySelectorAll( selector );
+					<!-- 看差异 diff查 -->
+					<img src="http://gtms01.alicdn.com/tps/i1/T1INWQFfpfXXXIjsL4-1479-915.jpg">.
 
-			                for( var i = 0, len = nodes.length; i &lt; len; i++ ) {
-			                  var node = nodes[i];
+					<p>git diff HEAD 则会出现修改差异（比的是工作区 和 当前工作分支头）</p>
+					<p>* 当调用 git diff --cached 或者 --staged 则是查看 暂存区 和 版本库之间差异；如何查看提交成功， 只要有日志 提交id 和 说明，即为提交成功；</p>
+				</section>
 
-			                  if( !node.className ) ) {
-			                    node.className += ' roll';
-			                  }
-			                };
-			              }
-			            }
-					</code></pre>
-					<p>Courtesy of <a href="http://softwaremaniacs.org/soft/highlight/en/description/">highlight.js</a>.</p>
-				</section>	
+
+				<section>
+					<h2>重置Reset</h2>						
+
+					<!-- reset重置命令 -->
+					<img src="http://gtms02.alicdn.com/tps/i2/T19PSPFgleXXcMiHkE-1430-688.jpg">
+
+					<p>* 当执行 reset HEAD，暂存区的 目录会被重写，即被 HEAD 目录指向 替换掉，工作区不受影响，换而言之 暂存区 和 HEAD就是 2个缓冲对象，一个 对工作区，一个对分支头，而两者之间又有 关系交互；</p>
+				</section>
+
+				<section>
+					<h2>checkout暂存区操作</h2>					
+
+					<!-- 工作区_暂存区_版本库_关系图 -->
+					<img src="http://gtms03.alicdn.com/tps/i3/T1jrqSFblXXXXRGFTi-1239-659.jpg">
+
+					<p>	* 当执行 git checkout . 或者 git checkout -- <file> 会用暂存区 全部文件或者指定文件 替换工作区的 文件，危险性就是 会清除 工作区中未 添加到 暂存区的 改变；</p>
+
+					<p>* 同理可得，当执行 git checkout HEAD . 或者 git checkout HEAD <file> 会用HEAD 分支 指向的文件 替换 暂存区 和 工作区 指定或者全部文件；会清除 工作区未提交的改动，也会清除暂存区未提交的改动；</p>
+				</section>
+
 
 			</div>
 
 		</div>
 
-		<script src="js/head.min.js"></script>
-		<script src="js/reveal.min.js"></script>
+		<script src="js/head.js"></script>
+		<script src="js/reveal.js"></script>
 
 		<script>
 			Reveal.initialize({
@@ -134,21 +138,6 @@
 			});
 
 		</script>
-
-        <!-- Everything below this point is unrelated to the slideshow -->
-
-        <div class="share-reveal" style="display: none; position: absolute; bottom: 10px; left: 50%; margin-left: -225px; z-index: 20;">
-            <a href="http://twitter.com/share" class="twitter-share-button" data-text="reveal.js - an HTML presentation framework from @hakimel." data-url="http://lab.hakim.se/reveal-js" data-count="small" data-related="hakimel"></a>
-
-            <iframe id="facebook-button" src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fapp.hakim.se%2Freveal-js%2F&layout=button_count&show_faces=false&width=93&action=like&font=arial&colorscheme=light&height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:85px; height:24px; position: relative; top: 4px;" allowTransparency="true"></iframe>
-
-            <a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://lab.hakim.se/reveal-js"></a>
-
-            <a href="https://twitter.com/revealjs" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @revealjs</a>
-        </div>
-
-        <a class="fork-reveal" style="display: none;" href="https://github.com/hakimel/reveal.js"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/camo.github.com/e6bef7a091f5f3138b8cd40bc3e114258dd68ddf/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub"></a>
-
         <script>
 	        var _gaq = [['_setAccount', 'UA-15240703-1'], ['_trackPageview']];
 
@@ -162,8 +151,6 @@
 		        
 	        })(document, 'script');
         </script>
-
-        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 
         <script type="text/javascript">
         /* <![CDATA[ */
