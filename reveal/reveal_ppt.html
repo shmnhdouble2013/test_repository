@@ -44,14 +44,41 @@
 				<section>
 					<h2>知识点</h2>
 					<ul class="margin_top50">
+						<li><a href="#">git基本操作三部曲</a></li>
 						<li><a href="#">git暂存区</a></li>
 						<li><a href="#">git diff比较差异</a></li>
 						<li><a href="#">git reset操作</a></li>
 						<li><a href="#">git checkout操作</a></li>
 					</ul>
 				</section>
-
-
+				
+				<section>
+					<section>	
+						<h2>基本操作三部曲</h2>
+						<p>git init---仓库初始化</p>
+						<p>git add---刷新head头文件文件</p>
+						<p>git commit---完成提交</p>
+					</section>	
+					
+					<section>	
+						<h2>git init</h2>
+						<p>创建版本库，初始化仓库操作，如果clone仓库则无须如此，因为文件/文件夹已经存在版本库信息了，即存在.git文件夹版本库文件</p> 
+						<p>初始化版本库时，git 1.6.5或最新版本可以直接输入目录完成初始化即：git init testDir</p> 
+					</section>
+					
+					<section>	
+						<h2>git add</h2>
+						<p>当我们 修改了一个文件并add，其实只是修改了 head文件头，而没有加入到 暂存区(stage)中,  ps：此时 git diff  不带参数比的是 工作区与暂存区差异，所以是空的，
+	 				此时若 调用 git status 则会提示： 用 reset 撤销提交，否则就准备 提交到 暂存区啦；来真的咯；</p>
+					</section>
+					
+					<section>	
+						<h2>git commit</h2>
+						<p>当我们 修改了一个文件并add，其实只是修改了 head文件头，而没有加入到 暂存区(stage)中,  ps：此时 git diff  不带参数比的是 工作区与暂存区差异，所以是空的，
+	 				此时若 调用 git status 则会提示： 用 reset 撤销提交，否则就准备 提交到 暂存区啦；来真的咯；</p>
+					</section>
+				</section>
+				
 				<section>
 					<h2>暂存区</h2>
 					<p>原理、概念、替换本地改动等</p>
@@ -68,8 +95,7 @@
 
 				<section>				   
 					<p>首先 必须明白 3个区： 工作区 --- 暂存区 --- HEAD头区，一个 文件实际上 存在 3种版本（工作区、暂存区、版本库（当前分支）中最新版本）,举例说明：</p> 
-	 				<p>当我们 修改了一个文件并add，其实只是修改了 head文件头，而没有加入到 暂存区(stage)中,  ps：此时 git diff  不带参数比的是 工作区与暂存区差异，所以是空的，
-	 				此时若 调用 git status 则会提示： 用 reset 撤销提交，否则就准备 提交到 暂存区啦；来真的咯；</p>
+	 				
 
 					<h3>* 文件内容 存在 git对象库里，.git/objects目录中，文件索引 建立了 文件 和 对象库中 对象和实体的 映射对应, 见下图：</h3> 
 					<p>* commit提交, 暂存区的 目录树 会写到 版本库 对象中， HEAD会做相应的更新， 即 HEAD最新指向的目录树 就是提交时 原暂存区的目录树.</p>
