@@ -37,103 +37,225 @@
 			<div class="slides">
       
 				<section>
-					<h1>Git读书笔记</h1>
+					<h1>Git读书分享</h1>
 					<p class="margin_top50">by 水木年华double</p>
 				</section>
 
+				<!-- 总览 -->
 				<section>
-					<h2>知识点</h2>
+					<p>知识点</p>
 					<ul class="margin_top50">
-						<li><a href="#">git基本操作三部曲</a></li>
-						<li><a href="#">git暂存区</a></li>
-						<li><a href="#">git diff比较差异</a></li>
-						<li><a href="#">git reset操作</a></li>
-						<li><a href="#">git checkout操作</a></li>
+						<li><a href="#">git基本操作</a></li>								
+						<li><a href="#">git 工作区--版本库--暂存区 原理</a></li>	
+						<li><a href="#">git管理对象原理</a></li>
+						<li><a href="#">git diff 差异比较</a></li>
+						<li><a href="#">git reset 重置操作</a></li>
+						<li><a href="#">git checkout 暂存区等操作</a></li>
+					</ul>
+				</section>
+				
+				<!-- 基本操作 -->
+				<section>
+					<section>	
+						<h2>基本操作</h2>
+						<ul>
+							<li>git init---初始化仓库</li>
+							<li>git add---提交变更集任务</li>
+							<li>git commit---提交变更</li>
+							<li>git push---远程备份</li>
+							<li>git branch---分支操作</li>
+						</ul>
+					</section>	
+					
+					<section>	
+						<p>git init</p>
+						<ul>
+							<li>git init 完成初始化仓库操作，如果clone检出仓库则无须如此，因为文件夹下已经存在版本库信息了，即存在.git文件夹版本库信息文件</li> 
+							<li>ps：git 1.6.5或最新版本可以直接输入目录完成初始化版本库，例：git init testDir</li> 
+							<li>检出仓库---创建一个本地仓库的克隆版本：git clone /path/to/repository</li> 
+							<li>检出仓库---远端服务器上的仓库：git clone git@github.com:shmnhdouble2013/bui.git</li>							
+						</ul>
+					</section>
+					
+					<section>	
+						<p>git add----添加文件变更集任务</p>
+						<ul>	
+							<li>当我们修改或者删除了版本库中受控的工作区文件, 版本库中并没有随之记录，所以执行add命令添加到缓存区；完成后若调用git status 则会提示： 用git reset HEAD 撤销add添加</li>
+							<li>工作区修改/新增 git add 或者 删除文件 git add -u 命令，暂存区目录将被更新，与此同时，文件内容写入git对象库中一个新对象中，文件修改id记录在 暂存区index中</li>
+						</ul>
+					</section>
+					
+					<section>	
+						<p>git commit</p>
+						<ul>
+							<li>当执行 git commit -m "代码提交信息" 提交操作，暂存区的目录树会写到版本库HEAD指向的分支中,master分支会做相应的更新, 即HEAD/master最新指向的目录树 就是提交时 原暂存区的目录树</li>
+							<li>* 不要使用 git commit -a 来提交 文件， 主要是 丢掉了 暂存区 的作用, 命令本身是对 本地 工作区 所有变更 执行commit操作，包括修改和删除，但不包括 未被版本库跟踪的文件；也即是说 新增的文件 是不被 包括的</li>
+						</ul>
+					</section>
+					
+					<section>	
+						<p>git push</p>
+						<ul>
+							<li>刚才的提交只是在本地仓库中，需要执行 git push origin master命令以将这些改动或者整个仓库 提交到远端仓库(可以把 master 换成你想要推送的任何分支)</li>
+							<li>如果你还没有克隆现有仓库，并欲将你的仓库连接到某个远程服务器，使用如下命令添加：git remote add origin git@github.com:shmnhdouble2013/bui.git</li>
+							<li>ps: origin是啥？ origin就是 git仓库创建好后默认的仓库名字，类似于远程分支会有个独立的origin命名空间，降低了多用户操作时候合并分支的分险</li>
+						</ul>
+					</section>
+					
+					<section>	
+						<p>git branch 分支操作</p>
+						<ul>
+							<li>创建仓库的时候，master 是“默认的”。在其他分支上进行开发，完成后再将它们合并到主分支上</li>
+							<li>创建分支：git branch branchName; </li>
+							<li>删除分支：git branch -d branchName; </li>
+							<li>切换分支：git checkout branchName; </li>
+							<li>合并分支：git merge experimental 合并experimental分支到 当前分支；</li>
+						</ul>
+					</section>
+				</section>
+				
+				<!-- git对象 -->
+				<section>
+					<section>	
+						<h2>git对象--文件跟踪链</h2>
+						<img src="http://d.pcs.baidu.com/thumbnail/48320d8be49e8f51e40674b5c313c7fc?fid=3256522100-250528-1588432315&time=1380850488&rt=pr&sign=FDTAR-DCb740ccc5511e5e8fedcff06b081203-80IFh6hdm%2Fltm07dNtU3HmOV7%2Fk%3D&expires=8h&r=186964952&size=c850_u580&quality=100" alt="git对象" />
+					</section>
+					<section>	
+						<p>根据commit提交ID，查看详细提交信息 $ git cat-file -p id</p> 
+						<p>可以看到主要包含的5部分内容:</p> 
+						<ul>
+							<li>本次commit提交id标示</li>
+							<li>本次 提交 所对应的目录树tree</li>
+							<li>本次提交的 父提交parent</li>
+							<li>作者author</li>
+							<li>提交者committer</li>
+						</ul>
+					</section>
+					<section>	
+						<p>git对象版本库构造图</p>
+						<img src="http://gtms04.alicdn.com/tps/i4/T1KmKRFXFcXXb2hk6u-1143-965.jpg" />						
+					</section>
+					<section>		
+						<ul>						
+							<li>.git/refs/是保存 引用的 命名空间, .git/refs/heads/下的引用又称为分支，分支2中写法： 全称.git/refs/heads/master; 简写 也可以去掉前面的2级目录,故而常见简写为master</li> 
+							<li>master在 版本库 中 就是一个引用文件(.git/refs/heads/master) 内容就是 分支中 最新提交的 提交ID，这个文件 也可以在 .git 文件夹下 依次找到</li>
+							<li>git底层命令 git rev-parse 可以用于显示 引用分支 对应的 提交ID，举例：git rev-parse master</li> 
+						</ul>
+					</section>
+					<section>		
+						<p>思考2个问题？？？</p>
+						<ul>						
+							<li>git对象如何建立历史跟踪链？</li>
+							<li>HEAD、master啥关系？</li>
+						</ul>	
+					</section>
+				</section>			
+				
+				<!-- 工作区_暂存区_版本库_关系图 -->
+				<section>
+					<section>
+						<h2>暂存区</h2>
+						<p>工作区、暂存区、版本库 原理、概念</p>
+						<img src="http://gtms03.alicdn.com/tps/i3/T1jrqSFblXXXXRGFTi-1239-659.jpg" />
+					</section>
+					
+					<section>		
+						<ul>
+							<li>首先 必须明白 3个区： 工作区 --- 暂存区 --- HEAD头区，一个 文件实际上 存在 3种版本(工作区、暂存区、版本库中最新版本)</li> 				
+							<li>文件内容 存在 git对象库里，.git/objects目录中，文件索引 建立了 文件 和 对象库中 对象和实体的 映射对应, 回见上图：</li> 
+							<li>commit提交, 暂存区的 目录树 会写到 版本库 对象中， HEAD会做相应的更新， 即 HEAD最新指向的目录树 就是提交时 原暂存区的目录树.</li>
+						</ul>
+					</section>	
+					<section>		
+						<p>思考？？？</p>
+						<ul>						
+							<li>工作区 --- 暂存区 --- 版本库关系</li>
+							<li>一个文件一般存在几个版本？最多几个？</li>
+						</ul>	
+					</section>
+				</section>
+		
+				<!-- 看差异 diff查 -->
+				<section>
+					<section>
+						<p>git diff 差异比较</p>					
+						<img src="http://gtms01.alicdn.com/tps/i1/T1INWQFfpfXXXIjsL4-1479-915.jpg" />
+					</section>
+					
+					<section>
+						<p>git diff 差异比较</p>
+						<ul>
+							<li>git diff (工作区 和 暂存区)</li>
+							<li>git diff HEAD(工作区 和 当前工作分支)</li>
+							<li>git diff --cached 或者 --staged 则是查看 暂存区 和 版本库之间差异</li>
+						</ul>
+					</section>
+					<section>		
+						<p>思考？？？</p>
+						<ul>						
+							<li>差异比较3种比法实质是啥？</li>
+							<li>新增文件或者修改文件在上述3种差异比较中有时候无差异是什么原因？</li>
+						</ul>	
+					</section>
+				</section>
+				
+				<!-- reset重置命令 -->
+				<section>
+					<section>
+						<p>重置Reset</p>	
+						<img src="http://gtms02.alicdn.com/tps/i2/T19PSPFgleXXcMiHkE-1430-688.jpg">
+					</section>
+					<section>
+						<p>重置Reset</p>
+						<ul>
+							<li>git reset --hard <commit> 引用到新的提交ID、暂存区、工作区 三者都同时替换，即:上图中的123</li>
+							<li>git reset --soft <commit> 只替换commit提交ID引用的指向,即:上图中的1。一般用于重新提交</li>
+							<li>git reset 仅仅用 HEAD 指向的 目录树 重置 替换 暂存区 === git reset HEAD</li>
+							<li>git reset -- filename 仅仅将 文件filename 改动撤出 暂存区 ===  相当于对 git add filename反向 === git rm --cached <file> 其他不变</li>
+							<li>ps: 暂存区刷新 工作区 命令 git checkout . </li>
+						</ul>
+					</section>
+					<section>		
+						<p>思考？？？</p>
+						<ul>						
+							<li>重置3种状态实质理解？</li>
+						</ul>	
+					</section>
+				</section>
+				
+				<!-- 暂存区操作-->
+				<section>
+					<section>
+						<p>checkout暂存区操作</p>	
+						<!-- 工作区_暂存区_版本库_关系图 -->
+						<img src="http://gtms03.alicdn.com/tps/i3/T1jrqSFblXXXXRGFTi-1239-659.jpg" />
+					</section>
+					<section>
+						<ul>
+							<li>执行 git checkout . 或者 git checkout -- <file> 会用暂存区 全部文件或者指定文件 替换工作区的 文件，危险性就是 会清除 工作区中未 添加到 暂存区的 改变</li>
+							<li>执行 git checkout HEAD . 或者 git checkout HEAD <file> 会用HEAD 分支 指向的文件 替换 暂存区 和 工作区 指定或者全部文件；会清除 工作区未提交的改动，也会清除暂存区未提交的改动</li>
+						</ul>
+					</section>
+				</section>
+					
+				<section>
+					<h2>总结</h2>					
+					<ul>
+						<li></li>
 					</ul>
 				</section>
 				
 				<section>
-					<section>	
-						<h2>基本操作三部曲</h2>
-						<p>git init---仓库初始化</p>
-						<p>git add---刷新head头文件文件</p>
-						<p>git commit---完成提交</p>
-					</section>	
-					
-					<section>	
-						<h2>git init</h2>
-						<p>创建版本库，初始化仓库操作，如果clone仓库则无须如此，因为文件/文件夹已经存在版本库信息了，即存在.git文件夹版本库文件</p> 
-						<p>初始化版本库时，git 1.6.5或最新版本可以直接输入目录完成初始化即：git init testDir</p> 
-					</section>
-					
-					<section>	
-						<h2>git add</h2>
-						<p>当我们 修改了一个文件并add，其实只是修改了 head文件头，而没有加入到 暂存区(stage)中,  ps：此时 git diff  不带参数比的是 工作区与暂存区差异，所以是空的，
-	 				此时若 调用 git status 则会提示： 用 reset 撤销提交，否则就准备 提交到 暂存区啦；来真的咯；</p>
-					</section>
-					
-					<section>	
-						<h2>git commit</h2>
-						<p>当我们 修改了一个文件并add，其实只是修改了 head文件头，而没有加入到 暂存区(stage)中,  ps：此时 git diff  不带参数比的是 工作区与暂存区差异，所以是空的，
-	 				此时若 调用 git status 则会提示： 用 reset 撤销提交，否则就准备 提交到 暂存区啦；来真的咯；</p>
-					</section>
+					<h2>其他学习资料</h2>					
+					<ul>
+						<li><a href="http://book.git-scm.com/">Git 社区参考书</a></li>
+						<li><a href="http://progit.org/book/">专业 Git</a></li>
+						<li><a href="http://think-like-a-git.net/">如 git 思考</a></li>
+						<li><a href="http://help.github.com/">GitHub 帮助</a></li>
+						<li><a href="http://marklodato.github.com/visual-git-guide/index-en.html">图形化的 Git 指南一则</a></li>
+					</ul>
 				</section>
 				
-				<section>
-					<h2>暂存区</h2>
-					<p>原理、概念、替换本地改动等</p>
-				</section>
-
-				<section>
-					<!-- 工作区_暂存区_版本库_关系图 -->
-					<img src="http://gtms03.alicdn.com/tps/i3/T1jrqSFblXXXXRGFTi-1239-659.jpg">
-
-					<!-- git版本库构造 -->
-					<img src="http://gtms04.alicdn.com/tps/i4/T1KmKRFXFcXXb2hk6u-1143-965.jpg">
-
-				</section>
-
-				<section>				   
-					<p>首先 必须明白 3个区： 工作区 --- 暂存区 --- HEAD头区，一个 文件实际上 存在 3种版本（工作区、暂存区、版本库（当前分支）中最新版本）,举例说明：</p> 
-	 				
-
-					<h3>* 文件内容 存在 git对象库里，.git/objects目录中，文件索引 建立了 文件 和 对象库中 对象和实体的 映射对应, 见下图：</h3> 
-					<p>* commit提交, 暂存区的 目录树 会写到 版本库 对象中， HEAD会做相应的更新， 即 HEAD最新指向的目录树 就是提交时 原暂存区的目录树.</p>
-				</section>
-
-
-
-				<section>
-					<h2>比较差异Diff</h2>				
-
-					<!-- 看差异 diff查 -->
-					<img src="http://gtms01.alicdn.com/tps/i1/T1INWQFfpfXXXIjsL4-1479-915.jpg">.
-
-					<p>git diff HEAD 则会出现修改差异（比的是工作区 和 当前工作分支头）</p>
-					<p>* 当调用 git diff --cached 或者 --staged 则是查看 暂存区 和 版本库之间差异；如何查看提交成功， 只要有日志 提交id 和 说明，即为提交成功；</p>
-				</section>
-
-
-				<section>
-					<h2>重置Reset</h2>						
-
-					<!-- reset重置命令 -->
-					<img src="http://gtms02.alicdn.com/tps/i2/T19PSPFgleXXcMiHkE-1430-688.jpg">
-
-					<p>* 当执行 reset HEAD，暂存区的 目录会被重写，即被 HEAD 目录指向 替换掉，工作区不受影响，换而言之 暂存区 和 HEAD就是 2个缓冲对象，一个 对工作区，一个对分支头，而两者之间又有 关系交互；</p>
-				</section>
-
-				<section>
-					<h2>checkout暂存区操作</h2>					
-
-					<!-- 工作区_暂存区_版本库_关系图 -->
-					<img src="http://gtms03.alicdn.com/tps/i3/T1jrqSFblXXXXRGFTi-1239-659.jpg">
-
-					<p>	* 当执行 git checkout . 或者 git checkout -- <file> 会用暂存区 全部文件或者指定文件 替换工作区的 文件，危险性就是 会清除 工作区中未 添加到 暂存区的 改变；</p>
-
-					<p>* 同理可得，当执行 git checkout HEAD . 或者 git checkout HEAD <file> 会用HEAD 分支 指向的文件 替换 暂存区 和 工作区 指定或者全部文件；会清除 工作区未提交的改动，也会清除暂存区未提交的改动；</p>
-				</section>
-
 
 			</div>
 
