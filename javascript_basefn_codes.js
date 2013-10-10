@@ -46,7 +46,7 @@ this.constructor.superclass._initEvent.call(this);
 
 
 
-// 校验实例化
+// validation 自定义校验规则 --日历基本校验 
 _validaRender: function(){
 	var _self = this;
 
