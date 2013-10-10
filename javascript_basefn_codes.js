@@ -132,3 +132,13 @@ KISSY.use(_self.fullPlugins, function (S) {
     var args = S.makeArray(arguments);
     args.shift();
 });
+
+
+// 监控日期控件，禁止手动输入编辑
+Event.add('#ac_startTime, #ac_endTime', 'keyup', function(ev){
+	var evtype = ev.type;
+
+	switch(evtype){
+		case 'keyup': DOM.val(ev.target, ''); // 清空字段	
+	}				
+});
