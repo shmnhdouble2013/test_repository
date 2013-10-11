@@ -111,8 +111,8 @@ renderCalendar: function(container, cfg){
 
 	_self.get(calendarStr).render();
 
-	// 点击后 填写日期数据
-_self.get(calendarStr).on('timeSelect', function(e){
+	// 点击后 填写日期数据 http://docs.kissyui.com/docs/html/api/component/calendar/index.html#calendar.popup
+_self.get(calendarStr).on('timeSelect', function(e){ // 注意：监控时间 若没有 具体时间则 应该监控 select
     DOM.val(container,  S_Date.format(e.date, 'yyyy-mm-dd HH:MM:ss') );
     _self.validform && _self.validform.isValid(); // 这里方便验证
 });
