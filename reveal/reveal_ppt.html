@@ -38,19 +38,20 @@
       
 				<section>
 					<h1>Git读书分享</h1>
-					<p class="margin_top50">by 水木年华double</p>
+					<p class="margin_top50">by 水木年华double.黄甲</p>
 				</section>
 
 				<!-- 总览 -->
 				<section>
 					<p>知识点</p>
 					<ul class="margin_top50">
-						<li><a href="#">git基本操作</a></li>								
-						<li><a href="#">git 版本库原理概况</a></li>	
-						<li><a href="#">git管理对象原理</a></li>
+						<li><a href="#">git 基本操作</a></li>						
+						<li><a href="#">git 版本库原理</a></li>	
+						<li><a href="#">git 管理对象</a></li>
 						<li><a href="#">git diff 差异比较</a></li>
-						<li><a href="#">git reset 重置操作</a></li>
-						<li><a href="#">git checkout 暂存区操作</a></li>
+						<li><a href="#">git reset 重置</a></li>
+						<li><a href="#">git checkout 检出</a></li>
+						<li><a href="#">git 远程版本库</a></li>	
 					</ul>
 				</section>
 				
@@ -71,16 +72,16 @@
 						<p>git init</p>
 						<ul>
 							<li>git init 完成初始化仓库操作，如果clone检出仓库则无须如此，因为文件夹下已经存在版本库信息文件了，即存在.git文件夹及其信息文件</li> 
-							<li>ps：git 1.6.5或最新版本可以&nbsp;直接输入目录完成初始化版本库，例：git init testDir</li> 
-							<li>检出仓库---创建一个本地仓库的克隆版本：git clone /path/to/repository</li> 
-							<li>检出仓库---远端服务器上的仓库：git clone git@github.com:shmnhdouble2013/bui.git</li>							
+							<li>ps：git 1.6.5或最新版本可以&nbsp;直接输入目录完成初始化版本库，例：git init testDirectory</li> 
+							<li>检出仓库1---创建一个本地仓库的克隆版本：git clone /path/to/repository</li> 
+							<li>检出仓库2---远端服务器上的仓库：git clone git@github.com:shmnhdouble2013/bui.git</li>							
 						</ul>
 					</section>
 					
 					<section>	
 						<p>git add----添加文件变更集任务</p>
 						<ul>	
-							<li>当我们修改或者删除了版本库中受控的工作区文件, 版本库中并没有随之记录，所以执行add命令添加到&nbsp;暂存区；完成后若调用git status 则会提示： 用git reset HEAD 撤销add添加，工作区不变化</li>
+							<li>当我们修改或者删除了版本库中受控的工作区文件, 版本库中并没有随之记录，所以执行add命令添加到&nbsp;暂存区；完成后若调用git status 则会提示： 用git reset HEAD 撤销add添加(工作区不变化,后面会详解reset)</li>
 							<li>工作区修改/新增 git add 或者 删除文件 git add -u 命令，暂存区目录将被更新，与此同时，文件内容写入git对象库中一个新对象中，文件修改id记录在 暂存区中</li>
 						</ul>
 					</section>
@@ -88,7 +89,7 @@
 					<section>	
 						<p>git commit</p>
 						<ul>
-							<li>当执行 git commit -m "代码提交信息" 提交操作，暂存区的目录树会写到版本库HEAD指向的分支中,master分支会做相应的更新, 即HEAD/master最新指向的目录树 就是提交时 原暂存区的目录树</li>
+							<li>当执行 git commit -m "提交备注" 提交操作，暂存区的目录树会写到版本库HEAD指向的分支中,master分支会做相应的更新, 即HEAD/master最新指向的目录树 就是提交时 原暂存区的目录树</li>
 							<li>* 不要使用 git commit -a 来提交 文件， 主要是 丢掉了 暂存区 的作用, 命令本身是对 本地 工作区 所有变更 执行commit操作，包括修改和删除，但不包括 未被版本库跟踪的文件；也即是说 不包括新增的文件</li>
 						</ul>
 					</section>
@@ -97,7 +98,7 @@
 						<p>git branch 分支操作</p>
 						<ul>
 							<li>创建仓库的时候，master 是"默认工作分支",一般在其他分支上进行开发，完成后再将它们合并到主分支master上</li>
-							<li>显示分支：git branch &nbsp; 注：远程分装 添加参数 -r</li>
+							<li>显示分支：git branch &nbsp; 注：查看远程分支 添加参数 -r</li>
 							<li>创建分支：git branch branchName 注：添加第二个配置项 则为基于该提交 创建分支，默认基于当前头指针指向的提交创建分支</li>
 							<li>删除分支：git branch -d branchName 注：强制删除分支 参数为大写 -D，默认检查合并</li>
 							<li>切换分支：git checkout branchName</li>
@@ -108,9 +109,19 @@
 					<section>	
 						<p>git push</p>
 						<ul>
-							<li>以上开发操作提交只是在本地仓库中，通常我们还远程备份一份，即远程提交！执行 git push origin master命令以将这些改动或者整个仓库 提交到远端仓库(可以把 master 换成你想要推送的任何分支)</li>
+							<li>以上开发操作提交只是在本地仓库中，通常我们提交到远程共享版本库！执行 git push origin master命令以将这些改动或者整个仓库 提交到远端仓库(可以把 master 换成你想要推送的任何分支)</li>
 							<li>如果你还没有克隆现有仓库，并欲将你的仓库连接到某个远程服务器，使用如下命令添加：git remote add origin git@github.com:shmnhdouble2013/bui.git</li>
-							<li>ps: origin是啥？ origin就是 git仓库创建好后默认的仓库名字，类似于远程分支会有个独立的origin命名空间，降低了多用户操作时候合并分支的分险</li>
+							<li>ps: origin是啥？ origin就是 git仓库创建好后默认的仓库名字，类似于远程分支会有个独立的origin命名空间，降低了多用户操作时候合并分支的分险，参加后面远程仓库详细介绍</li>
+						</ul>
+					</section>
+
+					<section>	
+						<p>git 基本操作实用命令</p>
+						<ul>
+							<li>git commit --amend  -c b80f09dc904ca17  重新 上次 提交并 借用上次的注释</li>
+							<li>git lot --stat -3 查看过去3次提交</li>
+							<li>查看简要提交历史命令: $ git log --graph --oneline 简短提交的id 和 说明 的list列表</li>
+							<li>git rm 更为方便，动作完成后 自动 加入了 暂存区，直接 commit 就好了</li>							
 						</ul>
 					</section>
 				</section>
@@ -122,7 +133,7 @@
 						<img src="http://gtms04.alicdn.com/tps/i4/T1eCDjFfxbXXX56GoH-1294-745.jpg" alt="git对象" />
 					</section>
 					<section>	
-						<p>根据commit提交ID，查看详细提交信息 命令：$ git cat-file -p id 注：查看提交类型 参数为 -t，主要包含的5部分内容：</p> 
+						<p>根据commit提交ID，查看详细提交信息 命令：$ git cat-file -p ID 注：查看提交类型 参数为 -t，主要包含的5部分内容：</p> 
 						<ul>
 							<li>本次commit提交 id标示</li>
 							<li>本次 提交 所对应的目录树tree id标示</li>
@@ -138,7 +149,7 @@
 					<section>	
 						<p>git对象版本库构造图 解释</p>	
 						<ul>						
-							<li>.git/refs/是保存 引用的 命名空间, .git/refs/heads/下的引用又称为分支，分支2中写法： 全称.git/refs/heads/master; 简写 也可以去掉前面的2级目录,故而常见简写为master</li> 
+							<li>.git/refs/是保存 引用的 命名空间(heads/remotes/tags),比如.git/refs/heads/下的引用称为分支，其实分支2中写法：全称.git/refs/heads/master; 简写 也可以去掉前面的2级目录,故而常见简写为master</li> 
 							<li>master在 版本库 中 就是一个引用文件(.git/refs/heads/master) 内容就是 分支中 最新提交的 提交ID，这个文件 也可以在 .git 文件夹下 依次找到</li>
 							<li>git底层命令 git rev-parse 可以用于显示 引用分支 对应的 提交ID，举例：git rev-parse master</li> 
 						</ul>
@@ -147,7 +158,7 @@
 						<p>思考2个问题？？？</p>
 						<ul>						
 							<li>git对象如何建立历史跟踪链？</li>
-							<li>HEAD、master啥关系？</li>
+							<li>HEAD头指针是个啥？与master啥关系？</li>
 						</ul>	
 					</section>
 				</section>			
@@ -163,14 +174,15 @@
 					<section>	
 						<p>暂存区</p>	
 						<ul>
-							<li>首先 必须明白 3个区： 工作区 --- 暂存区 --- HEAD头区，一个 文件实际上 最多存在 3种版本(工作区、暂存区、版本库中最新版本)</li> 				
+							<li>git的 2区1头解释： 工作区 --- 暂存区 --- HEAD头指针，一个 文件实际上 最多存在 3种版本(工作区、暂存区、版本库中最新版本)</li> 				
 							<li>文件内容 存在 git对象库里，.git/objects目录中，文件索引 建立了 文件 和 对象库中 对象和实体的 映射对应,存在于暂存区中，回见上图</li> 
-							<li>重现：commit提交, 暂存区的 目录树 会写到 版本库 对象中，HEAD会做相应的更新，即 HEAD最新指向的目录树 就是提交时 原暂存区的目录树</li>
+							<li>push重现：commit提交, 暂存区的 目录树 会写到 版本库 对象中，HEAD会做相应的更新，即 HEAD最新指向的目录树 就是提交时 原暂存区的目录树</li>
 						</ul>
 					</section>	
 					<section>		
 						<p>思考？？？</p>
-						<ul>						
+						<ul>
+						    <li>差异冲突产生的实质？</li>						
 							<li>工作区 --- 暂存区 --- 版本库关系</li>
 							<li>一个文件一般存在几个版本？存在哪里？</li>
 						</ul>	
@@ -194,14 +206,15 @@
 					</section>
 
 					<section>
-						<p>git diff 差异比较 深入-- git 如何 记录比较 文件改动？</p>
+						<p>git diff 差异比较 深入-- git 如何 记录和快速比较 文件改动的呢？</p>
 						<p>实则为.git 目录下 index文件，当执行 diff 或者 status 先依据 .git/index文件 比对 时间戳和文件长度判断文件改动，时间戳改变了，再打开文件比较内容长度，若更改则更新时间戳；这种设计的好处 当然比 纯比对文件内容 效率要高的多的多</p>
 					</section>
 
 					<section>		
 						<p>思考？？？</p>
 						<ul>						
-							<li>差异比较3种比法实质理解</li>
+							<li>应用场景?</li>
+							<li>差异比较3种比法实质理解</li>							
 							<li>新增文件或者修改文件在上述3种差异比较中有时候无差异是什么原因？(2种情况)</li>
 						</ul>	
 					</section>
@@ -210,42 +223,42 @@
 				<!-- reset重置命令 -->
 				<section>
 					<section>
-						<p>重置reset---git分支引用id操作之手</p>	
+						<p>重置reset---分支引用-id操作之手</p>	
 						<img src="http://gtms02.alicdn.com/tps/i2/T19PSPFgleXXcMiHkE-1430-688.jpg">
 					</section>
 					<section>
 						<p>重置reset</p>
 						<ul>
 							<li>git reset --hard <commit> 引用到新的提交ID、暂存区、工作区 三者都同时替换，即:上图中的123,谨慎操作，恢复比较麻烦</li>
-							<li>git reset --soft <commit> 只替换commit提交ID引用的指向,即:上图中的1。一般用于重新提交</li>
+							<li>git reset --soft <commit> 只替换commit提交ID引用的指向,即:上图中的1。一般用于撤销上次提交，重新提交</li>
 							<li>git reset 仅仅用 HEAD 指向的 目录树 重置 替换 暂存区 === git reset HEAD</li>
 							<li>git reset -- filename 仅仅将 文件filename 改动撤出 暂存区 ===  相当于对 git add filename反向 === git rm --cached <file> 其他不变</li>
-							<li>ps：查看简要提交历史命令: $ git log --graph --oneline 简短提交的id 和 说明 的list列表</li>
 						</ul>
 					</section>
 					<section>		
 						<p>思考？？？</p>
 						<ul>						
 							<li>重置3种状态实质理解？</li>
+							<li>重置 应用场景？彻底撤销、重新提交、2区1头操作</li>
 						</ul>	
 					</section>
 				</section>
 				
-				<!-- 暂存区操作-->
+				<!-- 检出 操作-->
 				<section>
 					<section>
-						<p>checkout暂存区操作--改变HEAD 分支引用</p>	
+						<p>checkout 检出操作--改变HEAD 分支引用</p>	
 						<!-- 工作区_暂存区_版本库_关系图 -->
 						<img src="http://gtms03.alicdn.com/tps/i3/T1jrqSFblXXXXRGFTi-1239-659.jpg" />
 					</section>
 					<section>
 						<p>checkout暂存区操作--改变HEAD 分支引用</p>
 						<ul>
-							<li>git checkout branch 改变分支引用</li>
-							<li>查看HEAD 头指向 $ cat .git/HEAD</li>
+							<li>git checkout branch 改变分支引用</li>							
 							<li>执行 git checkout . 或者 git checkout -- <file> 会用暂存区 全部文件或者指定文件 替换工作区的 文件，危险性就是 会清除 工作区中未 添加到 暂存区的 改变</li>
-							<li>ps: git checkout branch -- fileName 维持HEAD的指向不变,用branch 所指向的 提交中的相应文件 替换 暂存区和工作区的文件</li>
+							<li>ps: git checkout branch -- fileName 维持HEAD的指向不变, 用branch 所指向的 提交中的相应文件 替换 暂存区和工作区的文件</li>
 							<li>执行 git checkout HEAD . 或者 git checkout HEAD <file> 会用HEAD 分支 指向的文件 替换 暂存区 和 工作区 指定或者全部文件；会清除 工作区未提交的改动，也会清除暂存区未提交的改动</li>
+							<li>ps: 查看HEAD 头指向 $ cat .git/HEAD</li>
 						</ul>
 					</section>
 					<section>		
@@ -255,18 +268,45 @@
 						</ul>	
 					</section>
 					<section>
-						<p>checkout暂存区操作--改变HEAD 分支引用</p>
+						<p>checkout 检出操作--改变HEAD 分支引用</p>
 						<ul>
 							<li>改变分支引用，即的切换分支</li>
 							<li>暂存区覆盖工作区(取消上次执行add操作)或指定ID覆盖工作区</li>
 						</ul>
 					</section>
 				</section>
-					
+				
+				<!-- 远程版本库 操作-->
 				<section>
-					<h2>总结</h2>					
+					<section>
+						<p>远程分支</p>	
+						<ul>
+							<li>在本地是无法看到所有分支的， git branch 只能够看到 master,  查看本地全部引用命令： git show -ref == git branch -r</li>
+							<li>远程分支不是真正的分支，类似 里程碑一样的引用，故而 不可直接 checkout 检出，若强制检出 则出现大段 警告提示，使得 头指针 HEAD 处于 分离头指针状态，唯一的办法 基于远程分支 创建本地分支: git 版本比较1.6.6以上 则可以直接 checkout  -b 分支创建并切换， 老版本git 则是 ： git checkout -b 本地分支  origin/远程分支</li>		
+						</ul>
+					</section>
+					<section>
+						<p>更进一步</p>
+						<ul>
+							<li>远程分支也可以简写为：origin/**分支, 远程分支前缀 refs/remotes/origin/  从远程 版本库的分支 复制过来分支为远程分支； 巧妙之处： 非原封不动复制过来，而是放到 另外的 命名空间( .git/refs/remotes/origin/ ), 这样 就不会存在 本地的 相互覆盖</li>
+						</ul>
+					</section>
+
+					<section>
+						<ul>
+							<p>远程版本库</p>
+							<li>名为 origin 的远程版本库 是在 版本库 clone 时候 注册的， 想注册新的 版本库名称，命令：git remote add remote-name  ***.git  再查看  git/config 文件配置信息：会看到新配置为   [remote 'remote-name']  ps： 查看 本地 所有 已经注册的版本库 命令 git remote -v ,    现在 你可能以为 可以从新的版本库获取信息， 错了， 因为 默认的 是 版本库 origin， 要想从新的 版本库更新 信息，则需要制定 刚才的版本库名字， git fetch remote-name 从操作提示中 你将 看到 远程版本库分支信息复制到了  新的 本地 版本库 remote-name 的远程分支中去了</li>							
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<h2>统计问题回答</h2>					
 					<ul>
-						<li></li>
+						<li>1.暂存区和HEAD头文件</li>
+						<li>2. 怎么删除远程分支  git push origin  :B</li>
+						<li>3. 怎么将本地仓库关联到新的远程仓库上 git remote add remote-name  ***.git</li>
+						<li>4. 怎么查看 & merge别人的远程分支</li>
 					</ul>
 				</section>
 				
@@ -279,8 +319,18 @@
 						<li><a href="http://help.github.com/">GitHub 帮助</a></li>
 						<li><a href="http://marklodato.github.com/visual-git-guide/index-en.html">图形化的 Git 指南一则</a></li>
 					</ul>
-				</section>
-				
+				</section>	
+
+				<section>
+					<section>
+						<p>转换下心情</p>	
+						<img src="http://gtms01.alicdn.com/tps/i1/T1VLSCXsxbXXaNpaIw-1680-1050.jpg" />
+					</section>	
+					<section>
+						<p>转换下心情</p>	
+						<img src="http://gtms01.alicdn.com/tps/i1/T119vJFjpbXXb_pIvH-1417-1584.jpg" />
+					</section>	
+				</section>				
 
 			</div>
 
