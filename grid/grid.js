@@ -347,10 +347,16 @@ KISSY.add('mui/grid', function(S, XTemplate, Store, Pagination, TL) { // O,
 
 			// 转发 分页事件 afterPageChange --> afterPageChanged
 			_self.pagination && _self.pagination.on('afterPageChange', function(e) {
-				var curPage = e.idx;
+				var curPage = e.idx,
+					storeCurrentPage = _self.store.pageInfo.currentPage;
 
-				// 若是异步则为 后端分页数据 否则 改为 本地分页 数据
-				if(_self.get('ajaxUrl')){
+				// 目标页数 和 当前页数一样 则退出翻页	-- 修复 pagination 加载页数 触发 afterPageChange 带来的 二次 加载数据  
+				if(storeCurrentPage === curPage){
+					return;
+				}
+
+				// 若是异步则为 后端分页数据 否则 改为 本地分页 数据 --- 
+				if(_self.get('ajaxUrl')){					
 					_self.store.load({ 		
 						currentPage: curPage
 					});

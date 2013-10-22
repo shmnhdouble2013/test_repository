@@ -1,5 +1,5 @@
 <?php 
-    sleep(1);
+    sleep(2);
 ?>
 
 {
@@ -18,6 +18,7 @@
 		{"nos":3, "id":"333333333333333", "actype":"出口", "medianame":"souhoo.com", "time":5454758409584},
         {"nos":9, "id":"999999999999999.72", "actype":"清楚", "medianame":"google.com", "time":5454784584584},
 		
-        {"nos":10, "id":"00000000000000", "actype":"后再", "medianame":"sina.com", "time":5454657584584}
+        {"nos":10, "id":"00000000000000", "actype":"后再", "medianame":"sina.com", "time":5454657584584},
+        {"nos":11, "id":"fa212f1a2000000000", "actype":"的地方的", "medianame":"faff.com", "time":54546452184}
     ]
 }

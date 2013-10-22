@@ -1,5 +1,5 @@
-/** @fileOverview ¶ÔKISSY½øĞĞÀ©Õ¹µÄÒ»Ğ©°ïÖúº¯Êı
-* °üÀ¨£º¸ñÊ½»¯º¯Êı£¬Form°ïÖúÀà 
+/** @fileOverview å¯¹KISSYè¿›è¡Œæ‰©å±•çš„ä¸€äº›å¸®åŠ©å‡½æ•°
+* åŒ…æ‹¬ï¼šæ ¼å¼åŒ–å‡½æ•°ï¼ŒFormå¸®åŠ©ç±» 
 * @version 1.0.0  
 */
 KISSY.add('TL', function(S, Calendar){
@@ -25,14 +25,14 @@ KISSY.add('TL', function(S, Calendar){
 	S.extend(TL, S.Base);
     S.augment(TL, {
 		/**
-			@description ÈÕÆÚ¸ñÊ½»¯º¯Êı
-			@param {Number|Date} date ¸ñÊ½»°µÄÈÕÆÚ£¬Ò»°ãÎª1970 Äê 1 ÔÂ 1 ÈÕÖÁ½ñµÄºÁÃëÊı 
-			@return {String} ¸ñÊ½»¯ºóµÄÈÕÆÚ¸ñÊ½Îª 2011-10-31
+			@description æ—¥æœŸæ ¼å¼åŒ–å‡½æ•°
+			@param {Number|Date} date æ ¼å¼è¯çš„æ—¥æœŸï¼Œä¸€èˆ¬ä¸º1970 å¹´ 1 æœˆ 1 æ—¥è‡³ä»Šçš„æ¯«ç§’æ•° 
+			@return {String} æ ¼å¼åŒ–åçš„æ—¥æœŸæ ¼å¼ä¸º 2011-10-31
 			@example
-		* Ò»°ãÓÃ·¨£º<br> 
-		* S.TL.Format.dateRenderer(1320049890544);Êä³ö£º2011-10-31 <br>
-		* ±í¸ñÖĞÓÃÓÚäÖÈ¾ÁĞ£º<br>
-		* {title:"³ö¿âÈÕÆÚ",dataIndex:"date",renderer:S.TL.Format.dateRenderer}
+		* ä¸€èˆ¬ç”¨æ³•ï¼š<br> 
+		* S.TL.Format.dateRenderer(1320049890544);è¾“å‡ºï¼š2011-10-31 <br>
+		* è¡¨æ ¼ä¸­ç”¨äºæ¸²æŸ“åˆ—ï¼š<br>
+		* {title:"å‡ºåº“æ—¥æœŸ",dataIndex:"date",renderer:S.TL.Format.dateRenderer}
 		*/
 		dateRenderer: function (d) {
 			if(!d){
@@ -54,9 +54,9 @@ KISSY.add('TL', function(S, Calendar){
         },
         
 		/**
-			@description ÈÕÆÚÊ±¼ä¸ñÊ½»¯º¯Êı
-			@param {Number|Date} date ¸ñÊ½»°µÄÈÕÆÚ£¬Ò»°ãÎª1970 Äê 1 ÔÂ 1 ÈÕÖÁ½ñµÄºÁÃëÊı 
-			@return {String} ¸ñÊ½»¯ºóµÄÈÕÆÚ¸ñÊ½Ê±¼äÎª 2011-10-31 16 : 41 : 02
+			@description æ—¥æœŸæ—¶é—´æ ¼å¼åŒ–å‡½æ•°
+			@param {Number|Date} date æ ¼å¼è¯çš„æ—¥æœŸï¼Œä¸€èˆ¬ä¸º1970 å¹´ 1 æœˆ 1 æ—¥è‡³ä»Šçš„æ¯«ç§’æ•° 
+			@return {String} æ ¼å¼åŒ–åçš„æ—¥æœŸæ ¼å¼æ—¶é—´ä¸º 2011-10-31 16 : 41 : 02
 		*/
 		datetimeRenderer: function (d) {
 			if(!d){
@@ -78,7 +78,7 @@ KISSY.add('TL', function(S, Calendar){
 		},		
 
 		/*
-		* @description ¸ù¾İÈÕÆÚÊ±¼ä×Ö·û´® ·µ»ØÈÕÆÚ¶ÔÏó
+		* @description æ ¹æ®æ—¥æœŸæ—¶é—´å­—ç¬¦ä¸² è¿”å›æ—¥æœŸå¯¹è±¡
 		* @param {String} 
 		* @return {obj} date obj 
 		*/
@@ -87,7 +87,7 @@ KISSY.add('TL', function(S, Calendar){
 		},
 		
 		/*
-		* @description ¸ù¾İ×Ö·û´®ÈÕÆÚ »ñÈ¡ÈÕÆÚºÁÃëÊı£¬Ö§³Ö Ç°ºóÊ±¼ä ÍÆÒÆ
+		* @description æ ¹æ®å­—ç¬¦ä¸²æ—¥æœŸ è·å–æ—¥æœŸæ¯«ç§’æ•°ï¼Œæ”¯æŒ å‰åæ—¶é—´ æ¨ç§»
 		* @param {Number|String} 
 		* @return {obj} date obj 
 		*/
@@ -108,9 +108,9 @@ KISSY.add('TL', function(S, Calendar){
 		},
 
 		/**
-			@description ÎÄ±¾½ØÈ¡º¯Êı£¬µ±ÎÄ±¾³¬³öÒ»¶¨Êı×ÖÊ±£¬»á½ØÈ¡ÎÄ±¾£¬Ìí¼Ó...
-			@param {Number} length ½ØÈ¡¶àÉÙ×Ö·û
-			@return {function} ·µ»Ø´¦Àíº¯Êı ·µ»Ø½ØÈ¡ºóµÄ×Ö·û´®£¬Èç¹û±¾ÉíĞ¡ÓÚÖ¸¶¨µÄÊı×Ö£¬·µ»ØÔ­×Ö·û´®¡£Èç¹û´óÓÚ£¬Ôò·µ»Ø½Ø¶ÏºóµÄ×Ö·û´®£¬²¢¸½¼Ó...
+			@description æ–‡æœ¬æˆªå–å‡½æ•°ï¼Œå½“æ–‡æœ¬è¶…å‡ºä¸€å®šæ•°å­—æ—¶ï¼Œä¼šæˆªå–æ–‡æœ¬ï¼Œæ·»åŠ ...
+			@param {Number} length æˆªå–å¤šå°‘å­—ç¬¦
+			@return {function} è¿”å›å¤„ç†å‡½æ•° è¿”å›æˆªå–åçš„å­—ç¬¦ä¸²ï¼Œå¦‚æœæœ¬èº«å°äºæŒ‡å®šçš„æ•°å­—ï¼Œè¿”å›åŸå­—ç¬¦ä¸²ã€‚å¦‚æœå¤§äºï¼Œåˆ™è¿”å›æˆªæ–­åçš„å­—ç¬¦ä¸²ï¼Œå¹¶é™„åŠ ...
 		*/
 		cutTextRenderer: function(length){
 			return function(value){
@@ -124,9 +124,9 @@ KISSY.add('TL', function(S, Calendar){
 		},
 		
 		/*
-		* @description ¸ù¾İ×Ö·û´®¡¢Êı×ÖÖµ-- ÅĞ¶ÏÊı¾İÀàĞÍ -- string || date¡¢ float || int
+		* @description æ ¹æ®å­—ç¬¦ä¸²ã€æ•°å­—å€¼-- åˆ¤æ–­æ•°æ®ç±»å‹ -- string || dateã€ float || int
 		* @param {Number|String|} 
-		* @return {string} ·µ»Ø Êı¾İÀàĞÍ
+		* @return {string} è¿”å› æ•°æ®ç±»å‹
 		*/
 		strToDataType: function(value){
 			var dataType = 'string',
@@ -155,9 +155,9 @@ KISSY.add('TL', function(S, Calendar){
 		},	
 		
 		/*
-		* @description ½«²ÆÎñÊı¾İ·Ö×ª»»³ÉÔª
+		* @description å°†è´¢åŠ¡æ•°æ®åˆ†è½¬æ¢æˆå…ƒ
 		* @param {Number|String} 
-		* @return {Number} ·µ»Ø½« ·Ö×ª»»³É ÔªµÄÊı×Ö
+		* @return {Number} è¿”å›å°† åˆ†è½¬æ¢æˆ å…ƒçš„æ•°å­—
 		*/
 		moneyCentRenderer: function(v, fixed){
 			if(S.isString(v)){
@@ -169,8 +169,8 @@ KISSY.add('TL', function(S, Calendar){
 			return v;
 		},
 		/**
-		* @description ¸ù¾İÂ·¾¶ Éî²ã±éÀú¶ÔÏó,»ñÈ¡ ×îÖÕÖµ; 
-		* @param {object|String} String¶à¸ökey Ö±½ÓÓÃ'.'ºÅ¸ô¿ª; ÀıÈç: object --> 'aa.bb.cc.dd.ee' 
+		* @description æ ¹æ®è·¯å¾„ æ·±å±‚éå†å¯¹è±¡,è·å– æœ€ç»ˆå€¼; 
+		* @param {object|String} Stringå¤šä¸ªkey ç›´æ¥ç”¨'.'å·éš”å¼€; ä¾‹å¦‚: object --> 'aa.bb.cc.dd.ee' 
 		* @return {value}
 		*/
     	getFiledValue: function(obj, index){
@@ -191,9 +191,9 @@ KISSY.add('TL', function(S, Calendar){
 		},
 		
 		/*
-		* @description ¹«ÓÃ·½·¨--- ±éÀú Ñ¡ÖĞ/È¡Ïû ¼È¶¨ÎÄµµ×÷ÓÃÓò, Ö¸¶¨cls¹³×ÓµÄ checkbox, ÉèÖÃchecked×´Ì¬
-		* @param {string|boolean|document} class ¹³×Ó-- ÊÇ·ñÑ¡ÖĞ --- ÎÄµµ×÷ÓÃÓò
-		* @return {array} Ñ¡ÖĞµÄcheckbox valueÖµ Êı×é
+		* @description å…¬ç”¨æ–¹æ³•--- éå† é€‰ä¸­/å–æ¶ˆ æ—¢å®šæ–‡æ¡£ä½œç”¨åŸŸ, æŒ‡å®šclsé’©å­çš„ checkbox, è®¾ç½®checkedçŠ¶æ€
+		* @param {string|boolean|document} class é’©å­-- æ˜¯å¦é€‰ä¸­ --- æ–‡æ¡£ä½œç”¨åŸŸ
+		* @return {array} é€‰ä¸­çš„checkbox valueå€¼ æ•°ç»„
 		*/
     	selectedAllBox: function(cls, isChecked, thatDoc){
     		var selectedAry = [],	
@@ -215,17 +215,17 @@ KISSY.add('TL', function(S, Calendar){
 			return selectedAry;
     	},
 		/**
-		* ½«±íµ¥Êı¾İĞòÁĞ»¯³ÉÎª×Ö·û´®
-		* @param {HTMLForm} form ±íµ¥ÔªËØ
-		* @return {String} ĞòÁĞ»¯µÄ×Ö·û´®
+		* å°†è¡¨å•æ•°æ®åºåˆ—åŒ–æˆä¸ºå­—ç¬¦ä¸²
+		* @param {HTMLForm} form è¡¨å•å…ƒç´ 
+		* @return {String} åºåˆ—åŒ–çš„å­—ç¬¦ä¸²
 		*/
 		serialize:function(form){
 			return S.param(S.TL.serializeToObject(form));
 		},
 		/**
-		* ½«±íµ¥Êı¾İĞòÁĞ»¯³É¶ÔÏó
-		* @param {HTMLForm} form ±íµ¥ÔªËØ
-		* @return {Object} ±íµ¥ÔªËØµÄ
+		* å°†è¡¨å•æ•°æ®åºåˆ—åŒ–æˆå¯¹è±¡
+		* @param {HTMLForm} form è¡¨å•å…ƒç´ 
+		* @return {Object} è¡¨å•å…ƒç´ çš„
 		*/
 		serializeToObject:function(form){
 			var originElements = S.makeArray(form.elements),
@@ -235,21 +235,21 @@ KISSY.add('TL', function(S, Calendar){
 				result={};
 
 			elements = S.filter(originElements, function(item){
-				// ÓĞname»òÕßÓĞid
-				// Î´±»½ûÓÃ -- disabled="disabled"
-				// Ñ¡ÖĞ×´Ì¬
+				// æœ‰nameæˆ–è€…æœ‰id
+				// æœªè¢«ç¦ç”¨ -- disabled="disabled"
+				// é€‰ä¸­çŠ¶æ€
 				// select|textarea |input  nodeName
 				// text|hidden|password |radio|checbox  input.type
 
 				return (item.id ||item.name) && !item.disabled && ( item.checked || /select|textarea/i.test(item.nodeName) || /text|hidden|password/i.test(item.type) );
 			});
 
-			//checkbox ×öÌØÊâ´¦Àí£¬Èç¹ûËùÓĞcheckbox¶¼Î´Ñ¡ÖĞÊ±,ÉèÖÃ×Ö¶ÎÎª¿Õ
+			//checkbox åšç‰¹æ®Šå¤„ç†ï¼Œå¦‚æœæ‰€æœ‰checkboxéƒ½æœªé€‰ä¸­æ—¶,è®¾ç½®å­—æ®µä¸ºç©º
 			checkboxElements = S.filter(originElements, function(item){
 				return ( item.id ||item.name) && !item.disabled &&(/checkbox/i.test(item.type) );
 			});
 
-			// ´´½¨²ÎÊıÊı¾İ¶ÔÏó
+			// åˆ›å»ºå‚æ•°æ•°æ®å¯¹è±¡
 			S.each(elements,function(elem){
 				var val = S.one(elem).val(),
 					name = elem.name||elem.id,
@@ -264,10 +264,10 @@ KISSY.add('TL', function(S, Calendar){
 				}
 			});
 
-			//×éºÏ¶ÔÏó
+			//ç»„åˆå¯¹è±¡
 			S.each(arr, function(elem){
 				var prop = result[elem.name],
-					a = []; //ÁÙÊ±±äÁ¿
+					a = []; //ä¸´æ—¶å˜é‡
 
 				if(!prop){
 					result[elem.name] = elem.value;
@@ -280,7 +280,7 @@ KISSY.add('TL', function(S, Calendar){
 				}
 			});
 
-			//¼ì²écheckboxµÄ×Ö¶ÎÊÇ·ñÔÚ¶ÔÏóÖĞ£¬²»ÔÚÔòÖÃÎª¿Õ
+			//æ£€æŸ¥checkboxçš„å­—æ®µæ˜¯å¦åœ¨å¯¹è±¡ä¸­ï¼Œä¸åœ¨åˆ™ç½®ä¸ºç©º
 			S.each(checkboxElements, function(elem){
 				var name = elem.name || elem.id;
 
@@ -293,9 +293,9 @@ KISSY.add('TL', function(S, Calendar){
 		},
 
 		/**
-		* encodeURI Òì²½²ÎÊı
-		* @param  {String || array || json, Boolean} ½«ÒªencodeURI ÄÚÈİ£¬ÊÇ·ñ2´Î×ªÂëBooleanÖµ
-		* @return {String || array || json} encodeURI ºóµÄ Öµ
+		* encodeURI å¼‚æ­¥å‚æ•°
+		* @param  {String || array || json, Boolean} å°†è¦encodeURI å†…å®¹ï¼Œæ˜¯å¦2æ¬¡è½¬ç Booleanå€¼
+		* @return {String || array || json} encodeURI åçš„ å€¼
 		*/
     	encodeURIParam: function(vals, isDoubEncode){
     		var _self = this;
@@ -304,12 +304,12 @@ KISSY.add('TL', function(S, Calendar){
     			return;
     		}
 
-    		// ×Ö·û´®
+    		// å­—ç¬¦ä¸²
     		if(S.isString(vals)){
     			return isDoubEncode ? encodeURI(encodeURI(vals)) : encodeURI(vals);
     		}
 
-    		// Êı×é ×Ö·û´® 
+    		// æ•°ç»„ å­—ç¬¦ä¸² 
     		if(S.isArray(vals)){
     			S.each(vals, function(val, i){
     				vals[i] = isDoubEncode ? encodeURI(encodeURI(val)) : encodeURI(val);
@@ -317,7 +317,7 @@ KISSY.add('TL', function(S, Calendar){
     			return vals;
     		}
 
-    		// jsonÊı¾İ¶ÔÏó
+    		// jsonæ•°æ®å¯¹è±¡
     		if(S.isObject(vals)){
     			S.each(vals, function(value, index){
     				vals[index] = _self.encodeURIParam(value, isDoubEncode);
@@ -325,7 +325,7 @@ KISSY.add('TL', function(S, Calendar){
     			return vals;
     		}
 
-    		// ÆäËûÖ±½ÓÊä³ö -- number || boolean ..
+    		// å…¶ä»–ç›´æ¥è¾“å‡º -- number || boolean ..
     		return vals;
     	}
 	});
