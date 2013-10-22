@@ -468,7 +468,7 @@ KISSY.add('mui/grid', function(S, XTemplate, Store, Pagination, TL) { // O,
 			if(_self.get('isShowCheckboxText')){
 				defWidth = CHECKBOXW;
 				index = ++index;
-				aindex = currentPage === 1 ? index : pageSize + index;
+				aindex = currentPage === 1 ? index : pageSize*(currentPage-1) + index;
 			}else{
 				defWidth = CHECKBOXS;
 			}

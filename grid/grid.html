@@ -52,9 +52,7 @@
 	        {"nos":5, "id":"555555555555555", "actype":"过我", "medianame":"taobao.com", "time":5454756784584},  
 
 	        {"nos":7, "id":"777777777777777.8653", "actype":"口味", "medianame":"qiyi.com", "time":545475123584},
-
-	        {"nos":8, "id":"888888888888888", "actype":"不会", "medianame":"baidu.com", "time":5454766584584},	
-
+	        {"nos":8, "id":"888888888888888", "actype":"不会", "medianame":"baidu.com", "time":5454766584584},
 	        {"nos":10, "id":"00000000000000", "actype":"后再", "medianame":"sina.com", "time":54546575584}
 		];
 
@@ -74,14 +72,13 @@
 
 					staticData: selectData, 						// table 静态数据，当ajaxUrl同时存在时候，优先异步数据
 
-					// isLocalSort: true, 							// 是否本地排序，默认前端排序 --  另外，开启排序列请在下面columns里配置sortable, 以及指定dataType 排序数据类型
+					// isLocalSort: false, 							// 是否本地排序，默认本地排序 --  另外，开启排序列请在下面columns里配置sortable, 以及指定dataType 排序数据类型
 		
 					checkable: true,								// 是否 开启 复选框 checkbox ---- 默认 false 不显示
 					isShowCheckboxText: true, 						// 是否 显示 checkbox 序号 和 表头 全选文字， 默认 false 不显示
 						
-					// pageSize:10, 								// 分页大小  默认10条/页
+					pageSize:5, 									// 分页大小  默认10条/页
 																	// 关于分页： 异步 默认 后端 分页数据，若为静态数据 则自动 前端 本地分页 
-
 					columns: [
 						{title: 'id', width: 'auto', sortable: true, dataType: 'float', dataIndex: 'id'},
 						{title: '活动类型',width: 'auto', sortable: true, dataType: 'string', dataIndex: 'actype'},
