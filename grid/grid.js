@@ -350,7 +350,7 @@ KISSY.add('mui/grid', function(S, XTemplate, Store, Pagination, TL) { // O,
 				var curPage = e.idx,
 					storeCurrentPage = _self.store.pageInfo.currentPage;
 
-				// 目标页数 和 当前页数一样 则退出翻页	-- 修复 pagination 加载页数 触发 afterPageChange 带来的 二次 加载数据  
+				// 目标页数 和 当前页数一样 则退出翻页	-- 修复 pagination 加载页数 触发 afterPageChange 带来的异步数据 二次 加载数据  
 				if(storeCurrentPage === curPage){
 					return;
 				}
@@ -699,7 +699,7 @@ KISSY.add('mui/grid', function(S, XTemplate, Store, Pagination, TL) { // O,
 			
 				_self.showData(results); 	
 
-				// 更新分页 实时总数
+				// 更新分页 实时总数 -- 会触发 pagination  afterChange事件 上述已规避有此带来的异步二次加载
 				if(_self.pagination){		
 					_self.pagination.setTotalPage(curPage);
 				}	
