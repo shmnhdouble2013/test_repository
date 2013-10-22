@@ -1,21 +1,21 @@
 /** 
-* @fileOverview grid±í¸ñ
+* @fileOverview gridè¡¨æ ¼
 * @extends  KISSY.Base
-* @creator  »Æ¼×(Ë®Ä¾Äê»ªdouble)<huangjia2015@gmail.com>
+* @creator  é»„ç”²(æ°´æœ¨å¹´ådouble)<huangjia2015@gmail.com>
 * @depends  ks-core
 * @version 1.0  
 * @update 2013-08-30
 * @example
 *   new Grid('#poolTable', {
-		tr_tpl: tpltr,					// träÖÈ¾Ä£°å
-		gridData:[{},{}],				// Ö¸¶¨Êı¾İ
-		isAjaxData:true,				// ÊÇ·ñÊÇÒì²½Êı¾İ Ä¬ÈÏ Îªfalse
-		ajaxUrl: 'result.php',		    // Òì²½²éÑ¯url  
-		checkable: true					// ÊÇ·ñÓĞcheckbox
+		tr_tpl: tpltr,					// træ¸²æŸ“æ¨¡æ¿
+		gridData:[{},{}],				// æŒ‡å®šæ•°æ®
+		isAjaxData:true,				// æ˜¯å¦æ˜¯å¼‚æ­¥æ•°æ® é»˜è®¤ ä¸ºfalse
+		ajaxUrl: 'result.php',		    // å¼‚æ­¥æŸ¥è¯¢url  
+		checkable: true					// æ˜¯å¦æœ‰checkbox
 	});
 */
 
-KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,  
+KISSY.add('mui/grid', function(S, XTemplate, Store, Pagination, TL) { // O,  
 	var DOM = S.DOM,
 		Node = S.Node,
 		Ajax = S.IO,
@@ -25,43 +25,43 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
         win = window,
         doc = document;		
 
-	// Éè¶¨È«¾Ö ²ÎÊı ±äÁ¿ 
-	var	CONTAINERCLS = 'j_tableContent',			// table ÈİÆ÷¹³×Ó
+	// è®¾å®šå…¨å±€ å‚æ•° å˜é‡ 
+	var	CONTAINERCLS = 'j_tableContent',			// table å®¹å™¨é’©å­
 
-		CHECKRDIOTH = 'j_checkRdio',				// checkbox radio ÁĞ ¿í¶Ècls
+		CHECKRDIOTH = 'j_checkRdio',				// checkbox radio åˆ— å®½åº¦cls
 
-		DATA_ELEMENT = 'row-element',				 // row ÔªËØindex
-		CLS_GRID_ROW_SELECTED = 'grid-row-selected', // row Ñ¡ÖĞclass±êÊ¾
-		ATTR_COLUMN_FIELD = 'data-column-field',	// Êı¾İ×Ö¶Î±íÊ¾
+		DATA_ELEMENT = 'row-element',				 // row å…ƒç´ index
+		CLS_GRID_ROW_SELECTED = 'grid-row-selected', // row é€‰ä¸­classæ ‡ç¤º
+		ATTR_COLUMN_FIELD = 'data-column-field',	// æ•°æ®å­—æ®µè¡¨ç¤º
 
-		CHECKBOX_TD_INDEX = 'checkbox-index',		// ´øĞòºÅµÄ checkbox ÎÄ×ÖË®Æ½¶ÔÆë
+		CHECKBOX_TD_INDEX = 'checkbox-index',		// å¸¦åºå·çš„ checkbox æ–‡å­—æ°´å¹³å¯¹é½
 
-		CLS_GRID_ROW = 'grid-row',					// grid tr row±êÊ¾
+		CLS_GRID_ROW = 'grid-row',					// grid tr rowæ ‡ç¤º
 		CLS_GRID_TH = 'grid-th',					// grid th
-		CLS_GRID_CELL = 'grid-cell',				// grid cell±êÊ¾
-		COMMAND_BTN = 'command-btn',				// ²Ù×÷À¸ btn ±êÊ¾ -- Ö÷Òª×èÖ¹ Ñ¡ÖĞ×´Ì¬
+		CLS_GRID_CELL = 'grid-cell',				// grid cellæ ‡ç¤º
+		COMMAND_BTN = 'command-btn',				// æ“ä½œæ  btn æ ‡ç¤º -- ä¸»è¦é˜»æ­¢ é€‰ä¸­çŠ¶æ€
 
-		CHECKBOXW = '45px',  						// checkbox ÏÔÊ¾ ´øÓĞĞòÁĞºÅ µÄ¿í¶È
-		CHECKBOXS = '30px',							// checkbox ²»ÏÔÊ¾ ĞòºÅ Ä¬ÈÏ ¿í¶È
+		CHECKBOXW = '45px',  						// checkbox æ˜¾ç¤º å¸¦æœ‰åºåˆ—å· çš„å®½åº¦
+		CHECKBOXS = '30px',							// checkbox ä¸æ˜¾ç¤º åºå· é»˜è®¤ å®½åº¦
 		
-		DRECTION_TAGS = 'drection-tags',			// ÅÅĞò×Ö¶Î±êÊ¾
-		DRECTION_ASC = 'asc',						// ÉıĞò cls
-		DRECTION_DSC = 'desc',						// ½µĞò cls
+		DRECTION_TAGS = 'drection-tags',			// æ’åºå­—æ®µæ ‡ç¤º
+		DRECTION_ASC = 'asc',						// å‡åº cls
+		DRECTION_DSC = 'desc',						// é™åº cls
 		
-		CLS_ROW_ODD = 'odd-tr', 					// ÆæÊı tr cls
-		CLS_ROW_EVEN = 'even-tr', 					// Å¼Êı tr cls
+		CLS_ROW_ODD = 'odd-tr', 					// å¥‡æ•° tr cls
+		CLS_ROW_EVEN = 'even-tr', 					// å¶æ•° tr cls
 		
 		CLS_CHECKBOX = 'grid-checkbox', 			// checkbox row
 		
-		CLS_GRID_ROW_OVER = 'grid-row-over',		// ĞĞ mouseover class ÑùÊ½
+		CLS_GRID_ROW_OVER = 'grid-row-over',		// è¡Œ mouseover class æ ·å¼
 		
-		SELECTALLCLS = 'j_select_all',				// È«²¿Ñ¡ÖĞ checkbox cls¹³×Ó
+		SELECTALLCLS = 'j_select_all',				// å…¨éƒ¨é€‰ä¸­ checkbox clsé’©å­
 
-		THEADCLS = '.j_thead',						// thead css ¹³×Ó
-		TBODYCLS = '.j_tbody',						// tbody css ¹³×Ó
-		TFOOTCLS = '.j_tfoot',						// tfoot css ¹³×Ó
+		THEADCLS = '.j_thead',						// thead css é’©å­
+		TBODYCLS = '.j_tbody',						// tbody css é’©å­
+		TFOOTCLS = '.j_tfoot',						// tfoot css é’©å­
 
-		CLS_HIDDEN = '.cls-hide', 					// ÊÇ·ñÒş²Ø ÁĞ Òş²Ø¹³×Ó
+		CLS_HIDDEN = '.cls-hide', 					// æ˜¯å¦éšè— åˆ— éšè—é’©å­
 
 		GRIDTPL = 									
 			'<div class="table-container j_tableContent">'+
@@ -83,34 +83,34 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 
 			'</div>',										// table tpl		
 
-	    LOADMASKTPL = '<div class="loading-mask"></div>'; 	// ¼ÓÔØÊı¾İÕÚÕÖ¹¦ÄÜ
+	    LOADMASKTPL = '<div class="loading-mask"></div>'; 	// åŠ è½½æ•°æ®é®ç½©åŠŸèƒ½
 		
 
 
-	// grid Ä¬ÈÏÅäÖÃ
+	// grid é»˜è®¤é…ç½®
 	var POLLGRIDDEFAULT = {
-			columns:[],								// row Êı×é ÅäÖÃ¶ÔÏó ÀıÈç£º{title: 'id', width: 110, sortable: true, dataIndex: 'id'}	
+			columns:[],								// row æ•°ç»„ é…ç½®å¯¹è±¡ ä¾‹å¦‚ï¼š{title: 'id', width: 110, sortable: true, dataIndex: 'id'}	
 
-			ajaxUrl: null,      					// Òì²½²éÑ¯url  
-			isJsonp: false,							// ÊÇ·ñ Îªjsonp Ä¬ÈÏÎªfalse			
+			ajaxUrl: null,      					// å¼‚æ­¥æŸ¥è¯¢url  
+			isJsonp: false,							// æ˜¯å¦ ä¸ºjsonp é»˜è®¤ä¸ºfalse			
 
-			staticData: [],							// Ñ¡Ôñ³Ø ¾²Ì¬Êı¾İ 
+			staticData: [],							// é€‰æ‹©æ±  é™æ€æ•°æ® 
 
-			checkable:false,						// ÊÇ·ñ¸´Ñ¡¿ò checkbox
-			isShowCheckboxText: false, 				// checkboxÇé¿öÏÂ£¬ÊÇ·ñth±íÍ·ÊÇ·ñÏÔÊ¾ È«Ñ¡ ×Ö·û ºÍ  checkbox ĞòºÅ
+			checkable:false,						// æ˜¯å¦å¤é€‰æ¡† checkbox
+			isShowCheckboxText: false, 				// checkboxæƒ…å†µä¸‹ï¼Œæ˜¯å¦thè¡¨å¤´æ˜¯å¦æ˜¾ç¤º å…¨é€‰ å­—ç¬¦ å’Œ  checkbox åºå·
 			
-			isPagination:true,						// ÊÇ·ñÓĞ·ÖÒ³ Ä¬ÈÏ ÓĞ
+			isPagination:true,						// æ˜¯å¦æœ‰åˆ†é¡µ é»˜è®¤ æœ‰
 
-			pageSize: 10, 							// ·ÖÒ³´óĞ¡
-			// isLocalPagination: false,			// ÊÇ·ñ ±¾µØ·ÖÒ³
+			pageSize: 10, 							// åˆ†é¡µå¤§å°
+			// isLocalPagination: false,			// æ˜¯å¦ æœ¬åœ°åˆ†é¡µ
 
-			dataField:'id',							// µ¥Ìõ josn Êı¾İ ±êÊ¾
+			dataField:'id',							// å•æ¡ josn æ•°æ® æ ‡ç¤º
 
-			isOuterTpl: false						// ÊÇ·ñÍâ²¿×Ô¶¨Òå tr Ä£°å
+			isOuterTpl: false						// æ˜¯å¦å¤–éƒ¨è‡ªå®šä¹‰ tr æ¨¡æ¿
 		}
 
 	/**
-	* 	ajaxUrl ·µ»ØÊı¾İ¸ñÊ½
+	* 	ajaxUrl è¿”å›æ•°æ®æ ¼å¼
 	*	{ 	
 	*		"success":true,
 	*		"message":"",
@@ -121,8 +121,8 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		new Store({
 			url : _self.get('ajaxUrl'),
 			root: 'rows',
-			totalProperty: 'results', 	 // Êı¾İÌõÊı
-			params: {type:'all', id:'DJKFJDKFJ94944'}	//×Ô¶¨Òå²ÎÊı
+			totalProperty: 'results', 	 // æ•°æ®æ¡æ•°
+			params: {type:'all', id:'DJKFJDKFJ94944'}	//è‡ªå®šä¹‰å‚æ•°
 		});	
 	*/	
 
@@ -145,153 +145,153 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		Grid.superclass.constructor.call(_self, config);		
 		
 
-		// Ö§³ÖµÄÊÂ¼ş
+		// æ”¯æŒçš„äº‹ä»¶
 		_self.events = [
 			/**  
-			* ¿ªÊ¼¸½¼ÓÊı¾İ
+			* å¼€å§‹é™„åŠ æ•°æ®
 			* @name Grid#beginappend 
 			* @event  
-			* @param {event} e  ÊÂ¼ş¶ÔÏó
-			* @param {Array} e.data ¸½¼ÓÏÔÊ¾µÄÊı¾İ
+			* @param {event} e  äº‹ä»¶å¯¹è±¡
+			* @param {Array} e.data é™„åŠ æ˜¾ç¤ºçš„æ•°æ®
 			*/
 			'beginappend',
 			
 			/**  
-			* ¸½¼ÓÊı¾İÍê³É
+			* é™„åŠ æ•°æ®å®Œæˆ
 			* @name Grid#afterappend 
 			* @event  
-			* @param {event} e  ÊÂ¼ş¶ÔÏó
-			* @param {Array} e.data ¸½¼ÓÏÔÊ¾µÄÊı¾İ
-			* @param {Array} e.rows ¸½¼ÓÏÔÊ¾µÄÊı¾İĞĞDOM½á¹¹
+			* @param {event} e  äº‹ä»¶å¯¹è±¡
+			* @param {Array} e.data é™„åŠ æ˜¾ç¤ºçš„æ•°æ®
+			* @param {Array} e.rows é™„åŠ æ˜¾ç¤ºçš„æ•°æ®è¡ŒDOMç»“æ„
 			*/
 			'afterappend',
 
 			/**  
-			* ¿ªÊ¼ÏÔÊ¾Êı¾İ£¬Ò»°ãÊÇÊı¾İÔ´¼ÓÔØÍêÊı¾İ£¬¿ªÊ¼ÔÚ±í¸ñÉÏÏÔÊ¾Êı¾İ
+			* å¼€å§‹æ˜¾ç¤ºæ•°æ®ï¼Œä¸€èˆ¬æ˜¯æ•°æ®æºåŠ è½½å®Œæ•°æ®ï¼Œå¼€å§‹åœ¨è¡¨æ ¼ä¸Šæ˜¾ç¤ºæ•°æ®
 			* @name Grid#beginshow
 			* @event  
-			* @param {event} e  ÊÂ¼ş¶ÔÏó
+			* @param {event} e  äº‹ä»¶å¯¹è±¡
 			*/			
 			'beginshow',
 
 			/**  
-			* ÏÔÊ¾Êı¾İÍê³É£¬Ò»°ãÊÇÊı¾İÔ´¼ÓÔØÍêÊı¾İ£¬²¢ÔÚ±í¸ñÉÏÏÔÊ¾Íê³É
+			* æ˜¾ç¤ºæ•°æ®å®Œæˆï¼Œä¸€èˆ¬æ˜¯æ•°æ®æºåŠ è½½å®Œæ•°æ®ï¼Œå¹¶åœ¨è¡¨æ ¼ä¸Šæ˜¾ç¤ºå®Œæˆ
 			* @name Grid#aftershow
 			* @event  
-			* @param {event} e  ÊÂ¼ş¶ÔÏó
+			* @param {event} e  äº‹ä»¶å¯¹è±¡
 			*/
 			'aftershow',
 
 			/**  
-			* ÒÆ³ıĞĞ£¬Ò»°ãÊÇÊı¾İÔ´ÒÆ³ıÊı¾İºó£¬±í¸ñÒÆ³ı¶ÔÓ¦µÄĞĞÊı¾İ
+			* ç§»é™¤è¡Œï¼Œä¸€èˆ¬æ˜¯æ•°æ®æºç§»é™¤æ•°æ®åï¼Œè¡¨æ ¼ç§»é™¤å¯¹åº”çš„è¡Œæ•°æ®
 			* @name Grid#rowremoved
 			* @event  
-			* @param {event} e  ÊÂ¼ş¶ÔÏó
-			* @param {Object} e.data ĞĞ¶ÔÓ¦µÄ¼ÇÂ¼
-			* @param {Object} e.row ĞĞ¶ÔÓ¦µÄDOM¶ÔÏó
+			* @param {event} e  äº‹ä»¶å¯¹è±¡
+			* @param {Object} e.data è¡Œå¯¹åº”çš„è®°å½•
+			* @param {Object} e.row è¡Œå¯¹åº”çš„DOMå¯¹è±¡
 			*/
 			'rowremoved',
 
 			/**  
-			* Ìí¼ÓĞĞ£¬Ò»°ãÊÇÊı¾İÔ´Ìí¼ÓÊı¾İ¡¢¼ÓÔØÊı¾İºó£¬±í¸ñÏÔÊ¾¶ÔÓ¦µÄĞĞºó´¥·¢
+			* æ·»åŠ è¡Œï¼Œä¸€èˆ¬æ˜¯æ•°æ®æºæ·»åŠ æ•°æ®ã€åŠ è½½æ•°æ®åï¼Œè¡¨æ ¼æ˜¾ç¤ºå¯¹åº”çš„è¡Œåè§¦å‘
 			* @name Grid#rowcreated
 			* @event  
-			* @param {event} e  ÊÂ¼ş¶ÔÏó
-			* @param {Object} e.data ĞĞ¶ÔÓ¦µÄ¼ÇÂ¼
-			* @param {Object} e.row ĞĞ¶ÔÓ¦µÄDOM¶ÔÏó
+			* @param {event} e  äº‹ä»¶å¯¹è±¡
+			* @param {Object} e.data è¡Œå¯¹åº”çš„è®°å½•
+			* @param {Object} e.row è¡Œå¯¹åº”çš„DOMå¯¹è±¡
 			*/
 			'rowcreated',
 
 			/**  
-			* ·­Ò³Ç°´¥·¢ Òı×Ô mui/Pagination ·ÖÒ³, ×ª·¢·ÖÒ³ÊÂ¼ş
+			* ç¿»é¡µå‰è§¦å‘ å¼•è‡ª mui/Pagination åˆ†é¡µ, è½¬å‘åˆ†é¡µäº‹ä»¶
 			* @name Grid# afterPageChanged
 			* @event  
-			* @return ·ÖÒ³ĞÅÏ¢¶ÔÏó
+			* @return åˆ†é¡µä¿¡æ¯å¯¹è±¡
 			*/
 			'afterPageChanged',
 
 			/**  
-			* ĞĞµã»÷ÊÂ¼ş
+			* è¡Œç‚¹å‡»äº‹ä»¶
 			* @name Grid#rowclick
 			* @event  
-			* @param {event} e  ÊÂ¼ş¶ÔÏó
-			* @param {Object} e.data ĞĞ¶ÔÓ¦µÄ¼ÇÂ¼
-			* @param {Object} e.row ĞĞ¶ÔÓ¦µÄDOM¶ÔÏó
+			* @param {event} e  äº‹ä»¶å¯¹è±¡
+			* @param {Object} e.data è¡Œå¯¹åº”çš„è®°å½•
+			* @param {Object} e.row è¡Œå¯¹åº”çš„DOMå¯¹è±¡
 			* 
 			*/
 			'rowclick',
 
 			/**  
-			* µ¥Ôª¸ñµã»÷ÊÂ¼ş
+			* å•å…ƒæ ¼ç‚¹å‡»äº‹ä»¶
 			* @name Grid#cellclick
 			* @event  
-			* @param {event} e  ÊÂ¼ş¶ÔÏó
-			* @param {Object} e.data ĞĞ¶ÔÓ¦µÄ¼ÇÂ¼
-			* @param {Object} e.row µã»÷ĞĞ¶ÔÓ¦µÄDOM¶ÔÏó
+			* @param {event} e  äº‹ä»¶å¯¹è±¡
+			* @param {Object} e.data è¡Œå¯¹åº”çš„è®°å½•
+			* @param {Object} e.row ç‚¹å‡»è¡Œå¯¹åº”çš„DOMå¯¹è±¡
 			*/
 			'cellclick',
 
 			/**  
-			* ĞĞË«»÷ÊÂ¼ş
+			* è¡ŒåŒå‡»äº‹ä»¶
 			* @name Grid#rowdblclick
 			* @event  
-			* @param {event} e  ÊÂ¼ş¶ÔÏó
-			* @param {Object} e.data ĞĞ¶ÔÓ¦µÄ¼ÇÂ¼
-			* @param {Object} e.row ĞĞ¶ÔÓ¦µÄDOM¶ÔÏó
+			* @param {event} e  äº‹ä»¶å¯¹è±¡
+			* @param {Object} e.data è¡Œå¯¹åº”çš„è®°å½•
+			* @param {Object} e.row è¡Œå¯¹åº”çš„DOMå¯¹è±¡
 			* 
 			*/
 			'rowdblclick',
 
 			/**  
-			* µ¥Ôª¸ñË«»÷ÊÂ¼ş
+			* å•å…ƒæ ¼åŒå‡»äº‹ä»¶
 			* @name Grid#celldblclick
 			* @event  
-			* @param {event} e  ÊÂ¼ş¶ÔÏó
-			* @param {Object} e.data ĞĞ¶ÔÓ¦µÄ¼ÇÂ¼
-			* @param {Object} e.row µã»÷ĞĞ¶ÔÓ¦µÄDOM¶ÔÏó
+			* @param {event} e  äº‹ä»¶å¯¹è±¡
+			* @param {Object} e.data è¡Œå¯¹åº”çš„è®°å½•
+			* @param {Object} e.row ç‚¹å‡»è¡Œå¯¹åº”çš„DOMå¯¹è±¡
 			*/
 			'celldblclick',
 
 			/**  
-			* ĞĞÑ¡ÖĞÊÂ¼ş
+			* è¡Œé€‰ä¸­äº‹ä»¶
 			* @name Grid#rowselected
 			* @event  
-			* @param {event} e  ÊÂ¼ş¶ÔÏó
-			* @param {Object} e.data ĞĞ¶ÔÓ¦µÄ¼ÇÂ¼
-			* @param {Object} e.row ĞĞ¶ÔÓ¦µÄDOM¶ÔÏó
+			* @param {event} e  äº‹ä»¶å¯¹è±¡
+			* @param {Object} e.data è¡Œå¯¹åº”çš„è®°å½•
+			* @param {Object} e.row è¡Œå¯¹åº”çš„DOMå¯¹è±¡
 			*/
 			'rowselected',
 
 			/**  
-			* ĞĞÈ¡ÏûÑ¡ÖĞÊÂ¼ş
+			* è¡Œå–æ¶ˆé€‰ä¸­äº‹ä»¶
 			* @name Grid#rowunselected
 			* @event  
-			* @param {event} e  ÊÂ¼ş¶ÔÏó
-			* @param {Object} e.data ĞĞ¶ÔÓ¦µÄ¼ÇÂ¼
-			* @param {Object} e.row ĞĞ¶ÔÓ¦µÄDOM¶ÔÏó
+			* @param {event} e  äº‹ä»¶å¯¹è±¡
+			* @param {Object} e.data è¡Œå¯¹åº”çš„è®°å½•
+			* @param {Object} e.row è¡Œå¯¹åº”çš„DOMå¯¹è±¡
 			*/
 			'rowunselected',
 
 			/**  
-			* ĞĞÑ¡ÖĞ×´Ì¬¸Ä±äÊÂ¼ş
+			* è¡Œé€‰ä¸­çŠ¶æ€æ”¹å˜äº‹ä»¶
 			* @name Grid#rowselectchanged
 			* @event  
-			* @param {event} e  ÊÂ¼ş¶ÔÏó
-			* @param {Object} e.data ĞĞ¶ÔÓ¦µÄ¼ÇÂ¼
-			* @param {Object} e.row ĞĞ¶ÔÓ¦µÄDOM¶ÔÏó
-			* @param {Object} e.selected Ñ¡ÖĞµÄ×´Ì¬
+			* @param {event} e  äº‹ä»¶å¯¹è±¡
+			* @param {Object} e.data è¡Œå¯¹åº”çš„è®°å½•
+			* @param {Object} e.row è¡Œå¯¹åº”çš„DOMå¯¹è±¡
+			* @param {Object} e.selected é€‰ä¸­çš„çŠ¶æ€
 			*/
 			'rowselectchanged',			 
 
 			/**  
-			* È«Ñ¡ÊÂ¼ş ·¢Éú
+			* å…¨é€‰äº‹ä»¶ å‘ç”Ÿ
 			* @name Grid#allRowsSelected
 			* @event  
 			*/
 			'allRowsSelected',
 
 			/**  
-			* È¡ÏûÈ«Ñ¡ÊÂ¼ş ·¢Éú
+			* å–æ¶ˆå…¨é€‰äº‹ä»¶ å‘ç”Ÿ
 			* @name Grid#unAllRowsSelected
 			* @event  
 			*/
@@ -301,12 +301,12 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		_self._init();
 	}
 
-	// ¼Ì³ĞÓÚKISSY.Base  
+	// ç»§æ‰¿äºKISSY.Base  
 	S.extend(Grid, S.Base);
 	Grid.VERSION = 1.0;
 	S.augment(Grid, {
 
-		// ¿Ø¼ş ³õÊ¼»¯
+		// æ§ä»¶ åˆå§‹åŒ–
 		_init: function(){
 			var _self = this;
 
@@ -316,27 +316,27 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			_self._eventRender();
 		},
 
-		// ²ÎÊı³õÊ¼»¯
+		// å‚æ•°åˆå§‹åŒ–
 		_augmsConfig: function(){
 			var _self = this;
 			
 		},
 
-		// ÊÂ¼ş³õÊ¼»¯ -- click -- mouseout -- mouseover
+		// äº‹ä»¶åˆå§‹åŒ– -- click -- mouseout -- mouseover
 		_eventRender: function(){
 			var _self = this,
 				hedEv = S.query('.'+CLS_GRID_TH, _self.thead);
 
-			// theadÊÂ¼ş -- Ç°¶Ë ÅÅĞò vs È«Ñ¡ 
+			// theadäº‹ä»¶ -- å‰ç«¯ æ’åº vs å…¨é€‰ 
 			Event.delegate(hedEv, 'click', function(ev){				
-				// Ç°¶Ë ÅÅĞò
+				// å‰ç«¯ æ’åº
 				_self.sortableFn(ev); 
 
-				// È«Ñ¡
+				// å…¨é€‰
 				_self._allSlectEvt(ev);	
 			}); 
 			
-			// tbodyÊÂ¼ş
+			// tbodyäº‹ä»¶ -- click -- mouseover -- mouseout
 			S.one(_self.tbody).on('click', function (event) {
 				_self._rowClickEvent(event.target);
 			}).on('mouseover', function (event) {
@@ -345,11 +345,11 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				_self._rowOutEvent(event.target);
 			});		
 
-			// ×ª·¢ ·ÖÒ³ÊÂ¼ş afterPageChange --> afterPageChanged
+			// è½¬å‘ åˆ†é¡µäº‹ä»¶ afterPageChange --> afterPageChanged
 			_self.pagination && _self.pagination.on('afterPageChange', function(e) {
 				var curPage = e.idx;
 
-				// ÈôÊÇÒì²½ÔòÎª ºó¶Ë·ÖÒ³Êı¾İ ·ñÔò ¸ÄÎª ±¾µØ·ÖÒ³ Êı¾İ
+				// è‹¥æ˜¯å¼‚æ­¥åˆ™ä¸º åç«¯åˆ†é¡µæ•°æ® å¦åˆ™ æ”¹ä¸º æœ¬åœ°åˆ†é¡µ æ•°æ®
 				if(_self.get('ajaxUrl')){
 					_self.store.load({ 		
 						currentPage: curPage
@@ -365,62 +365,62 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			});	
 
 
-			// ĞĞÑ¡ÖĞ vs È«Ñ¡ ×Ô¶¯Æ¥Åä 
+			// è¡Œé€‰ä¸­ vs å…¨é€‰ è‡ªåŠ¨åŒ¹é… 
 			_self.on('rowselected rowunselected', function(ev){
 				_self.autoSelect(ev);
 			});				
 		},
 		
-		// ³õÊ¼»¯ table Dom ½á¹¹
+		// åˆå§‹åŒ– table Dom ç»“æ„
 		_initTableDom: function(data){
 			var _self = this,
 				thRow = '',
 				table = DOM.create(GRIDTPL);
 
-			// ¶¨ÒåÈ«¾ÖÊôĞÔ table
+			// å®šä¹‰å…¨å±€å±æ€§ table
 			_self.table = table;
 				
-			// »ñÈ¡ -- ±í¸ñ Í· Ìå ½Å  ±äÁ¿£»
+			// è·å– -- è¡¨æ ¼ å¤´ ä½“ è„š  å˜é‡ï¼›
 			_self.tbody = S.get(TBODYCLS, table);
 			_self.thead = S.get(THEADCLS, table);
 			_self.tfoot = S.get(TFOOTCLS, table);
 
-			// »ñÈ¡ÁĞÅäÖÃ	
+			// è·å–åˆ—é…ç½®	
 			_self.columns = S.isArray(_self.get('columns')) ? _self.get('columns') : [];
 
 			// if(data){
 				thRow = DOM.create(_self._getThRowTemplate(data, 0));
 			// }
 
-			// Ìí¼Ó Í·	
+			// æ·»åŠ  å¤´	
 			DOM.append(thRow, _self.thead);	
 
-			// ÅÅĞòa ±êÇ© ±êÊ¾ i	
+			// æ’åºa æ ‡ç­¾ æ ‡ç¤º i	
 			_self.sortAui = S.query('.'+DRECTION_TAGS, _self.thead);
 
-			// ÊÇ·ñ·ÖÒ³
+			// æ˜¯å¦åˆ†é¡µ
 			if(_self.get('isPagination')){
 				_self.addPagePation(_self.table);
 			}		
 			
-			// Ìí¼ÓÕÚÕÖdiv
+			// æ·»åŠ é®ç½©div
 			_self.loadingMaster(_self.table);	
 
-			// ·ÅÈëDomÊ÷ÖĞ
+			// æ”¾å…¥Domæ ‘ä¸­
 			DOM.append(_self.table, _self.container);
 		},		
 
-		//»ñÈ¡ĞĞµÄÄ£°æ -- tr
+		//è·å–è¡Œçš„æ¨¡ç‰ˆ -- tr
 		_getRowTemplate: function (obj, index){
 			var _self = this;
 
-			var	oddCls = index % 2 === 0 ? CLS_ROW_ODD : CLS_ROW_EVEN, 				// ±í¸ñ tr ¼ä¸ôÑÕÉ«±êÊ¾ wait
+			var	oddCls = index % 2 === 0 ? CLS_ROW_ODD : CLS_ROW_EVEN, 				// è¡¨æ ¼ tr é—´éš”é¢œè‰²æ ‡ç¤º
 				cellTempArray = [],
 				rowTemplate = null,
 				cellTemp = null,
 				emptyTd = '';
 			
-			// Èç¹ûÓĞ checkbox ÔòÏÈÌí¼Ó			
+			// å¦‚æœæœ‰ checkbox åˆ™å…ˆæ·»åŠ 			
 			if(_self.get('checkable')) {
 				cellTemp = _self._getCheckedCellTemplate(CLS_GRID_CELL, CLS_CHECKBOX, index);
 				cellTempArray.push(cellTemp);
@@ -439,7 +439,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			return rowTemplate;
 		},
 
-		//»ñÈ¡µ¥Ôª¸ñµÄÄ£°æ -- td
+		//è·å–å•å…ƒæ ¼çš„æ¨¡ç‰ˆ -- td
 		_getCellTemplate: function (index, column, text){
 			var _self = this,
 				width = _self.setPxCheck(column.width),
@@ -450,28 +450,35 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			return template;
 		},
 
-		// ÓĞcheckbox ¸´Ñ¡¿ò -- td checkbox
+		// æœ‰checkbox å¤é€‰æ¡† -- td checkbox
 		_getCheckedCellTemplate: function(clscell, clsCheck, index){
 			var _self = this,
 				currentPage = _self.store.getCurrentPage(),
 				pageSize = _self.store.getPageSize(), 
 				emptyTd = ' ',
-				defWidth = _self.get('isShowCheckboxText') ? CHECKBOXW : CHECKBOXS,	
-				index = _self.get('isShowCheckboxText') ? ++index : '',
-				index = currentPage === 1 ? index : pageSize + index;
+				defWidth,
+				aindex = '';
 
-			return '<td width="'+defWidth+'" class="'+clscell+emptyTd+CHECKBOX_TD_INDEX+'"><input type="checkbox" value="" name="checkboxs" class="'+clsCheck+'">'+index+'</td>';
+			if(_self.get('isShowCheckboxText')){
+				defWidth = CHECKBOXW;
+				index = ++index;
+				aindex = currentPage === 1 ? index : pageSize + index;
+			}else{
+				defWidth = CHECKBOXS;
+			}
+				
+			return '<td width="'+defWidth+'" class="'+clscell+emptyTd+CHECKBOX_TD_INDEX+'"><input type="checkbox" value="" name="checkboxs" class="'+clsCheck+'">'+aindex+'</td>';
 		},	
 
 		/**
-		* »ñÈ¡ĞĞµÄÄ£°æ -- th
-		* @param {obj || string} ±í¸ñ Êı¾İ¶ÔÏó ºÍ ÏàÓ¦µÄindex
-		* @return {string} °üº¬thµÄ tr html×Ö·û´®
+		* è·å–è¡Œçš„æ¨¡ç‰ˆ -- th
+		* @param {obj || string} è¡¨æ ¼ æ•°æ®å¯¹è±¡ å’Œ ç›¸åº”çš„index
+		* @return {string} åŒ…å«thçš„ tr htmlå­—ç¬¦ä¸²
 		*/
 		_getThRowTemplate: function(obj, index){
 			var _self = this;
 
-			// Ö»äÖÈ¾ tr th Í·¼´¿É
+			// åªæ¸²æŸ“ tr th å¤´å³å¯
 			if(index > 1){
 				return;
 			}
@@ -482,9 +489,9 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				thTpl = '',
 				emptyTd = ' ',
 				defWidth = _self.get('isShowCheckboxText') ? CHECKBOXW : CHECKBOXS,	
-				selectAllText = _self.get('isShowCheckboxText') ? 'È«Ñ¡': ''; // ÊÇ·ñÏÔÊ¾ È«Ñ¡ ×Ö·û
+				selectAllText = _self.get('isShowCheckboxText') ? 'å…¨é€‰': ''; // æ˜¯å¦æ˜¾ç¤º å…¨é€‰ å­—ç¬¦
 			
-			// ¸´Ñ¡¿ò	
+			// å¤é€‰æ¡†	
 			if( _self.get('checkable') ){
 				thTpl = '<th width="'+defWidth+'" class="'+CLS_GRID_TH + emptyTd +'"><input type="checkbox" value="" name="checkboxs" class="'+SELECTALLCLS+'" data-field="">'+selectAllText+'</th>';
 				cellTempArray.push(thTpl);
@@ -504,8 +511,8 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		},
 
 		/**
-		* »ñÈ¡ th html
-		* @param {obj||string} ÁĞÅäÖÃÊı¾İÏîobj¡¢render·½·¨html¡¢dataIndex»ñÈ¡µÄÖµ
+		* è·å– th html
+		* @param {obj||string} åˆ—é…ç½®æ•°æ®é¡¹objã€renderæ–¹æ³•htmlã€dataIndexè·å–çš„å€¼
 		* @return {string} th html
 		*/
 		_getThTemplate: function(obj, text, value){
@@ -521,12 +528,12 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				thTpl = '',
 				thAry = [];	
 			
-			// Ö§³Ö string || float || int || date
+			// æ”¯æŒ string || float || int || date
 			var dataType = obj.dataType || S.TL.strToDataType(value) || 'string';	
 
-			// ÓĞÎŞÅÅĞò
+			// æœ‰æ— æ’åº
 			if(isSortCols){
-				thTpl = '<th width="'+width+'" class="'+CLS_GRID_TH + emptyTd + hideCls+'"><a href="javascript:void(0)" title="µã»÷ÅÅĞò" data-field="'+dataIndex+'" data-dataType="'+dataType+'">'+text+'<i class="'+DRECTION_TAGS+'">&nbsp;</i></a></th>';
+				thTpl = '<th width="'+width+'" class="'+CLS_GRID_TH + emptyTd + hideCls+'"><a href="javascript:void(0)" title="ç‚¹å‡»æ’åº" data-field="'+dataIndex+'" data-dataType="'+dataType+'">'+text+'<i class="'+DRECTION_TAGS+'">&nbsp;</i></a></th>';
 				thAry.push(thTpl);
 			}else{
 				thTpl = '<th width="'+width+'" class="'+CLS_GRID_TH + emptyTd + hideCls+'" data-field="'+dataIndex+'">'+text+'</th>';
@@ -538,7 +545,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 
 		
 		
-		// ¸ù¾İ Êı¾İ¹´Ñ¡×´Ì¬, ×Ô¶¯ÅĞ¶Ï È«Ñ¡Óë·ñ ÏÔÊ¾×´Ì¬
+		// æ ¹æ® æ•°æ®å‹¾é€‰çŠ¶æ€, è‡ªåŠ¨åˆ¤æ–­ å…¨é€‰ä¸å¦ æ˜¾ç¤ºçŠ¶æ€
 		autoSelect: function(ev){
 			var _self = this,
 				type = 	ev.type;
@@ -563,16 +570,16 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				return;
 			}
 			
-			// µÚÒ»´Îµã»÷ vs ºóĞøµã»÷
+			// ç¬¬ä¸€æ¬¡ç‚¹å‡» vs åç»­ç‚¹å‡»
 			if(cssCls === DRECTION_TAGS){
-				direction = (_self.store.sortInfo.direction).toLowerCase() === DRECTION_ASC ? DRECTION_DSC : DRECTION_ASC; // »ñÈ¡storeÄ¬ÈÏÅÅĞò·½Ê½ asc ÉıĞò
+				direction = (_self.store.sortInfo.direction).toLowerCase() === DRECTION_ASC ? DRECTION_DSC : DRECTION_ASC; // è·å–storeé»˜è®¤æ’åºæ–¹å¼ asc å‡åº
 			}else{
 				direction = DOM.hasClass(itagIndex, DRECTION_ASC) ? DRECTION_DSC : DRECTION_ASC;
 			}
 			
 			_self.store.sort(field, direction.toLocaleUpperCase(), dataType); 	
 			
-			// ÒÆ³ıËùÓĞ ÅÅĞò±ê¼Ç±êÊ¾  -- ÏÔÊ¾µ±Ç° ÅÅĞò±ê¼Ç 
+			// ç§»é™¤æ‰€æœ‰ æ’åºæ ‡è®°æ ‡ç¤º  -- æ˜¾ç¤ºå½“å‰ æ’åºæ ‡è®° 
 			S.each(_self.sortAui, function(tag){
 				DOM.removeClass(tag, DRECTION_ASC);
 				DOM.removeClass(tag, DRECTION_DSC);
@@ -580,7 +587,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			DOM.addClass(itagIndex, direction);
 		},
 		
-		// ¸ù¾İÂ·¾¶ »ñÈ¡¶ÔÏóÖµ
+		// æ ¹æ®è·¯å¾„ è·å–å¯¹è±¡å€¼
 		_getFieldValue: function(obj, dataIndex){
 			var _self = this;
 
@@ -607,7 +614,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 	    	return result;
 	    },
 
-		// »ñÈ¡¸ñÊ½»¯µÄÊı¾İ
+		// è·å–æ ¼å¼åŒ–çš„æ•°æ®
         _getRenderText : function(column, value, obj){
         	var _self = this,
             	text = value,
@@ -624,16 +631,16 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
             return text;
         },
 
-		// ³õÊ¼»¯gird ºÍ ·ÖÒ³Æ÷
+		// åˆå§‹åŒ–gird å’Œ åˆ†é¡µå™¨
 		_initGrid: function(){
 			var _self = this,				
 				width = _self.get('width'),
 				height = _self.get('height');							
 			
-			// ÔØÈë »ù±¾table½á¹¹
+			// è½½å…¥ åŸºæœ¬tableç»“æ„
 			_self._initTableDom();		
 
-			// Èç¹ûÒì²½ ÔòÒì²½¼ÓÔØÊı¾İ£¬·ñÔò¼ÓÔØ ¾²Ì¬Êı¾İ --Store
+			// å¦‚æœå¼‚æ­¥ åˆ™å¼‚æ­¥åŠ è½½æ•°æ®ï¼Œå¦åˆ™åŠ è½½ é™æ€æ•°æ® --Store
 			if(_self.get('ajaxUrl')){
 				_self.store.load();
 			}else if(_self.get('staticData')){	
@@ -642,7 +649,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				throw 'Grid Data Source Error!';
 			}	
 			
-			// ÉèÖÃGrid BodyµÄ ¿í¸ß ¶È
+			// è®¾ç½®Grid Bodyçš„ å®½é«˜ åº¦
 			if(width) { 			
 				_self.setWidth(width);
 			}
@@ -651,12 +658,12 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			}
 		},
 		
-		// ³õÊ¼»¯Store jsonp
+		// åˆå§‹åŒ–Store jsonp
 		_initStore: function(data){
 			var _self = this,
 				dataType = _self.get('isJsonp') ? 'jsonp': 'json';
 
-			// ³õÊ¼»¯Store Ö¸¶¨ url¡¢ÊÇ·ñjsonp¡¢	ÈôÓĞ·ÖÒ³(·ÖÒ³´óĞ¡ ºÍ ·ÖÒ³×ÜÊı)
+			// åˆå§‹åŒ–Store æŒ‡å®š urlã€æ˜¯å¦jsonpã€	è‹¥æœ‰åˆ†é¡µ(åˆ†é¡µå¤§å° å’Œ åˆ†é¡µæ€»æ•°)
 			_self.store = new Store({ 
 				url: _self.get('ajaxUrl'),
 				dataType: dataType,
@@ -666,19 +673,19 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				// localPagination: _self.get('isLocalPagination')	
 			});
 			
-			// ÈôÎŞstoreÔòÍÆ³ö°ó¶¨
+			// è‹¥æ— storeåˆ™æ¨å‡ºç»‘å®š
 			if(!_self.store){
 				return;
 			}
 			
-			// ×¼±¸¼ÓÔØÊı¾İÇ° --- Ìí¼Ó ÆÁÄ»ÕÚÕÖ delay
+			// å‡†å¤‡åŠ è½½æ•°æ®å‰ --- æ·»åŠ  å±å¹•é®ç½© delay
 			_self.store.on('beforeload', function(){
 				if (_self.loadMask) {
 					_self.loadMask.show();
 				}
 			});
 			
-			// Êı¾İ¼ÓÔØÍê³Éºó - È¡Ïû ÆÁÄ»ÕÚÕÖ delay
+			// æ•°æ®åŠ è½½å®Œæˆå - å–æ¶ˆ å±å¹•é®ç½© delay
 			_self.store.on('load', function(obj){
 				var data = obj.data,
 					curPage = this.getTotalPage(),
@@ -686,7 +693,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			
 				_self.showData(results); 	
 
-				// ¸üĞÂ·ÖÒ³ ÊµÊ±×ÜÊı
+				// æ›´æ–°åˆ†é¡µ å®æ—¶æ€»æ•°
 				if(_self.pagination){		
 					_self.pagination.setTotalPage(curPage);
 				}	
@@ -696,26 +703,26 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				}
 			});
 
-			// Ìí¼ÓÊı¾İÊ±´¥·¢¸ÃÊÂ¼ş
+			// æ·»åŠ æ•°æ®æ—¶è§¦å‘è¯¥äº‹ä»¶
 			_self.store.on('addrecords', function (event) {
 				var data = event.data;
 				_self.appendData(data);
 			});
 
-			// É¾³ıÊı¾İÊÇ´¥·¢¸ÃÊÂ¼ş
+			// åˆ é™¤æ•°æ®æ˜¯è§¦å‘è¯¥äº‹ä»¶
 			_self.store.on('removerecords', function (event) {
 				var data = event.data;
 				_self.removeData(data);				
 			});
 
-			// ³ö´íÊ±ºò
+			// å‡ºé”™æ—¶å€™
 			_self.store.on('exception', function () {
 				if (_self.loadMask) {
 					_self.loadMask.hide();
 				}
 			});
 			
-			// Ç°¶ËÅÅĞò·¢Éú
+			// å‰ç«¯æ’åºå‘ç”Ÿ
 			_self.store.on('localsort', function(){
 				var results = this.getResult();			
 				_self.showData(results); 
@@ -723,7 +730,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		},
 		
 
-		// ÉèÖÃGrid BodyµÄ¿í¶È
+		// è®¾ç½®Grid Bodyçš„å®½åº¦
 		setWidth: function(width){
 			var _self = this,				
 				outerWidth = DOM.width(_self.container), 
@@ -734,7 +741,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			}
 		},
 
-		// ÉèÖÃGrid BodyµÄ¸ß¶È
+		// è®¾ç½®Grid Bodyçš„é«˜åº¦
 		setHeight: function(height){
 			var _self = this,
 				tbodyContainer = S.get('.tbody-container', _self.container), 
@@ -749,7 +756,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			_self.tbodyContainer = tbodyContainer;
 		},
 		
-		// ¹«¹² Éè¶¨ ÏñËØ¿í¸ß¹ıÂËº¯Êı
+		// å…¬å…± è®¾å®š åƒç´ å®½é«˜è¿‡æ»¤å‡½æ•°
 		setPxCheck: function(px){
 			var _self = this,
 				endVaue = 'auto';				
@@ -758,7 +765,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				return; 
 			}
 
-			// Èç¹ûµÈÓÚauto
+			// å¦‚æœç­‰äºauto
 			if(S.trim(px) === endVaue){
 				return endVaue;
 			}
@@ -785,7 +792,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			return endVaue;
 		},
 
-		// Ìí¼Ó·ÖÒ³
+		// æ·»åŠ åˆ†é¡µ
 		addPagePation: function(container){
 			var _self = this;
 
@@ -795,17 +802,17 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 
 			var pagContainer = S.get('.page-container', container);
 
-			// ³õÊ¼»¯
+			// åˆå§‹åŒ–
 			_self.pagination = new Pagination({
 				container: pagContainer
 			});
-			// ·ÀÖ¹ ·ÖÒ³ ±íµ¥Ìá½»
+			// é˜²æ­¢ åˆ†é¡µ è¡¨å•æäº¤
 		    Event.delegate(pagContainer, 'submit', 'form', function(e){
 		       	e.preventDefault();
 		    });
 		},
 
-		// ÊÖ¶¯ Ç¿ÖÆ Éè¶¨ ·ÖÒ³×ÜÊı
+		// æ‰‹åŠ¨ å¼ºåˆ¶ è®¾å®š åˆ†é¡µæ€»æ•°
 		_enforcePageTal: function(totalPage){
 			var _self = this,
 				totalPage = _self.store.getTotalPage(),
@@ -825,7 +832,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			}			
 		},
 
-		// Ìí¼ÓÕÚÕÖ¹¦ÄÜ -- ×Ô¶¨ÒåÄ£°å
+		// æ·»åŠ é®ç½©åŠŸèƒ½ -- è‡ªå®šä¹‰æ¨¡æ¿
 		loadingMaster: function(tableContainer){
 			var _self = this,
 				mastNode = DOM.create( _self.get('maskTpl') || LOADMASKTPL);
@@ -837,7 +844,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		},
 
 
-		// È«Ñ¡ÊÂ¼ş
+		// å…¨é€‰äº‹ä»¶
 		_allSlectEvt: function(target){
 			var _self = this,
 				hasAllSelect = DOM.hasClass(target, SELECTALLCLS);
@@ -848,17 +855,17 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		},
 		
 				
-		// ²éÕÒ row
+		// æŸ¥æ‰¾ row
 		_findRow: function (element) {
 			return this._lookupByClass(element, CLS_GRID_ROW);
 		},	
 		
-		// ²éÕÒ cell
+		// æŸ¥æ‰¾ cell
 		_findCell: function (element) {
 			return this._lookupByClass(element, CLS_GRID_CELL);
 		},
 		
-		// Í¨¹ıclass²éÕÒ·½·¨£¬ÈôÄ¾ÓĞÔò·µ»Ø¸¸ÈİÆ÷ÏÂµÄÑùÊ½ÔªËØ td tr
+		// é€šè¿‡classæŸ¥æ‰¾æ–¹æ³•ï¼Œè‹¥æœ¨æœ‰åˆ™è¿”å›çˆ¶å®¹å™¨ä¸‹çš„æ ·å¼å…ƒç´  td tr
 		_lookupByClass: function(element, css){
 			if(DOM.hasClass(element, css)) {
 				return element;
@@ -866,18 +873,18 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			return DOM.parent(element, '.' + css);
 		},
 		
-		// rowÊÇ·ñÑ¡ÖĞ
+		// rowæ˜¯å¦é€‰ä¸­
 		_isRowSelected: function(row) {
 			return S.one(row).hasClass(CLS_GRID_ROW_SELECTED);
 		},
 		
-		// ĞĞ click ÊÂ¼ş
+		// è¡Œ click äº‹ä»¶
 		_rowClickEvent: function (target) {
 			var _self = this,
 				isBtn = DOM.hasClass(target, COMMAND_BTN),
 				row = _self._findRow(target),
 				cell = _self._findCell(target),
-				rowCheckable = _self.get('checkable'), // ÊÇ·ñÓĞcheckbox				
+				rowCheckable = _self.get('checkable'), // æ˜¯å¦æœ‰checkbox				
 				data = null,
 				eventResult = null;
 				
@@ -886,18 +893,18 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				
 				if(cell){
 					eventResult = _self.fire('cellClick', {data: data, row: row, cell: cell, field: DOM.attr(cell, ATTR_COLUMN_FIELD), domTarget: target});
-					if(eventResult === false){ // Èç¹ûÊÂ¼ş³ö´í£¬ÔòÍË³ö
+					if(eventResult === false){ // å¦‚æœäº‹ä»¶å‡ºé”™ï¼Œåˆ™é€€å‡º
 						return;
 					}
 				}
 				_self.fire('rowclick', {data: data, row: row});
 				
-				// Èç¹ûÊÇ btn
+				// å¦‚æœæ˜¯ btn
 				if(isBtn){
 					return;
 				}
 				
-				// ÉèÖÃĞĞÑ¡ÖĞ×´Ì¬
+				// è®¾ç½®è¡Œé€‰ä¸­çŠ¶æ€
 				if(rowCheckable){// checkbox
 					if(!_self._isRowSelected(row)) {
 						_self._setRowSelected(row, true);						
@@ -908,7 +915,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			}
 		},
 		
-		// ĞĞµÄË«»÷ÊÂ¼ş
+		// è¡Œçš„åŒå‡»äº‹ä»¶
 		_rowDoubleClickEvent: function(target){
 			var _self = this,
 				row = _self._findRow(target),
@@ -923,7 +930,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			}
 		},
 		
-		//ĞĞµÄ mouseover ÊÂ¼ş
+		//è¡Œçš„ mouseover äº‹ä»¶
 		_rowOverEvent : function (target) {
 			var _self = this,
 				row = _self._findRow(target);
@@ -933,7 +940,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			}
 		},
 		
-		//ĞĞµÄ mouseout ÊÂ¼ş
+		//è¡Œçš„ mouseout äº‹ä»¶
 		_rowOutEvent : function (target) {
 			var _self = this,
 				row = _self._findRow(target);
@@ -943,8 +950,8 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		},		
 		
 		/**
-		* ÏÔÊ¾Êı¾İ
-		* @param {Array} data ÏÔÊ¾µÄÊı¾İ
+		* æ˜¾ç¤ºæ•°æ®
+		* @param {Array} data æ˜¾ç¤ºçš„æ•°æ®
 		* 
 		*/		
 		showData : function (data) {
@@ -959,7 +966,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				trs.push(_self._createRow(obj, index));
 			});
 
-			// _self._afterShow(); ×ÔÊÊÓ¦¿í¸ß ·½·¨
+			// _self._afterShow(); è‡ªé€‚åº”å®½é«˜ æ–¹æ³•
 			
 			DOM.html(_self.tbody, trs.join(''));
 			
@@ -967,13 +974,13 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		},
 
 		/**
-		* Çå¿Õ±í¸ñ
+		* æ¸…ç©ºè¡¨æ ¼
 		*/
 		clearData : function(){
 			var _self = this,
 				rows = _self.tbody.rows;
 
-			// ÒÆ³ıĞĞ£¬Ò»°ãÊÇÊı¾İÔ´ÒÆ³ıÊı¾İºó£¬±í¸ñÒÆ³ı¶ÔÓ¦µÄĞĞÊı¾İ	
+			// ç§»é™¤è¡Œï¼Œä¸€èˆ¬æ˜¯æ•°æ®æºç§»é™¤æ•°æ®åï¼Œè¡¨æ ¼ç§»é™¤å¯¹åº”çš„è¡Œæ•°æ®	
 			S.each(rows, function(row){
 				_self.fire('rowremoved', {data : DOM.data(row, DATA_ELEMENT), row : row} );
 			});
@@ -982,7 +989,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		},
 
 		/**
-		* render table Dom  -- Ö§³Ö ÓÃ»§ ×Ô¶¨Òåtable Ò³Ãæ, trÄ£°å ºÍ Ä¬ÈÏÄÚ½¨Ä¬ÈÏÕûÌ×Ä£°å
+		* render table Dom  -- æ”¯æŒ ç”¨æˆ· è‡ªå®šä¹‰table é¡µé¢, træ¨¡æ¿ å’Œ é»˜è®¤å†…å»ºé»˜è®¤æ•´å¥—æ¨¡æ¿
 		*/
 		_createRow : function(element, index) {
 			var _self = this,				
@@ -1004,9 +1011,9 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		},
 
 		/**
-		* ÒÆ³ıÊı¾İ
+		* ç§»é™¤æ•°æ®
 		* @private
-		* @param {Array} data ÒÆ³ıµÄÊı¾İ
+		* @param {Array} data ç§»é™¤çš„æ•°æ®
 		* 
 		*/
 		removeData : function (data) {
@@ -1023,9 +1030,9 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		},
 
 		/**
-		* ¸½¼ÓÊı¾İ ²»ÒÀÀµstore ¸ù¾İÊı¾İäÖÈ¾±í¸ñ
+		* é™„åŠ æ•°æ® ä¸ä¾èµ–store æ ¹æ®æ•°æ®æ¸²æŸ“è¡¨æ ¼
 		* @private
-		* @param {Array} data Ìí¼Óµ½±í¸ñÉÏµÄÊı¾İ
+		* @param {Array} data æ·»åŠ åˆ°è¡¨æ ¼ä¸Šçš„æ•°æ®
 		*/
 		appendData : function (data) {
 			var _self = this,
@@ -1040,7 +1047,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			_self.fire('afterappend', {rows : rows, data : data});
 		},
 
-		// äÖÈ¾ -- ¹«ÓÃ·½·¨
+		// æ¸²æŸ“ -- å…¬ç”¨æ–¹æ³•
 		tplRender: function(data, tpl){
     		var _self = this,
     			htmlText,
@@ -1061,7 +1068,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
     	},
 		
 		/**
-		* È¡ÏûÑ¡ÖĞµÄ¼ÇÂ¼ 
+		* å–æ¶ˆé€‰ä¸­çš„è®°å½• 
 		*/
 		clearSelection : function(){
 			var _self = this;
@@ -1071,7 +1078,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 		},
 		
 				
-		//ÉèÖÃ±íÍ·Ñ¡ÖĞ×´Ì¬
+		//è®¾ç½®è¡¨å¤´é€‰ä¸­çŠ¶æ€
 		_setHeaderChecked: function (checked) {
 			var _self = this,
 				checkEl = S.one('.'+SELECTALLCLS, _self.thead);
@@ -1081,7 +1088,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			}
 		},
 		
-		//ÉèÖÃrow È«Ñ¡
+		//è®¾ç½®row å…¨é€‰
 		_setAllRowsSelected: function (selected) {
 			var _self = this;			
 			
@@ -1096,12 +1103,12 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			}
 		},
 
-		// ´¿¸ù¾İ Íâ½ç ´«ÈëµÄ data --- Éè¶¨±í¸ñÖĞµÄ ¶ÔÓ¦µÄrowÑ¡ÖĞ×´Ì¬
+		// çº¯æ ¹æ® å¤–ç•Œ ä¼ å…¥çš„ data --- è®¾å®šè¡¨æ ¼ä¸­çš„ å¯¹åº”çš„rowé€‰ä¸­çŠ¶æ€
 		_setDataSelect: function(data, isSelected){
 			var _self = this;
 
 			if(!data || isSelected == undefined){
-				console.log('±ØĞë´«ÈëÏàÓ¦Êı¾İ»òÑ¡ÖĞ×´Ì¬');
+				console.log('å¿…é¡»ä¼ å…¥ç›¸åº”æ•°æ®æˆ–é€‰ä¸­çŠ¶æ€');
 				return;
 			}
 
@@ -1118,7 +1125,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			}
 		},
 
-		// Éè¶¨±í¸ñ Ñ¡ÖĞ×´Ì¬ --´øËø¶¨
+		// è®¾å®šè¡¨æ ¼ é€‰ä¸­çŠ¶æ€ --å¸¦é”å®š
 		_setLockRecords: function (row, compareData, selected){
 			var _self = this,
 				data = DOM.data(row, DATA_ELEMENT),
@@ -1129,7 +1136,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			}		
 		},
 		
-		// Ëø¶¨rows×´Ì¬
+		// é”å®šrowsçŠ¶æ€
 		_isLocalRows: function(rows, isDisabled){
 			var _self = this;
 			
@@ -1139,31 +1146,31 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 				var checkbox = DOM.get('.'+CLS_CHECKBOX, row),
 					data = DOM.data(row, DATA_ELEMENT);
 			
-				// ½ûÓÃ¸´Ñ¡ ±£³ÖÑ¡ÖĞ×´Ì¬
+				// ç¦ç”¨å¤é€‰ ä¿æŒé€‰ä¸­çŠ¶æ€
 				if(checkbox){
 					DOM.attr(checkbox, 'disabled', isDisabled);
 				}			
 			});						
 		},
 
-		// Éè¶¨Ñ¡ÖĞÇé¿ö ¼° Ëø¶¨Çé¿ö
+		// è®¾å®šé€‰ä¸­æƒ…å†µ åŠ é”å®šæƒ…å†µ
 		setSelectLock: function(row, selected){
 			var _self = this,
 				checkbox = DOM.get('.'+CLS_CHECKBOX, row),
 				isDisabled = DOM.attr(checkbox, 'disabled');
 			
-			// ÈôÊÇËø¶¨×´Ì¬£¬Ê×Ñ¡½âËø			
+			// è‹¥æ˜¯é”å®šçŠ¶æ€ï¼Œé¦–é€‰è§£é”			
 			if(isDisabled) {
 				DOM.attr(checkbox, 'disabled', false);
 			}
 			
-			// Éè¶¨Ñ¡ÖĞ ¼° Ëø¶¨ ×´Ì¬
+			// è®¾å®šé€‰ä¸­ åŠ é”å®š çŠ¶æ€
 			_self._setRowSelected(row, selected);		
 			_self._isLocalRows(row, selected);	
 		},
 
 
-		//ÊÇ·ñrowÈ«²¿Ñ¡ÖĞ
+		//æ˜¯å¦rowå…¨éƒ¨é€‰ä¸­
 		_isAllRowsSelected: function(){
 			var _self = this,
 				rows = _self.tbody.rows,
@@ -1183,8 +1190,8 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 
 		
 		/**
-		* »ñÈ¡Ñ¡ÖĞµÄÊı¾İ
-		* @return {Array} ·µ»ØÑ¡ÖĞµÄÊı¾İ
+		* è·å–é€‰ä¸­çš„æ•°æ®
+		* @return {Array} è¿”å›é€‰ä¸­çš„æ•°æ®
 		*/
 		getSelection : function(){
 			var _self = this,
@@ -1200,7 +1207,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			return objs;
 		},
 		
-		// ÉèÖÃĞĞÑ¡Ôñ
+		// è®¾ç½®è¡Œé€‰æ‹©
 		_setRowSelected : function (row, selected) {
 			var _self = this,
 				checkbox = DOM.get('.'+CLS_CHECKBOX, row),
@@ -1212,7 +1219,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			}
 			
 			if(checkbox) {
-				//Èç¹ûÑ¡Ôñ¿ò²»¿ÉÓÃ£¬´ËĞĞ²»ÄÜÑ¡ÖĞ
+				//å¦‚æœé€‰æ‹©æ¡†ä¸å¯ç”¨ï¼Œæ­¤è¡Œä¸èƒ½é€‰ä¸­
 				if(DOM.attr(checkbox,'disabled')){
 					return;
 				}
@@ -1228,7 +1235,7 @@ KISSY.add('mui/grid', function(S,  XTemplate, Store, Pagination, TL) { // O,
 			}
 		},
 		
-		// ´¥·¢ĞĞÑ¡ÖĞ£¬È¡ÏûÑ¡ÖĞÊÂ¼ş
+		// è§¦å‘è¡Œé€‰ä¸­ï¼Œå–æ¶ˆé€‰ä¸­äº‹ä»¶
 		_onRowSelectChanged : function(row, selected){
 			var _self = this,
 				data = DOM.data(row, DATA_ELEMENT);

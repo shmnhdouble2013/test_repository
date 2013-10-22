@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-		<meta http-equiv="content-type" content="text/html; charset=gbk">
-	    <title>Æ·ÅÆÔËÓªºóÌ¨</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	    <title>å“ç‰Œè¿è¥åå°</title>
 
 		<!--#def{
 			"hostName" : "g.assets.daily.taobao.net",
@@ -26,71 +26,71 @@
 		<script type="text/javascript" src='./store.js'></script>
 		<script type="text/javascript" src='./grid.js'></script>
     </head>
-<body style="padding:10px;">
-	<h3>Grid ¿Ø¼şÊ¾Àı:</h3>
 
-	<!-- ±í¸ñÑ¡ÖĞÄ£°å -->
+<body style="padding:10px;">
+	
+	<h3>Grid æ§ä»¶ç¤ºä¾‹:</h3>
+
+	<!-- è¡¨æ ¼é€‰ä¸­æ¨¡æ¿ -->
 	<div id="J_selectCandTable"></div>	
 
 	
 	<script type="text/javascript">
 
-		// ºòÑ¡Çø Ñ¡ÖĞÊı¾İ
+		// å€™é€‰åŒº é€‰ä¸­æ•°æ®
 		var selectData = [
-			{"nos":52, "id":"fa32f3a2f5", "actype":"Õ¾Íâ", "medianame":"youku.com", "time":5343543758045},
-			{"nos":71, "id":"faf262f6a66_1", "actype":"Õ¾Íâ7", "medianame":"youku7.com","time":5343545453758584},
-			{"nos":11, "id":"afa266969fa_2", "actype":"Õ¾Íâ11", "medianame":"youku11.com","time":5343944754584 }, 
+			{"nos":52, "id":"fa32f3a2f5", "actype":"ç«™å¤–", "medianame":"youku.com", "time":5343543758045},
+			{"nos":71, "id":"faf262f6a66_1", "actype":"ç«™å¤–7", "medianame":"youku7.com","time":5343545453758584},
+			{"nos":11, "id":"afa266969fa_2", "actype":"ç«™å¤–11", "medianame":"youku11.com","time":5343944754584 }, 
 
-			{"nos":17, "id":"fa32f3a2f7", "actype":"Õ¾Íâ", "medianame":"youku.com","time":5345932604584},
-			{"nos":1, "id":"111111111111111.09", "actype":"Õ¾Íâ", "medianame":"youku.com", "time":5343543758584},
-	        {"nos":2, "id":"222222222222222", "actype":"ÎÒÊÇ", "medianame":"yahoo.com", "time":54542375684584},
+			{"nos":17, "id":"fa32f3a2f7", "actype":"ç«™å¤–", "medianame":"youku.com","time":5345932604584},
+			{"nos":1, "id":"111111111111111.09", "actype":"ç«™å¤–", "medianame":"youku.com", "time":5343543758584},
+	        {"nos":2, "id":"222222222222222", "actype":"æˆ‘æ˜¯", "medianame":"yahoo.com", "time":54542375684584},
 
-			{"nos":6, "id":"666666666666666", "actype":"»Æ·ä", "medianame":"juhuasuan.com", "time":545474658484},
-	        {"nos":4, "id":"444444444444444", "actype":"ÌğĞÄ", "medianame":"alibaba.com", "time":5234454758584},
-	        {"nos":5, "id":"555555555555555", "actype":"¹ıÎÒ", "medianame":"taobao.com", "time":5454756784584},  
+			{"nos":6, "id":"666666666666666", "actype":"é»„èœ‚", "medianame":"juhuasuan.com", "time":545474658484},
+	        {"nos":4, "id":"444444444444444", "actype":"ç”œå¿ƒ", "medianame":"alibaba.com", "time":5234454758584},
+	        {"nos":5, "id":"555555555555555", "actype":"è¿‡æˆ‘", "medianame":"taobao.com", "time":5454756784584},  
 
-	        {"nos":7, "id":"777777777777777.8653", "actype":"¿ÚÎ¶", "medianame":"qiyi.com", "time":545475123584},
+	        {"nos":7, "id":"777777777777777.8653", "actype":"å£å‘³", "medianame":"qiyi.com", "time":545475123584},
 
-	        {"nos":8, "id":"888888888888888", "actype":"²»»á", "medianame":"baidu.com", "time":5454766584584},	
+	        {"nos":8, "id":"888888888888888", "actype":"ä¸ä¼š", "medianame":"baidu.com", "time":5454766584584},	
 
-	        {"nos":10, "id":"00000000000000", "actype":"ºóÔÙ", "medianame":"sina.com", "time":54546575584}
+	        {"nos":10, "id":"00000000000000", "actype":"åå†", "medianame":"sina.com", "time":54546575584}
 		];
 
-
 		KISSY.ready(function(S){
-		
+
 			S.use('mui/grid', function(S, Grid){ 
-				// Ö§³Ö string || float || int || date
+				// æ”¯æŒ string || float || int || date
 				// var dataType = S.TL.strToDataType(value);	
 				
 				
 				new Grid('#J_selectCandTable', {	
-					width:1000,									// Ç¿ÖÆÉè¶¨ ±í¸ñ ¸ß¶È 1000 or '1000px'
+					width:"1000px",									// å¼ºåˆ¶è®¾å®š è¡¨æ ¼ é«˜åº¦ 1000 or '1000px' æˆ–è€… è®¾ç½®'auto' è‡ªé€‚åº”
 					// height:520,									
 
-					// ajaxUrl: 'result.php', 						// Òì²½½Ó¿Ú result.php   result_jsonp.php
-					// isJsonp: false,									// ÊÇ·ñ Îªjsonp Ä¬ÈÏÎªfalse	
+					// ajaxUrl: 'result.php', 						// å¼‚æ­¥æ¥å£ result.php   result_jsonp.php
+					// isJsonp: false,								// æ˜¯å¦ ä¸ºjsonp é»˜è®¤ä¸ºfalse	
 
-					staticData: selectData, 						// table ¾²Ì¬Êı¾İ£¬µ±ajaxUrlÍ¬Ê±´æÔÚÊ±ºò£¬ÓÅÏÈÒì²½Êı¾İ
+					staticData: selectData, 						// table é™æ€æ•°æ®ï¼Œå½“ajaxUrlåŒæ—¶å­˜åœ¨æ—¶å€™ï¼Œä¼˜å…ˆå¼‚æ­¥æ•°æ®
 
-					// isLocalSort: true, 							// ÊÇ·ñ ±¾µØ ÅÅĞò£¬Ä¬ÈÏ Ç°¶ËÅÅĞò --  ÁíÍâ£¬¿ªÆô ÅÅĞòÁĞ ÇëÔÚ columns ÅäÖÃ sortable ÒÔ¼° dataType ÅÅĞòÊı¾İÀàĞÍ
+					// isLocalSort: true, 							// æ˜¯å¦æœ¬åœ°æ’åºï¼Œé»˜è®¤å‰ç«¯æ’åº --  å¦å¤–ï¼Œå¼€å¯æ’åºåˆ—è¯·åœ¨ä¸‹é¢columnsé‡Œé…ç½®sortable, ä»¥åŠæŒ‡å®šdataType æ’åºæ•°æ®ç±»å‹
 		
-					checkable: true,								// ÊÇ·ñ ¿ªÆô ¸´Ñ¡¿ò checkbox ---- Ä¬ÈÏ false ²»ÏÔÊ¾
-					// isShowCheckboxText: true, 						// ÊÇ·ñ ÏÔÊ¾ checkbox ĞòºÅ ºÍ ±íÍ· È«Ñ¡ÎÄ×Ö£¬ Ä¬ÈÏ false ²»ÏÔÊ¾
-
-	
-					// pageSize:10, 								// ·ÖÒ³´óĞ¡  Ä¬ÈÏ10Ìõ/Ò³
-																	// ¹ØÓÚ·ÖÒ³£º Òì²½ Ä¬ÈÏ ºó¶Ë ·ÖÒ³Êı¾İ£¬ÈôÎª¾²Ì¬Êı¾İ Ôò×Ô¶¯ Ç°¶Ë ±¾µØ·ÖÒ³ 
+					checkable: true,								// æ˜¯å¦ å¼€å¯ å¤é€‰æ¡† checkbox ---- é»˜è®¤ false ä¸æ˜¾ç¤º
+					// isShowCheckboxText: true, 						// æ˜¯å¦ æ˜¾ç¤º checkbox åºå· å’Œ è¡¨å¤´ å…¨é€‰æ–‡å­—ï¼Œ é»˜è®¤ false ä¸æ˜¾ç¤º
+						
+					// pageSize:10, 								// åˆ†é¡µå¤§å°  é»˜è®¤10æ¡/é¡µ
+																	// å…³äºåˆ†é¡µï¼š å¼‚æ­¥ é»˜è®¤ åç«¯ åˆ†é¡µæ•°æ®ï¼Œè‹¥ä¸ºé™æ€æ•°æ® åˆ™è‡ªåŠ¨ å‰ç«¯ æœ¬åœ°åˆ†é¡µ 
 
 					columns: [
 						{title: 'id', width: 'auto', sortable: true, dataType: 'float', dataIndex: 'id'},
-						{title: '»î¶¯ÀàĞÍ',width: 'auto', sortable: true, dataType: 'string', dataIndex: 'actype'},
-						{title: 'Ã½ÌåÃû³Æ',width: 'auto', sortable: true, dataType: 'string', dataIndex: 'medianame'},
-						{title: 'Ê±¼ä',width: 'auto', sortable: true, dataType: 'int', dataIndex: 'time', renderer: S.TL.dateRenderer},					
-						{title: '²Ù×÷', width: '.', sortable: false, dataIndex: '', renderer: function(value, obj){ 
+						{title: 'æ´»åŠ¨ç±»å‹',width: 'auto', sortable: true, dataType: 'string', dataIndex: 'actype'},
+						{title: 'åª’ä½“åç§°',width: 'auto', sortable: true, dataType: 'string', dataIndex: 'medianame'},
+						{title: 'æ—¶é—´',width: 'auto', sortable: true, dataType: 'int', dataIndex: 'time', renderer: S.TL.dateRenderer},					
+						{title: 'æ“ä½œ', width: '.', sortable: false, dataIndex: '', renderer: function(value, obj){ 
 
-							// ²Ù×÷ ±êÊ¾ command-btn
-							return '<a href="javascript:void(0)" class="command-btn">±à¼­</a>';
+							// æ“ä½œ æ ‡ç¤º command-btn
+							return '<a href="javascript:void(0)" class="command-btn">ç¼–è¾‘</a>';
 						}}
 					] 
 				});
