@@ -142,3 +142,25 @@ Event.add('#ac_startTime, #ac_endTime', 'keyup', function(ev){
 		case 'keyup': DOM.val(ev.target, ''); // 清空字段	
 	}				
 });
+
+
+// select change 基于 事件 和 初始化回显 href 动态id链接 生成 js
+
+// 初始化记录 href 链接
+_self.spredHref = DOM.attr('#J_spredId' , 'href');
+
+// 事件初始化
+_eventRender: function(){
+	var _self = this;	
+
+	// 添加默认 推广 详情 链接
+	_self._renderHrefFn();			
+
+	// 选择推广名称 同步刷新 -- 
+	Event.on('#J_spreadName', 'change', function(){	    		
+    	// if(_self.validform.isValid()){
+    		_self.form.submit();
+    	// }
+    		_self._renderHrefFn();	
+	 });
+});
