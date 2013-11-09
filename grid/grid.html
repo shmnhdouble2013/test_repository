@@ -3,28 +3,20 @@
     <head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	    <title>品牌运营后台</title>
-
-		<!--#def{
-			"hostName" : "g.assets.daily.taobao.net",
-		    "lab_version" : "1.1.9"
-		}-->
-
-		<link rel="stylesheet" href="http://g.tbcdn.cn/tm/tbs-ui/1.0.5/css/??mui.css,tbsui.css" />
-		<link rel='stylesheet' type='text/css' href='http://${hostName}/tm/tbs-back/${lab_version}/brand_active_url/grid.css'/>
-
-		<link rel='stylesheet' type='text/css' href='./grid.css'/>
 		
 		<script src="http://a.tbcdn.cn/s/kissy/1.3.0/kissy.js"></script>
-		<script src="./uicommon.js"></script>
+		
 
 		<script type="text/javascript" src="http://g.tbcdn.cn/mui/seed/1.1.3/seed.js"></script>
-		<script type="text/javascript" src='http://${hostName}/tm/tbs-back/${lab_version}/blue_print/uicommon.js'></script>
+		
+		
+		<link rel='stylesheet' type='text/css' href='./grid.css'/>
 
-		<script type="text/javascript" src='http://${hostName}/tm/tbs-back/${lab_version}/brand_active_url/??store.js,grid.js'></script>
-		
-		
+
+		<script src="./uicommon.js"></script>
 		<script type="text/javascript" src='./store.js'></script>
 		<script type="text/javascript" src='./grid.js'></script>
+
     </head>
 
 <body style="padding:10px;">
@@ -65,7 +57,7 @@
 				
 				new Grid('#J_selectCandTable', {	
 					width:"1000px",									// 强制设定 表格 高度 1000 or '1000px' 或者 设置'auto' 自适应
-					// height:520,									
+					// height:400,									
 
 					// ajaxUrl: 'result.php', 						// 异步接口 result.php   result_jsonp.php
 					// isJsonp: false,								// 是否 为jsonp 默认为false	
@@ -74,16 +66,16 @@
 
 					// isLocalSort: false, 							// 是否本地排序，默认本地排序 --  另外，开启排序列请在下面columns里配置sortable, 以及指定dataType 排序数据类型
 		
-					checkable: true,								// 是否 开启 复选框 checkbox ---- 默认 false 不显示
+					checkable: true,								// 是否 开启 复选框 checkbox ---- 默认 false 不显示 ，注意 次配置不开启则 isShowCheckboxText 显示文字无效
 					isShowCheckboxText: true, 						// 是否 显示 checkbox 序号 和 表头 全选文字， 默认 false 不显示
 						
-					pageSize:5, 									// 分页大小  默认10条/页
+					pageSize:6, 									// 分页大小  默认10条/页
 																	// 关于分页： 异步 默认 后端 分页数据，若为静态数据 则自动 前端 本地分页 
 					columns: [
-						{title: 'id', width: 'auto', sortable: true, dataType: 'float', dataIndex: 'id'},
+						{title: 'id', width: '150px', sortable: true, dataType: 'float', dataIndex: 'id'},
 						{title: '活动类型',width: 'auto', sortable: true, dataType: 'string', dataIndex: 'actype'},
-						{title: '媒体名称',width: 'auto', sortable: true, dataType: 'string', dataIndex: 'medianame'},
-						{title: '时间',width: 'auto', sortable: true, dataType: 'int', dataIndex: 'time', renderer: S.TL.dateRenderer},					
+						{title: '媒体名称',width: 'auto', sortable: false, dataType: 'string', dataIndex: 'medianame'},
+						{title: '时间',width: 'auto', sortable: false, dataType: 'int', dataIndex: 'time', renderer: S.TL.datetimeRenderer},					
 						{title: '操作', width: '.', sortable: false, dataIndex: '', renderer: function(value, obj){ 
 
 							// 操作 标示 command-btn

@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>秒杀时间控制器的demo</title>
+    <script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy.js" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="./spikectrl.css">
+
+    <style type="text/css">
+       .section-block{
+          width:990px;
+          margin:0 auto;
+        }  
+    </style>
+</head>
+	<body>
+
+    <div class="contpage">
+
+    		<!-- 导航预设容器 -->
+    		<div class="section-block sends-container"> 
+    			<a class="mrg_lft155 j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
+    			<a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
+    			<a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
+          <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
+          <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
+          <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
+          <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
+          <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
+          <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
+          <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
+    		</div>
+
+    		<!-- 秒杀活动内容区块 -->
+
+    		<div class="mui-act-items mui-act-items-240" id="J_secondContent">                   
+               <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul" data-hour="00" >
+                 00
+                                      
+              </ul>
+              
+              <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul" data-hour="02" >
+                02
+                                      
+              </ul>
+              
+              <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul" data-hour="04" >
+                04
+                                      
+              </ul>
+              
+              <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul" data-hour="06" >
+                06
+                                      
+              </ul>
+              
+              
+              <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul" data-hour="08" >
+                08
+                                      
+              </ul>
+              
+              
+             <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul" data-hour="10" >
+               10
+                                      
+              </ul>
+              
+              
+             <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul" data-hour="12" >
+               12
+                                      
+              </ul>
+              
+              
+              
+             <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul" data-hour="14" >
+               14
+                                      
+              </ul>
+              
+              
+            <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul" data-hour="16" >
+              16
+                                      
+              </ul>
+              
+              
+             <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul" data-hour="18" >
+               18
+                                      
+              </ul>
+              
+              
+              
+             <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul" data-hour="20" >
+               20
+                                      
+              </ul>
+              
+              
+             <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul" data-hour="22">               
+                    <li class="mui-act-item relative-cls">
+                      	<a class="mui-act-a" href="" title="">
+                          <img data-src="" width="220" height="220">
+                          <p class="mui-act-title"></p>
+                          <del class="mui-act-tagPrice">专柜价：￥</del>
+                          <b class="mui-act-kuang11">11.11秒杀价：<b class="price">￥<em class="var_price"></em></b></b>
+                       </a>
+                    </li>         
+              </ul>
+          </div>
+      </div>    
+
+
+
+<script type="text/javascript" src="./spikectrl.js"></script>      
+<script type="text/javascript">
+    KISSY.config({
+        packages:[
+            {
+                name:"act/double11-come-on",
+                path: "./",
+                charset:"utf-8",
+                ignorePackageNameInUri:true
+            }
+        ]
+    });
+
+
+    KISSY.ready(function(S){    
+          var DOM = S.DOM,
+              UA = S.UA,
+              Node = S.Node,
+              Event = S.Event,
+              win = window,
+              doc = document; 
+
+          var ONE_HOURS = 1000*60*60;       
+
+        // 双十一秒杀
+        S.use('act/double11-come-on/spikectrl', function(S, SpikeCtrl){
+          new SpikeCtrl('.sends-container', {
+
+              // ui自动更新间隔期
+              updateUiMinutes: 0.5,
+
+              // 不在时间范围 是否隐藏 秒杀 相关信息
+              // isInvalidTimeHide:false,
+
+              // 浏览其他区块 停留 时间 --  分钟
+              // viewResidenceTime: 1,
+
+              // 时间范围 配置 --必须配置 ，否则可能导致 无js效果
+                startTime: '2013-11-04 00:00:00',  
+                endTime: '2013-11-11 23:59:59'
+                // serviceTime:1383963696924    // 2013/11/05 00:00:00' -- 1383580800000 // '2013/11/05 23:59:59'   -- 1383667199000            
+            });
+        });
+           
+  });
+
+    </script>      
+
+
+	</body>
+<html>
