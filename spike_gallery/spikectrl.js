@@ -1,10 +1,10 @@
 /** 
-* @fileOverview 天猫双十一秒杀页面控制js -- 支持固定时间自动计算 和 自定义 不不规律时间 (目前只支持到小时精度)
+* @fileOverview 天猫双十一秒杀页面控制js -- 支持固定时间自动计算 和 自定义 不不规律时间
 * @extends  KISSY.Base
 * @creator  黄甲(水木年华double)<huangjia2015@gmail.com>
 * @depends  ks-core
 * @version  2.0  
-* @update 2013-11-05 更新时间算法，通过初次对比实现同步 秒杀 自动更新
+* @update 2013-11-05 完成3种 ui更新和 点击非当前时间预览回显逻辑
 */        
  
 KISSY.add('act/double11-come-on/spikectrl', function(S){
@@ -24,9 +24,9 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
         var ONE_SECONDS = 1000,
             ONE_MINUTES = 1000*60,
             ONE_HOURS = 1000*60*60,
-            ONE_DAY = 1000*60*60*24;
+            ONE_DAY = 1000*60*60*24,
+            DEVIATION = ONE_SECONDS; // js运算延迟时间
             
-
         // 默认配置
         var defCfg = {
            
@@ -40,6 +40,9 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             // servic time 毫秒数
             serviceTime: 0,
 
+            // 服务器时间接口
+            url: 'http://www.tmall.com/go/rgn/get_server_time.php?spm=0.0.0.0.c01Zvr',
+
             // 是否 html 自定义 不规则 时间段
             isCustomTimePeriod: false,
 
@@ -48,6 +51,9 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 
             // 浏览其他区块 停留 时间 --  分钟
             viewResidenceTime: 1,
+
+            // 本地对比时间误差值设置 主要是 初次差值 和 后续主动更新差值比较
+            deviationSeconds: 2,
 
             // 秒杀结束 是否 可查看
             isPastView:false,
@@ -175,43 +181,83 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     _self.dataHMS = _self.getALLHMSstr(_self.mainTime);
                 },
 
-                // 检查 服务器 时间
+                // 检查 服务器 时间- 初始化 -- 无须修正
                 _checkServiceTime: function(){
-                    var _self = this;
-
-                    if(!_self.get('serviceTime')){
-                        _self.mainTime = S.now();
-                        _self.hasServiceTime = false;
-                    }else{
-                        _self.mainTime = _self.get('serviceTime');
-                        _self.hasServiceTime = true;
-                    }
-                },
-
-                // 判断 服务器 和 本地时间
-                _updateTime: function(){
                     var _self = this,
-                        differenceTime = 0,
                         localTime = S.now();
 
-                    // 无服务器时间 ---- 更新本地时间方法
-                    if(!_self.hasServiceTime){
+                    if(!_self.get('serviceTime')){
                         _self.mainTime = localTime;
+                        _self.hasServiceTime = false;
                         return;
                     }
 
-                    // 获取时间差 
-                    differenceTime = Math.abs( localTime - _self.mainTime );
+                    _self.mainTime = _self.get('serviceTime'); 
+                    _self.hasServiceTime = true;
 
-                    // 纠正 时间差 保持同步
-                    if( localTime > _self.mainTime ){
-                        _self.mainTime = (localTime - differenceTime);
-                    }else if( localTime < _self.mainTime ){                        
-                        _self.mainTime = (localTime + differenceTime);
-                    }else{
-                        _self.mainTime = localTime;
-                    }
+                    // 获取 初始化 时间差(除去运算时间差 时间)
+                    _self.differenceTime = Math.abs( localTime - _self.mainTime ); 
+
+                    // 确定 大小关系
+                    if(localTime > _self.mainTime){
+                        _self.localTimeMax = true;
+                    }else if( localTime < _self.mainTime){
+                        _self.localTimeMax = false;
+                    }                   
                 },
+
+                // 差异修正方法
+                _updateTime: function(localTime, differenceTime){
+                    var _self = this,
+                        localTime = S.now(),
+                        diffRange = _self.get('deviationSeconds')*ONE_SECONDS;
+
+                    // // 获取时间差 第二次模拟服务器和本地差异 vs 第一二次差异比较 、误差范围
+                    // var secondSecondDiff = Math.abs( localTime - _self.mainTime ), 
+                    //     firstSecondDiff = Math.abs( _self.differenceTime - secondSecondDiff );           
+
+                    // 在允许误差内 视为 -- 无差异
+                    // if(differenceTime <= diffRange){
+                    //     _self.mainTime = localTime;
+                    //     return;
+                    // } 
+
+                    // if(firstSecondDiff > diffRange){
+                    //     S.log('时间错误! 你可能修改了您的电脑时间，为了保持秒杀精准度，请重新刷新您的页面确保时间准确性~'); 
+                    // }
+
+                    // 根据第一次 标尺 大小关系 修正 模拟服务器 时间差, 保持同步
+                    if(_self.localTimeMax){
+                        _self.mainTime = localTime - _self.differenceTime;
+                    }else{
+                        _self.mainTime = localTime + _self.differenceTime;
+                    }
+                },                
+
+                // // 判断 服务器 和 本地时间
+                // _updateTime: function(){
+                //     var _self = this,
+                //         localTime = S.now(),
+                //         deviationRange = _self.get('deviationSeconds')*ONE_SECONDS;
+
+                //     // 获取时间差 第二次模拟服务器和本地差异 vs 第一二次差异比较 、误差范围
+                //     var secondSecondDiff = Math.abs( localTime - _self.mainTime ), 
+                //         firstSecondDiff = Math.abs( _self.differenceTime - secondSecondDiff );                       
+
+                //     // 修正时差    
+                //     _self.timeCorrectFn(localTime, secondSecondDiff);
+
+                //     if(firstSecondDiff > deviationRange){
+                //         S.log('时间错误! 你可能修改了您的电脑时间，为了保持秒杀精准度，请重新刷新您的页面确保时间准确性~'); 
+                //     }
+
+                //     // // 纠正 模拟服务器 时间差, 保持同步- 增量/减量 推移
+                //     // if( localTime > _self.mainTime ){
+                //     //     S.log('时间错误! 你可能--"从当前向未来穿越时光"，修改了您的电脑时间，为了保持秒杀精准度，请重新刷新您的页面确保时间准确性~');    
+                //     // }else if( localTime < _self.mainTime ){      
+                //     //     S.log('时间错误! 你可能--"从当前向过去时光倒流"，修改了您的电脑时间，为了保持秒杀精准度，请重新刷新您的页面确保时间准确性~');       
+                //     // }
+                // },
 
                 // 初始化 时间 和 状态/文字
                 _blockStateRender: function(){
@@ -251,14 +297,9 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     Event.on(_self.timeBlock, 'click', function(el){
                         _self._timeClickIf(this);
                     });
-
-                    // 自动切换到 秒杀 时间点时 
-                    _self.on('currSpikeChange done', function(){
-                        _self._clearAllClickCls();
-                    });
                 },
 
-                // 根据状态--判断是否查看 相应活动区块 -- 触发开始 停止 自动ui更新
+                // 根据状态--判断是否查看 相应活动区块 
                 _timeClickIf: function(el){
                     var _self = this,
                         tgsContainer = el,
@@ -271,7 +312,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                         _self._showRangeTimeMeched(tgsContainer);
                         _self._clearAllClickCls();
                         DOM.addClass(el, _self.get('clickPastTimeBlockCls'));
-                        _self.stopAutoUpdateUi();
+                        _self._layzBackCurrView();
                     }    
 
                     // 即将开始 是否可以查看 
@@ -279,19 +320,32 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                         _self._showRangeTimeMeched(tgsContainer);
                         _self._clearAllClickCls();
                         DOM.addClass(el, _self.get('clickFutureTimeBlock'));
-                        _self.stopAutoUpdateUi();
+                        _self._layzBackCurrView();
                     }
 
                     // 点击 当前查看     
                     if(hasCurrTime){
                         _self._clearAllClickCls();
                         _self._showRangeTimeMeched(tgsContainer);
-                    }   
+                        _self.lazyBackTimeOut && clearTimeout(_self.lazyBackTimeOut);
+                    }                      
+                },
+
+                // 点击 查看过去 或者 未来 活动视图后 延迟指定时间返回当前时间段面板
+                _layzBackCurrView: function(){
+                    var _self = this;
 
                     // 定时重启 自动更新
-                    setTimeout(function(){
-                        _self.startAutoUpdateUi();
-                    }, _self.get('viewResidenceTime')*ONE_MINUTES );
+                    _self.lazyBackTimeOut && clearTimeout(_self.lazyBackTimeOut);
+                    _self.lazyBackTimeOut = setTimeout(backfn, _self.get('viewResidenceTime')*ONE_MINUTES );
+
+                    function backfn(){
+                        // 显示 当前时间 活动
+                        _self._showRangeTimeMeched(_self.currTimeBlock); 
+
+                        // 清除click样式
+                        _self._clearAllClickCls();
+                    }
                 },
 
                 // 清除过去样式
@@ -317,10 +371,14 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     var _self = this,
                         curTime = DOM.attr(el, BLOCK_DATA_TIME);
 
+                    if(!el || !curTime){
+                        return;
+                    }    
+
                     S.each(_self.aBlocks, function(em){
                         var  blockTime = DOM.attr(em, BLOCK_DATA_TIME);
 
-                        if(curTime && curTime === blockTime){
+                        if(curTime === blockTime){
                             DOM.show(em);
                             _self.renderImgLazyLoad(em);
                         }else{
@@ -355,10 +413,8 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                 _setStateText: function(){
                     var _self = this;
 
-                    if(!_self.isValidDate()){
-                        
+                    if(!_self.isValidDate()){                        
                         _self.allShowHideFn();
-
                         return;
                     } 
 
@@ -395,18 +451,17 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                         return;
                     }  
   
-                    // 是否 过去 时间 
-                    if(spikeTimeStart < _self.mainTime){ 
+                    // 3段 判断法：除去 过去和现在，剩下将来； 是否 过去 时间 - 逻辑判断改为 结束终点
+                    if(spikeTimeEnd < _self.mainTime){ 
                         _self._addPastState(el);
-   
-                    // 是否 未来 时间    
-                    }else if(spikeTimeEnd > _self.mainTime){
-                        _self._addFutureState(el);                    
-                    }
-  
-                    // 是否 当前 时间 段:  < 设定-1秒  && <= 设定+间隔- 1秒  vs // 不足24小时情况, 则停留最后 一个时间点上    
-                    if( _self.isInTimeRange(spikeTimeStart, _self.mainTime, spikeTimeEnd) || _self.isInTimeRange(spikeTimeStart, _self.mainTime, dayEndTimeSeconds) && isLastBlock ){                       
+
+                    // 是否 当前 时间 段:  < 设定-1秒  && <= 设定+间隔- 1秒  vs // 不足24小时情况, 则停留最后 一个时间点上     
+                    }else if( _self.isInTimeRange(spikeTimeStart, _self.mainTime, spikeTimeEnd) || _self.isInTimeRange(spikeTimeStart, _self.mainTime, dayEndTimeSeconds) && isLastBlock ){                       
                         _self._addCurrState(el);
+
+                    // 是否 未来 时间  
+                    }else{
+                        _self._addFutureState(el);                    
                     }
                 },
 
@@ -473,6 +528,9 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     // 展现当前 秒杀内容
                     _self._showRangeTimeMeched(el);
 
+                    // 存储目标
+                    _self.currTimeBlock = el;    
+
                     _self.fire('currSpikeChange', {"elTarget":el});
                 },
 
@@ -507,14 +565,23 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     if(textContainer){
                         DOM.text(textContainer, '');
                     }
-                },
-                
-                // 获取服务端时间
-                getServerTime: function(){
-                    var _self = this;
+                },               
 
-                    // 代码删除
+                // jsonp 获取服务端时间
+                getServerTime : function(){
+                    var _self = this;                   
 
+                    Ajax.jsonp(_self.get('url'), function(data){
+                        if(S.isString(data)){
+                            try{
+                                data = S.json.parse(data);
+                            }catch(ec){
+                                S.log('json数据转换出错：' + ec);
+                            }                                    
+                        }
+
+                        _self.mainTime = data['serviceTime'];
+                    });                    
                 },
 
                 // 判断日期 总区段 有效性
@@ -621,15 +688,30 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 
                 // 自动刷新ui
                 startAutoUpdateUi: function(){
-                    var _self = this,
-                        interValSeconds = _self.get('updateUiSeconds')*ONE_SECONDS;
+                    var _self = this;
 
                     // 系统自动 轮询 监控 时间状态 
-                    _self.autoUpdateIntvl = setInterval(autofn, interValSeconds);                     
+                    _self.stopAutoUpdateUi();
+                    _self.autoUpdateIntvl = setInterval(autofn, _self.get('updateUiSeconds')*ONE_SECONDS );                     
 
                     function autofn(){
-                        // 更新时间
-                        _self._updateTime();
+                        // 验证有效性
+                        if(!_self.isValidDate()){                        
+                            _self.allShowHideFn();
+                            return;
+                        } 
+
+                        // 无服务器时间 ---- 更新本地时间
+                        if(!_self.hasServiceTime){
+                            _self.mainTime = S.now();
+
+                        // 异步更新服务器时间    
+                        }else if(_self.get('url')){
+                            _self.getServerTime();
+                        }else{
+                        // 更新 修正 比较 时间
+                            _self._updateTime();
+                        }
 
                         // 更新实时 时间 数据
                         _self._getRealTime();
@@ -643,7 +725,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                 stopAutoUpdateUi: function(){
                     var _self = this;
 
-                    clearInterval(_self.autoUpdateIntvl);
+                    _self.autoUpdateIntvl && clearInterval(_self.autoUpdateIntvl);
                 }
         });
 
