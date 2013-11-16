@@ -1,10 +1,10 @@
 /** 
-* @fileOverview 天猫双十一秒杀页面控制js -- 支持固定时间自动计算 和 自定义 不不规律时间
+* @fileOverview 天猫双十一整点秒杀页面控制js -- 支持固定时间自动计算 和 自定义 不不规律时间
 * @extends  KISSY.Base
 * @creator  黄甲(水木年华double)<huangjia2015@gmail.com>
 * @depends  ks-core
 * @version  2.0  
-* @update 2013-11-05 完成3种 ui更新和 点击非当前时间预览回显逻辑
+* @update 2013-11-16 代码逻辑review 和 微调
 */        
  
 KISSY.add('act/double11-come-on/spikectrl', function(S){
@@ -24,8 +24,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
         var ONE_SECONDS = 1000,
             ONE_MINUTES = 1000*60,
             ONE_HOURS = 1000*60*60,
-            ONE_DAY = 1000*60*60*24,
-            DEVIATION = ONE_SECONDS; // js运算延迟时间
+            ONE_DAY = 1000*60*60*24;
             
         // 默认配置
         var defCfg = {
@@ -86,7 +85,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             futureStateText: '即将开抢',
 
             // ui更新时间 -- 秒
-            updateUiSeconds: 0.1,
+            updateUiSeconds: 5,
 
             // 秒杀商品内容区块容器
             merchContainer: '#J_secondContent',
@@ -149,9 +148,10 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                 // 控件 初始化
                 _init: function(){
                     var _self = this;    
-                    
-                    _self._showRangeTimeMeched();    
-                    _self._argumentsInit(); 
+                       
+                    _self._argumentsInit();
+					
+                    _self._showRangeTimeMeched(); 					
                     _self._blockStateRender(); 
 
                     _self._eventRender();
@@ -195,10 +195,10 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     _self.mainTime = _self.get('serviceTime'); 
                     _self.hasServiceTime = true;
 
-                    // 获取 初始化 时间差(除去运算时间差 时间)
+                    // 获取 初始化 时间差
                     _self.differenceTime = Math.abs( localTime - _self.mainTime ); 
 
-                    // 确定 大小关系
+                    // 确定 初始化 大小关系
                     if(localTime > _self.mainTime){
                         _self.localTimeMax = true;
                     }else if( localTime < _self.mainTime){
@@ -348,7 +348,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     }
                 },
 
-                // 清除过去样式
+                // 清除样式
                 _clearClickBlockCls: function(j_cls, stateCls){
                     var _self = this,
                         pastBlocks = S.query( '.'+j_cls , _self.container);
@@ -370,10 +370,6 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                 _showRangeTimeMeched: function(el){
                     var _self = this,
                         curTime = DOM.attr(el, BLOCK_DATA_TIME);
-
-                    if(!el || !curTime){
-                        return;
-                    }    
 
                     S.each(_self.aBlocks, function(em){
                         var  blockTime = DOM.attr(em, BLOCK_DATA_TIME);
@@ -431,13 +427,11 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                         _self.showHideFn( _self.timeBlock, false );
                         _self._showRangeTimeMeched(); 
                     }
-
                 },
 
-                // 设定 文本状态 总具体 方法
+                // 设定 文本状态 方法
                 _renderStateAll: function(el, index){
                     var _self = this, 
-
                         hourLength = _self.get('isCustomTimePeriod') ? DOM.attr(el, BLOCK_TIME_LENGTH) : _self.get('hourLength'),                      
                         curDateStr = _self.dataYMD +' '+ DOM.attr(el, BLOCK_DATA_TIME) + ':00:00',
 
@@ -476,8 +470,8 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     }
                 },
 
-                // 有效期间内 设定时间段是否已经全部过时
-                _isAllPastDone: function(){
+                // 有效期间内 设定时间段是否已经全部过时  
+                /* _isAllPastDone: function(){
                     var _self = this,
                         isAllDone = true;
 
@@ -487,8 +481,9 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                             return false;
                         }
                     });
+					
                     return isAllDone;
-                },
+                }, */
 
                 // 添加过去样式
                 _addPastState: function(el){
@@ -587,14 +582,10 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                 // 判断日期 总区段 有效性
                 isValidDate: function(){
                     var _self = this,
-                        valid = true,
                         startTime = _self.getDateParse(_self.get('startTime')),
                         endTime = _self.getDateParse(_self.get('endTime'));
-
-                    if( _self.mainTime < startTime || endTime < _self.mainTime){
-                        valid = false;
-                    } 
-                    return valid;
+					
+					return _self.isInTimeRange(startTime, _self.mainTime, endTime);
                 },  
 
                 // 隐藏或者显示所有 时间 段区块儿
@@ -665,7 +656,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                 offsetDateSeconds: function(date, offset, PreviousLater){
                     var _self = this,
                         dataParse = S.isString(date) ? _self.getDateParse(date) : ( S.isNumber(date) ? date : (new Date()).getTime() ),
-                        offsetParse = offset ? (offset * ONE_HOURS) : 0,  // - ONE_MINUTES
+                        offsetParse = offset ? (offset * ONE_HOURS) : 0, 
                         dataTime;
 
                     switch(PreviousLater){
@@ -708,6 +699,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                         // 异步更新服务器时间    
                         }else if(_self.get('url')){
                             _self.getServerTime();
+							
                         }else{
                         // 更新 修正 比较 时间
                             _self._updateTime();
