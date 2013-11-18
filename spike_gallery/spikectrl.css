@@ -4,6 +4,10 @@
 * 修改 span标签 为左浮动块级元素
 */
 
+body{
+  font: 12px/1.5 tahoma,arial,\5b8b\4f53;
+}
+
 .clear-both{
 	clear: both;
 }
@@ -160,6 +164,7 @@
 	overflow: hidden;
 	text-overflow:ellipsis;
 	overflow:hidden;
+  margin: 0;
 }
 
 .mui-act-shi-10231123 .mui-act-tagPrice{

@@ -18,7 +18,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             CURRCLS = 'currCls',
             FUTRUECLS = 'futrueCls',
             BLOCK_DATA_TIME = 'data-hour',
-            BLOCK_TIME_LENGTH = 'data-timeLength';
+            BLOCK_TIME_LENGTH = 'data-timeLength'; 
 
         // 常量 2       
         var ONE_SECONDS = 1000,
@@ -42,7 +42,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             // 服务器时间接口
             url: 'http://www.tmall.com/go/rgn/get_server_time.php?spm=0.0.0.0.c01Zvr',
 
-            // 是否 html 自定义 不规则 时间段
+            // 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要自己在 DOM结构上行 定义 伪类属性：data-timeLength 距离下个整点时间长度，直到24点
             isCustomTimePeriod: false,
 
             // 秒杀 间隔 小时

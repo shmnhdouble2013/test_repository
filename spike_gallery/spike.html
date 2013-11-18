@@ -528,9 +528,9 @@
 			new SpikeCtrl('.sends-container', {
 
 				// ui自动更新间隔期 - 秒 - 默认5秒
-				updateUiSeconds: 1,
+				// updateUiSeconds: 1,
 
-				// 服务器时间 url接口
+				// 服务器时间 url接口 默认取tms
 				// url: 'result_jsonp.php',
 
 				// 不在时间范围 是否隐藏 秒杀 相关信息
@@ -544,10 +544,10 @@
 				endTime: '2115-11-11 23:59:59',
 				  
 				// 服务器初始化时间
-				//serviceTime: S.now(),    
+				serviceTime: S.now(),    
 
-				// 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要自己在 DOM结构上行 定义 伪类属性值
-				isCustomTimePeriod: false,
+				// 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要自己在 DOM结构上行 定义 伪类属性：data-timeLength 距离下个整点时间长度，直到24点
+				// isCustomTimePeriod: false,
 
 				// 秒杀 间隔 小时
 				hourLength: 2, 
