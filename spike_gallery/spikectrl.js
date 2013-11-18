@@ -25,6 +25,8 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             ONE_MINUTES = 1000*60,
             ONE_HOURS = 1000*60*60,
             ONE_DAY = 1000*60*60*24;
+
+        var DAY_HOURS = 24;    
             
         // 默认配置
         var defCfg = {
@@ -268,9 +270,11 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     }  
 
                     // 是否 自定义 不规则时间段 
-                    if(!_self.get('isCustomTimePeriod')) {
+                    if(_self.get('isCustomTimePeriod')) {
+                        _self.renderSelfTimeBlock();
+                    }else{
                         _self.renderTimeBlock();
-                    };
+                    }
                    
                     _self._setStateText();
                 },
@@ -383,7 +387,43 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     });
                 },
 
-                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  --- 整点
+                // 输出<10 数字 补全0 字符串
+                getFullTimeStr: function(num){
+                    var _self = this,
+                        num = parseInt(num, 10);
+
+                    if(!num && num !== 0 ){
+                        return '';
+                    }
+
+                    return num < 10 ? '0'+ num : num;
+                },
+
+                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  --- 自定义 整点 时间
+                renderSelfTimeBlock: function(){
+                    var _self = this;
+
+                    S.each(_self.timeBlock, function(el, num){
+                        var hoursContainer = S.one(el).first(_self.get('hoursContainerCls')),
+                            curHourTime = parseInt(DOM.attr(el, BLOCK_DATA_TIME), 10),
+                            nextEl = S.one(el).next(),
+                            nextHourTime = nextEl ? parseInt( nextEl.attr(BLOCK_DATA_TIME), 10) : DAY_HOURS,
+                            hourTimeLength = nextHourTime - curHourTime,
+                            timeText = curHourTime + ':00';    
+
+                        if(curHourTime > 23){
+                            DOM.remove(el);
+                            S.log('时间点 ' + BLOCK_DATA_TIME+ '="' + curHourTime + '" 配置无效！');
+                            return;
+                        }                       
+
+                        // 写入 时间长度标示 和 文本字符串 小时时间    
+                        DOM.attr(el, BLOCK_TIME_LENGTH, _self.getFullTimeStr(hourTimeLength));
+                        hoursContainer.text(timeText);
+                    });
+                },
+
+                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  ---  参数配置 固定的 秒杀间隔小时 hourLength
                 renderTimeBlock: function(){
                     var _self = this,
                         hourTimeLength = _self.get('hourLength');
@@ -399,6 +439,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                             return;
                         }  
 
+                        // 写入 时间标示 和 文本字符串 小时时间 
                         DOM.attr(el, BLOCK_DATA_TIME, timeRult);
                         hoursContainer.text(timeText);
                     });
@@ -432,8 +473,14 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                 // 设定 文本状态 方法
                 _renderStateAll: function(el, index){
                     var _self = this, 
-                        hourLength = _self.get('isCustomTimePeriod') ? DOM.attr(el, BLOCK_TIME_LENGTH) : _self.get('hourLength'),                      
-                        curDateStr = _self.dataYMD +' '+ DOM.attr(el, BLOCK_DATA_TIME) + ':00:00',
+                        hourTime = DOM.attr(el, BLOCK_DATA_TIME);
+
+                    if(hourTime >= DAY_HOURS){
+                        return;
+                    }    
+
+                    var hourLength = _self.get('isCustomTimePeriod') ? DOM.attr(el, BLOCK_TIME_LENGTH) : _self.get('hourLength'),                      
+                        curDateStr = _self.dataYMD +' '+ hourTime + ':00:00',
 
                         spikeTimeStart = _self.getDateParse(curDateStr),
                         spikeTimeEnd = _self.offsetDateSeconds(curDateStr, hourLength, '+'),                       
