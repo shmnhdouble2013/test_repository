@@ -527,8 +527,8 @@
 		
 			new SpikeCtrl('.sends-container', {
 
-				// ui自动更新间隔期 - 秒
-				// updateUiSeconds: 5,
+				// ui自动更新间隔期 - 秒 - 默认5秒
+				updateUiSeconds: 1,
 
 				// 服务器时间 url接口
 				// url: 'result_jsonp.php',
@@ -536,15 +536,15 @@
 				// 不在时间范围 是否隐藏 秒杀 相关信息
 				// isInvalidTimeHide:false,
 
-				// 浏览其他区块 停留 时间 --  分钟
+				// 浏览其他区块 停留 时间 --  分钟 默认30秒
 				// viewResidenceTime: 1,
 
 				// 时间范围 配置 --必须配置 ，否则可能导致 无js效果
-				startTime: '2013-12-04 00:00:00',  
+				startTime: '2013-11-04 00:00:00',  
 				endTime: '2115-11-11 23:59:59',
 				  
 				// 服务器初始化时间
-				serviceTime: S.now(),    
+				//serviceTime: S.now(),    
 
 				// 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要自己在 DOM结构上行 定义 伪类属性值
 				isCustomTimePeriod: false,

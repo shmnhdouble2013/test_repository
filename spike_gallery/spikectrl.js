@@ -49,7 +49,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             hourLength: 2, 
 
             // 浏览其他区块 停留 时间 --  分钟
-            viewResidenceTime: 1,
+            viewResidenceTime: 0.5,
 
             // 本地对比时间误差值设置 主要是 初次差值 和 后续主动更新差值比较
             deviationSeconds: 2,
