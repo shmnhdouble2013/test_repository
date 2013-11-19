@@ -1,10 +1,10 @@
 /** 
-* @fileOverview 天猫双十一整点秒杀页面控制js -- 支持固定时间自动计算 和 自定义 不不规律时间
+* @fileOverview 天猫双十一秒杀页面控制js -- 支持固定间隔时间 和 自定义 不不规律时间
 * @extends  KISSY.Base
 * @creator  黄甲(水木年华double)<huangjia2015@gmail.com>
 * @depends  ks-core
 * @version  2.0  
-* @update 2013-11-16 支持jsonp和ajax微调、支持到 时分级别 自定义
+* @update 2013-11-19 解决毫秒数转换分钟0.9999 四舍五入， 发现自定义事件数组 需要大小过滤wait、 规律 间隔时间 需要 读取 开始时间 ok
 */        
  
 KISSY.add('act/double11-come-on/spikectrl', function(S){
@@ -51,7 +51,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             // 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要 配置 下列 customTime 时间点数组
             isCustomTimePeriod: false,
 
-            // 自定义时间点 数组
+            // 自定义时间点 数组 --- 注意 时间大小 和 顺序不能 错误，否则出现 自动更新时间 出错 
             customTime: [], 
 
             // 秒杀 固定 间隔 支持时分秒
@@ -64,13 +64,13 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             deviationSeconds: 2,
 
             // 秒杀结束 是否 可查看
-            isPastView:false,
+            isPastView: false,
 
             // 秒杀结束 点击查看 标示样式
             clickPastTimeBlockCls: 'clickPastTimeBlock',
 
             // 即将秒杀是否 可查看
-            isFutureView:true, 
+            isFutureView: true, 
 
             // 即将秒杀 点击查看 标示样式
             clickFutureTimeBlock: 'clickFutureTimeBlock',
@@ -168,9 +168,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 
                     _self._eventRender();
 					
-					if(_self.get('isAutoUpdateUi')){
-						_self.startAutoUpdateUi();   
-					}                                       
+					_self.get('isAutoUpdateUi') && _self.startAutoUpdateUi();                                        
                 },
 
                 // 全局变量初始化
@@ -373,10 +371,8 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     S.each(_self.timeBlock, function(el, num){
 
                         var hoursContainer = S.one(el).first(_self.get('hoursContainerCls')),
-                            data_hour = tiems[num],                            
-
+                            data_hour = tiems[num],                         
                             nextDataHour = tiems[num+1] ? tiems[num+1] : ONE_DAY,
-
                             hourTimeLength = _self.getMillisecond(nextDataHour) - _self.getMillisecond(data_hour);    
 
                         if( _self.getSelectHMS(data_hour, 'H') > 23){
@@ -385,7 +381,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                             return;
                         } 
 
-                        if(!_self.getSelectHMS(data_hour, 'M') ){
+                        if(!_self.getSelectHMS(data_hour, 'M')){
                             data_hour = _self.autoComplement(data_hour, null, null, true); 
                         }                     
 
@@ -401,15 +397,24 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                 // 根据 容器 个数 和 时间 配置参数 初始化 时间段  ---  参数配置 固定的 整点秒杀间隔小时
                 renderTimeBlock: function(){
                     var _self = this,
+						startSeconds = _self.getDateParse(_self.get('startTime')),
+						beginTimeStr = _self.getAllHMSstr(startSeconds),
+						
+						beginHour = _self.getSelectHMS(beginTimeStr, 'H');
+                        beginMinutes = _self.getSelectHMS(beginTimeStr, 'M'),
+						beginEndStr = _self.autoComplement(beginHour, beginMinutes, null, true),
+						beginSeconds = _self.getMillisecond(beginEndStr), 	
+						
                         secondesTims = _self.getMillisecond(_self.get('timeLength')),
                         length = _self.timeBlock.length-1;
-
+						
                     S.each(_self.timeBlock, function(el, num){
                         var hoursContainer = S.one(el).first(_self.get('hoursContainerCls')),
-                            timeRange = num*secondesTims,                           
-                            timeText = _self.getHMstr(timeRange),
+                            timeRange = !num ? beginSeconds : beginSeconds + num*secondesTims,
+                            timeText = timeRange ? _self.getHMstr(timeRange) : beginTimeStr,
                             hour = _self.getSelectHMS(timeText, 'H');
-                            minutes = _self.getSelectHMS(timeText, 'M');
+                            minutes = _self.getSelectHMS(timeText, 'M'),
+							endStr = _self.autoComplement(hour, minutes, null, true);
 
                         if( hour > 23 || (hour === 23 && minutes > 59) ){
                             DOM.remove(_self.timeBlock[num]);
@@ -418,9 +423,9 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 
                         // 写入 活动区块序号、时间、长度标示 和 文本字符串 小时时间  
                         DOM.attr(el, VIEW_INDEX, num); 
-                        DOM.attr(el, BLOCK_DATA_TIME, timeText);
+                        DOM.attr(el, BLOCK_DATA_TIME, endStr);
                         DOM.attr(el, BLOCK_TIME_LENGTH, secondesTims);
-                        hoursContainer && hoursContainer.text(timeText);
+                        hoursContainer && hoursContainer.text(endStr);
                     });
                 },
                
@@ -727,7 +732,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                 getSelectHMS: function(hourMinutesStr, dateType){
                     var _self = this,
                         timeNum,
-                        AateStr = hourMinutesStr ? hourMinutesStr.split(':') : '';
+                        AateStr = hourMinutesStr ? hourMinutesStr.split(':') : [];
 
                     switch(dateType){
                         case 'H' : timeNum = parseInt(AateStr[0], 10);
@@ -760,7 +765,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                         hour = parseInt(alhours, 10),
 
                         minuteses = (alhours - hour)*ONE_HOURS/ONE_MINUTES,
-                        minutes = parseInt(minuteses, 10);
+                        minutes = Math.round(minuteses); // 四舍五入 减少1分钟误差
                         
                     return _self.autoComplement(hour, minutes, null, true);
                 },

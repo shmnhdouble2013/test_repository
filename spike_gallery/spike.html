@@ -26,7 +26,7 @@
         </div>
 
         <!-- 秒杀活动内容区块 -->
-        <div class="mui-act-items mui-act-items-240 section-block" id="J_secondContent">
+        <div class="mui-act-items mui-act-items-240 section-block" id="J_secondContent" style="border: 1px dashed orange;">
             <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul section-block" style="display: none;">                
                     <li class="mui-act-item relative-cls">
                       <a class="mui-act-a" href="http://detail.tmall.com/item.htm?spm=0.0.0.0.BS7FFy&amp;id=35815222632&amp;scm=activity.10364.738598104.4687&amp;acm=activity.10364.738598104.4687" title="松桂坊-湘西后腿腊肉" data-spm-anchor-id="0.0.0.0">
@@ -615,13 +615,13 @@
     				serviceTime: S.now(),    
 
     				// 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要 配置 下列 customTime 时间点数组
-    				isCustomTimePeriod: false,
+    				isCustomTimePeriod: true,
 
-                    // 自定义时间点 数组
-                    customTime : ["00", "02", "03:11", "04:11", "05", "09", "12", "14:11", "15:11", "16:11", "17:11", "18:11"],
+                    // 自定义时间点 数组 --- 注意 时间大小 和 顺序不能 错误，否则出现 自动更新时间 出错 
+                    customTime : ["01:20", "02", "03:11", "04:11", "05", "09", "12", "14:11", "15:11", "23:28", "23:30", "23:31"],
 
     				// 秒杀 固定 间隔 支持 到分钟
-    				timeLength: '02:11', 
+    				timeLength: '2', 
 
     				// 秒杀结束 是否 可查看
     				isPastView:true,
