@@ -4,7 +4,7 @@
 * @creator  黄甲(水木年华double)<huangjia2015@gmail.com>
 * @depends  ks-core
 * @version  2.0  
-* @update 2013-11-16 代码逻辑review 和 微调
+* @update 2013-11-16 支持jsonp和ajax微调、支持到 时分级别 自定义
 */        
  
 KISSY.add('act/double11-come-on/spikectrl', function(S){
@@ -17,8 +17,9 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
         var DONECLS = 'doneCls',
             CURRCLS = 'currCls',
             FUTRUECLS = 'futrueCls',
-            BLOCK_DATA_TIME = 'data-hour',
-            BLOCK_TIME_LENGTH = 'data-timeLength'; 
+            VIEW_INDEX = 'data-index',
+            BLOCK_DATA_TIME = 'data-time',
+            BLOCK_TIME_LENGTH = 'data-timelength'; 
 
         // 常量 2       
         var ONE_SECONDS = 1000,
@@ -33,7 +34,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
            
             // 时间配置
             startTime: '2013-11-04 00:00:00',  
-            endTime: '2013-11-11 23:59:59',
+            endTime: '2023-11-11 23:59:59',
 
             // 无效时间 是否 隐藏 数据
             isInvalidTimeHide: true,
@@ -47,11 +48,14 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 			// 是否是jsonp  --默认
 			isJsonp: true,
 
-            // 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要自己在 DOM结构上行 定义 伪类属性：data-timeLength 距离下个整点时间长度，直到24点
+            // 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要 配置 下列 customTime 时间点数组
             isCustomTimePeriod: false,
 
-            // 秒杀 间隔 小时
-            hourLength: 2, 
+            // 自定义时间点 数组
+            customTime: [], 
+
+            // 秒杀 固定 间隔 支持时分秒
+            timeLength: null, 
 
             // 浏览其他区块 停留 时间 --  分钟
             viewResidenceTime: 0.5,
@@ -128,7 +132,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             * 秒杀时间时间段 超时
             * @event passSpikeChange  
             * @param {event} el对象
-            * @param {Array} el.HtmlEl Dom元素
+            * @param {Array} el.elTarget Dom元素
             */
             'passSpikeChange',
             
@@ -136,7 +140,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             * 秒杀时间时间段 超时
             * @event currSpikeChange  
             * @param {event} el对象
-            * @param {Array} el.HtmlEl Dom元素
+            * @param {Array} el.elTarget Dom元素
             */
             'currSpikeChange',
 
@@ -144,7 +148,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             * 秒杀时间时间段 超时
             * @event futureSpikeChange  
             * @param {event} el对象
-            * @param {Array} el.HtmlEl Dom元素
+            * @param {Array} el.elTarget Dom元素
             */
             'futureSpikeChange'   
         ];    
@@ -159,7 +163,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                        
                     _self._argumentsInit();
 					
-                    _self._showRangeTimeMeched(); 					
+                    _self._hideAllAcitve(); 					
                     _self._blockStateRender(); 
 
                     _self._eventRender();
@@ -189,7 +193,7 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     var _self = this;
 
                     _self.dataYMD = S_Date.format(_self.mainTime, 'yyyy-mm-dd');
-                    _self.dataHMS = _self.getALLHMSstr(_self.mainTime);
+                    _self.dataHMS = _self.getAllHMSstr(_self.mainTime);
                 },
 
                 // 检查 服务器 时间- 初始化 -- 无须修正
@@ -223,52 +227,12 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                         localTime = S.now(),
                         diffRange = _self.get('deviationSeconds')*ONE_SECONDS;
 
-                    // // 获取时间差 第二次模拟服务器和本地差异 vs 第一二次差异比较 、误差范围
-                    // var secondSecondDiff = Math.abs( localTime - _self.mainTime ), 
-                    //     firstSecondDiff = Math.abs( _self.differenceTime - secondSecondDiff );           
-
-                    // 在允许误差内 视为 -- 无差异
-                    // if(differenceTime <= diffRange){
-                    //     _self.mainTime = localTime;
-                    //     return;
-                    // } 
-
-                    // if(firstSecondDiff > diffRange){
-                    //     S.log('时间错误! 你可能修改了您的电脑时间，为了保持秒杀精准度，请重新刷新您的页面确保时间准确性~'); 
-                    // }
-
-                    // 根据第一次 标尺 大小关系 修正 模拟服务器 时间差, 保持同步
                     if(_self.localTimeMax){
                         _self.mainTime = localTime - _self.differenceTime;
                     }else{
                         _self.mainTime = localTime + _self.differenceTime;
                     }
                 },                
-
-                // // 判断 服务器 和 本地时间
-                // _updateTime: function(){
-                //     var _self = this,
-                //         localTime = S.now(),
-                //         deviationRange = _self.get('deviationSeconds')*ONE_SECONDS;
-
-                //     // 获取时间差 第二次模拟服务器和本地差异 vs 第一二次差异比较 、误差范围
-                //     var secondSecondDiff = Math.abs( localTime - _self.mainTime ), 
-                //         firstSecondDiff = Math.abs( _self.differenceTime - secondSecondDiff );                       
-
-                //     // 修正时差    
-                //     _self.timeCorrectFn(localTime, secondSecondDiff);
-
-                //     if(firstSecondDiff > deviationRange){
-                //         S.log('时间错误! 你可能修改了您的电脑时间，为了保持秒杀精准度，请重新刷新您的页面确保时间准确性~'); 
-                //     }
-
-                //     // // 纠正 模拟服务器 时间差, 保持同步- 增量/减量 推移
-                //     // if( localTime > _self.mainTime ){
-                //     //     S.log('时间错误! 你可能--"从当前向未来穿越时光"，修改了您的电脑时间，为了保持秒杀精准度，请重新刷新您的页面确保时间准确性~');    
-                //     // }else if( localTime < _self.mainTime ){      
-                //     //     S.log('时间错误! 你可能--"从当前向过去时光倒流"，修改了您的电脑时间，为了保持秒杀精准度，请重新刷新您的页面确保时间准确性~');       
-                //     // }
-                // },
 
                 // 初始化 时间 和 状态/文字
                 _blockStateRender: function(){
@@ -382,75 +346,81 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                 // 1、传入元素参数--判断显示指定时间段活动内容;   2、不传递参数 默认 隐藏 所有 秒杀商品 区块
                 _showRangeTimeMeched: function(el){
                     var _self = this,
-                        curTime = DOM.attr(el, BLOCK_DATA_TIME);
+                        showIndex = parseInt(DOM.attr(el, VIEW_INDEX), 10),
+                        elNode = _self.aBlocks[showIndex];
 
-                    S.each(_self.aBlocks, function(em){
-                        var  blockTime = DOM.attr(em, BLOCK_DATA_TIME);
+                    _self._hideAllAcitve();
 
-                        if(curTime === blockTime){
-                            DOM.show(em);
-                            _self.renderImgLazyLoad(em);
-                        }else{
-                            DOM.hide(em);
-                        }                       
+                    DOM.show(elNode);
+                    _self.renderImgLazyLoad(elNode);  
+                },
+
+                // 隐藏所有秒杀 活动区块
+                _hideAllAcitve: function(){
+                    var _self = this;
+
+                    S.each(_self.aBlocks, function(em){                       
+                        DOM.hide(em);                     
                     });
                 },
 
-                // 输出<10 数字 补全0 字符串
-                getFullTimeStr: function(num){
+                
+                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  --- 自定义 不规则时间间隔 及 分 时间
+                renderSelfTimeBlock: function(){
                     var _self = this,
-                        num = parseInt(num, 10);
+                        tiems = _self.get('customTime');
 
-                    if(!num && num !== 0 ){
-                        return '';
-                    }
+                    S.each(_self.timeBlock, function(el, num){
 
-                    return num < 10 ? '0'+ num : num;
+                        var hoursContainer = S.one(el).first(_self.get('hoursContainerCls')),
+                            data_hour = tiems[num],                            
+
+                            nextDataHour = tiems[num+1] ? tiems[num+1] : ONE_DAY,
+
+                            hourTimeLength = _self.getMillisecond(nextDataHour) - _self.getMillisecond(data_hour);    
+
+                        if( _self.getSelectHMS(data_hour, 'H') > 23){
+                            DOM.remove(el);
+                            S.log('时间点 ' + BLOCK_DATA_TIME+ '="' + data_hour + '" 配置无效！');
+                            return;
+                        } 
+
+                        if(!_self.getSelectHMS(data_hour, 'M') ){
+                            data_hour = _self.autoComplement(data_hour, null, null, true); 
+                        }                     
+
+                        // 写入 活动区块序号、时间、长度标示 和 文本字符串 小时时间  
+                        DOM.attr(el, VIEW_INDEX, num); 
+                        DOM.attr(el, BLOCK_DATA_TIME, data_hour);
+                        DOM.attr(el, BLOCK_TIME_LENGTH, hourTimeLength);
+                        hoursContainer && hoursContainer.text(data_hour);
+                    });
                 },
 
-                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  --- 自定义 整点 时间
-                renderSelfTimeBlock: function(){
-                    var _self = this;
+                
+                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  ---  参数配置 固定的 整点秒杀间隔小时
+                renderTimeBlock: function(){
+                    var _self = this,
+                        secondesTims = _self.getMillisecond(_self.get('timeLength')),
+                        length = _self.timeBlock.length-1;
 
                     S.each(_self.timeBlock, function(el, num){
                         var hoursContainer = S.one(el).first(_self.get('hoursContainerCls')),
-                            curHourTime = parseInt(DOM.attr(el, BLOCK_DATA_TIME), 10),
-                            nextEl = S.one(el).next(),
-                            nextHourTime = nextEl ? parseInt( nextEl.attr(BLOCK_DATA_TIME), 10) : DAY_HOURS,
-                            hourTimeLength = nextHourTime - curHourTime,
-                            timeText = curHourTime + ':00';    
+                            timeRange = num*secondesTims,                           
+                            timeText = _self.getHMstr(timeRange),
+                            hour = _self.getSelectHMS(timeText, 'H');
+                            minutes = _self.getSelectHMS(timeText, 'M');
 
-                        if(curHourTime > 23){
-                            DOM.remove(el);
-                            S.log('时间点 ' + BLOCK_DATA_TIME+ '="' + curHourTime + '" 配置无效！');
+                        if( hour > 23 || (hour === 23 && minutes > 59) ){
+                            DOM.remove(_self.timeBlock[num]);
                             return;
-                        }                       
+                        }    
 
-                        // 写入 时间长度标示 和 文本字符串 小时时间    
-                        DOM.attr(el, BLOCK_TIME_LENGTH, _self.getFullTimeStr(hourTimeLength));
-                        hoursContainer.text(timeText);
-                    });
-                },
-
-                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  ---  参数配置 固定的 秒杀间隔小时 hourLength
-                renderTimeBlock: function(){
-                    var _self = this,
-                        hourTimeLength = _self.get('hourLength');
-
-                    S.each(_self.timeBlock, function(el, num){
-                        var num = num + 1,
-                            hoursContainer = S.one(el).first(_self.get('hoursContainerCls')),
-                            timeRange = num*hourTimeLength - hourTimeLength,
-                            timeRult = timeRange <= 0 ? '00' : ( timeRange < 10 ? '0'+ timeRange : timeRange ),
-                            timeText = timeRult + ':00';
-                        
-                        if(timeRange > 23){
-                            return;
-                        }  
-
-                        // 写入 时间标示 和 文本字符串 小时时间 
-                        DOM.attr(el, BLOCK_DATA_TIME, timeRult);
-                        hoursContainer.text(timeText);
+                        // 写入 活动区块序号、时间、长度标示 和 文本字符串 小时时间  
+                        DOM.attr(el, VIEW_INDEX, num); 
+                        DOM.attr(el, BLOCK_DATA_TIME, timeText);
+                        DOM.attr(el, BLOCK_TIME_LENGTH, secondesTims);
+                        hoursContainer && hoursContainer.text(timeText);
                     });
                 },
                
@@ -475,25 +445,25 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 
                     if(_self.get('isInvalidTimeHide')){
                         _self.showHideFn( _self.timeBlock, false );
-                        _self._showRangeTimeMeched(); 
+                        _self._hideAllAcitve(); 
                     }
                 },
 
                 // 设定 文本状态 方法
                 _renderStateAll: function(el, index){
-                    var _self = this, 
-                        hourTime = DOM.attr(el, BLOCK_DATA_TIME);
+                    var _self = this,
+                        timeStr = DOM.attr(el, BLOCK_DATA_TIME),
+                        hour = _self.getSelectHMS(timeStr, 'H'),
+                        minutes = _self.getSelectHMS(timeStr, 'M');
 
-                    if(hourTime >= DAY_HOURS){
+                    if(hour >= DAY_HOURS){
                         return;
-                    }    
+                    }  
 
-                    var hourLength = _self.get('isCustomTimePeriod') ? DOM.attr(el, BLOCK_TIME_LENGTH) : _self.get('hourLength'),                      
-                        curDateStr = _self.dataYMD +' '+ hourTime + ':00:00',
-
+                    var timeLengthSeconds = parseInt(DOM.attr(el, BLOCK_TIME_LENGTH), 10);
+                        curDateStr = _self.dataYMD +' '+ _self.autoComplement(hour, minutes);
                         spikeTimeStart = _self.getDateParse(curDateStr),
-                        spikeTimeEnd = _self.offsetDateSeconds(curDateStr, hourLength, '+'),                       
-                        
+                        spikeTimeEnd = _self.offsetDateSeconds(curDateStr, timeLengthSeconds, '+'),                      
                         isLastBlock = (_self.timeBlock.length-1) === index,
                         dayEndTimeSeconds = _self.getDateParse(_self.dataYMD +' 23:59:59') + ONE_SECONDS;    
 
@@ -676,8 +646,53 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     });
                 },
 
-                // 获取时分秒字符串 -- 毫秒数 输入
-                getALLHMSstr: function(d){
+                // 输出<10 数字 补全0 字符串
+                addZeroFn: function(num){
+                    var _self = this,
+                        num = parseInt(num, 10);
+
+                    if(!num && num !== 0 ){
+                        return '';
+                    }
+
+                    return num < 10 ? '0'+ num : num;
+                },
+
+                /**
+                * 根据时分秒 残缺信息 自动补全完整 合法时间字符串
+                * @method autoComplement
+                * @param {string} 时间字符串 小时 '3'
+                * @param {string} 时间字符串 分钟 '19'
+                * @param {string} 时间字符串 秒 null
+                * @param {boolean} 是否不显示秒 false
+                * @return {string} 时分秒字符串 如： '03:19:00'
+                **/ 
+                autoComplement: function(hour, minutes, seconds, isHideSeconds){
+                    var _self = this,
+                        ary,
+                        zeroNorml = '00',
+                        concat = ":";
+
+                    var hour = hour ? _self.addZeroFn(hour) : zeroNorml,
+                        minutes = minutes ? _self.addZeroFn(minutes) : zeroNorml,
+                        seconds = seconds ? _self.addZeroFn(seconds) : zeroNorml;
+
+                    if(isHideSeconds){
+                        ary = [hour, minutes];   
+                    }else{
+                        ary = [hour, minutes, seconds];   
+                    }
+                        
+                    return ary.join(concat); 
+                },
+
+                /**
+                * 根据日期时间 获取 时分秒 字符串 -- 毫秒数 输入
+                * @method getAllHMSstr(d)
+                * @param {number} 毫秒数
+                * @return {string} 时分秒 字符串
+                */ 
+                getAllHMSstr: function(d){
                     var _self = this,
                         date = null;
 
@@ -702,33 +717,83 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     return S_Date.format(d, 'HH:MM:ss');
                 },     
 
-                // 选择性 获取 分 - 秒 3段指定 字符串 'HH:MM:ss' -- 为扩展 精确度 准备
-                getSelectHMSstr: function(date, dateType){
+                /**
+                * 根据 时分秒 字符串 获取 3段指定 时分秒 值
+                * @method getSelectHMS(date, dateType)
+                * @param {data} 日期时间
+                * @param {string} 要获取的 时分秒 类型 H M S
+                * @return {number || undefined}
+                */
+                getSelectHMS: function(hourMinutesStr, dateType){
                     var _self = this,
-                        returnStr,
-                        AateStr = _self.getALLHMSstr(date).split(':');
+                        timeNum,
+                        AateStr = hourMinutesStr ? hourMinutesStr.split(':') : '';
 
                     switch(dateType){
-                        case 'H' : returnStr = AateStr[0];
+                        case 'H' : timeNum = parseInt(AateStr[0], 10);
                             break;
 
-                        case 'M' : returnStr = AateStr[1];
+                        case 'M' : timeNum = parseInt(AateStr[1], 10);
                             break; 
 
-                        case 'S' : returnStr = AateStr[2];
-                            break;
-
-                        default: returnStr = AateStr;             
+                        case 'S' : timeNum = parseInt(AateStr[2], 10);
+                            break;         
                     }
 
-                    return returnStr; 
+                    return timeNum; 
                 },
                 
+                /**
+                * 根据 时分秒 毫秒数 获取 时分 字符串
+                * @method getHMstr(number)
+                * @param {number} 时分秒 毫秒数
+                * @return {string} 时分 字符串
+                */
+                getHMstr: function(hourMinutes){
+                    var _self = this;
+
+                    if(!S.isNumber(hourMinutes)){
+                        return;
+                    }
+
+                    var alhours = hourMinutes/ONE_HOURS,
+                        hour = parseInt(alhours, 10),
+
+                        minuteses = (alhours - hour)*ONE_HOURS/ONE_MINUTES,
+                        minutes = parseInt(minuteses, 10);
+                        
+                    return _self.autoComplement(hour, minutes, null, true);
+                },
+
+                /**
+                * 根据 时分秒 字符串 获取毫秒数
+                * @method getMillisecond(str)
+                * @param {str} 时分秒 时间
+                * @return {number} 时分秒 毫秒数 之和
+                */
+                getMillisecond: function(hourMinutesStr){
+                    var _self = this;
+
+                    if(S.isNumber(hourMinutesStr)){
+                        return hourMinutesStr;
+                    }
+
+                    var hour = _self.getSelectHMS(hourMinutesStr, 'H'),
+                        minutes = _self.getSelectHMS(hourMinutesStr, 'M'),
+                        seconds = _self.getSelectHMS(hourMinutesStr, 'S');
+
+                    var hourMillisecond = hour ? hour*ONE_HOURS : 0,
+                        minutesMillisecond = minutes ? minutes*ONE_MINUTES : 0,
+                        secondsMillisecond = seconds ? seconds*ONE_SECONDS : 0;
+                        
+                    return (hourMillisecond + minutesMillisecond + secondsMillisecond); 
+                },
+
                 // 小时偏移量 计算 -- 返回毫秒数
                 offsetDateSeconds: function(date, offset, PreviousLater){
                     var _self = this,
                         dataParse = S.isString(date) ? _self.getDateParse(date) : ( S.isNumber(date) ? date : (new Date()).getTime() ),
-                        offsetParse = offset ? (offset * ONE_HOURS) : 0, 
+                        offsetParse = offset ? offset : 0, 
                         dataTime;
 
                     switch(PreviousLater){
@@ -746,7 +811,11 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 
                 // 根据日期时间字符串 返回日期对象 毫秒数
                 getDateParse: function(dateStr){
-                    return S_Date.parse(dateStr.replace(/\-/g,'/')).getTime();
+                    var _self = this,
+                        dateOjb = S_Date.parse(dateStr.replace(/\-/g,'/')),
+                        nums = dateOjb ? dateOjb.getTime() : 0;
+
+                    return nums;
                 },
 
                 // 自动刷新ui
