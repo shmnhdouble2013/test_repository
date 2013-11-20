@@ -4,7 +4,7 @@
 * @creator  黄甲(水木年华double)<huangjia2015@gmail.com>
 * @depends  ks-core
 * @version  2.0  
-* @update 2013-11-19 解决毫秒数转换分钟0.9999 四舍五入， 发现自定义事件数组 需要大小过滤wait、 规律 间隔时间 需要 读取 开始时间 ok
+* @update 2013-11-20  优化升级: 增加ajax请求误差信息、ajax异步数据服务间隔校正性能优化、毫秒数转换分钟0.9999精确近1、随机时间字符串 数组大小顺序排序、 规律 间隔时间读取 startTime开始时间
 */        
  
 KISSY.add('act/double11-come-on/spikectrl', function(S){
@@ -27,23 +27,24 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             ONE_HOURS = 1000*60*60,
             ONE_DAY = 1000*60*60*24;
 
-        var DAY_HOURS = 24;    
+        var DAY_HOURS = 24,
+            TIME = S.now();      
             
         // 默认配置
         var defCfg = {
            
             // 时间配置
-            startTime: '2013-11-04 00:00:00',  
-            endTime: '2023-11-11 23:59:59',
+            startTime: '',  
+            endTime: '',
 
             // 无效时间 是否 隐藏 数据
             isInvalidTimeHide: true,
 
-            // servic time 毫秒数
-            serviceTime: 0,
+            // 服务器初始化时间 默认 毫秒数 number、支持 标准时间字符串如：'2013-11-20 17:30:32'
+            serviceTime: null,
 
             // 服务器时间接口
-            url: 'http://www.tmall.com/go/rgn/get_server_time.php?spm=0.0.0.0.c01Zvr',
+            url: '',
 			
 			// 是否是jsonp  --默认
 			isJsonp: true,
@@ -51,17 +52,14 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             // 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要 配置 下列 customTime 时间点数组
             isCustomTimePeriod: false,
 
-            // 自定义时间点 数组 --- 注意 时间大小 和 顺序不能 错误，否则出现 自动更新时间 出错 
+            // 自定义时间点 数组 --- 支持 时间大小顺序 随机排列
             customTime: [], 
 
-            // 秒杀 固定 间隔 支持时分秒
+            // 秒杀时间 固定 间隔 -- 支持时分秒
             timeLength: null, 
 
             // 浏览其他区块 停留 时间 --  分钟
-            viewResidenceTime: 0.5,
-
-            // 本地对比时间误差值设置 主要是 初次差值 和 后续主动更新差值比较
-            deviationSeconds: 2,
+            viewResidenceTime: 2,
 
             // 秒杀结束 是否 可查看
             isPastView: false,
@@ -96,8 +94,8 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 			// 是否开启 自动更新
 			isAutoUpdateUi: true,
 
-            // ui更新时间 -- 秒
-            updateUiSeconds: 5,
+            // ui更新时间 -- 秒 -- 默认1秒钟 无需对外开放
+            updateUiSeconds: 1,
 
             // 秒杀商品内容区块容器
             merchContainer: '#J_secondContent',
@@ -106,7 +104,10 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
             merchBlockCls: '.j_ul',
 
             // 活动区块内容 图片 伪类src属性 钩子 --- 若 图片懒加载 则为 data-ks-lazyload,否则图片展现不出来哈！ 不填写 默认为 data-src
-            lazyLoadSrc: 'data-src'              
+            lazyLoadSrc: 'data-src',
+
+            // 异步更新服务器时间 配置，暂不对外开放 -- 默认 1分钟
+            ajaxUpMinutes: 1              
         };  
 
 
@@ -168,14 +169,18 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 
                     _self._eventRender();
 					
-					_self.get('isAutoUpdateUi') && _self.startAutoUpdateUi();                                        
+					if(_self.get('isAutoUpdateUi') ){
+                        _self.startAutoUpdateUi();  
+                    }else{
+                        _self.stopAutoUpdateUi();
+                    }                                   
                 },
 
                 // 全局变量初始化
                 _argumentsInit: function(){
                     var _self = this;
 
-                    _self._checkServiceTime();
+                    _self._renderMainTime();
 
                     _self._getRealTime();
 
@@ -194,43 +199,33 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     _self.dataHMS = _self.getAllHMSstr(_self.mainTime);
                 },
 
-                // 检查 服务器 时间- 初始化 -- 无须修正
-                _checkServiceTime: function(){
+                // 初始化 主时间
+                _renderMainTime: function(){
                     var _self = this,
-                        localTime = S.now();
+                        jsRenderTime = (S.now()) - TIME,
+                        serviceTime = _self.get('serviceTime');
 
-                    if(!_self.get('serviceTime')){
-                        _self.mainTime = localTime;
+                    if(!S.isNumber(serviceTime)){
+                        serviceTime = _self.getDateParse(serviceTime);
+                    }    
+
+                    if(!serviceTime && !_self.get('url') ){
+                        _self.mainTime = S.now();
                         _self.hasServiceTime = false;
                         return;
                     }
 
-                    _self.mainTime = _self.get('serviceTime'); 
-                    _self.hasServiceTime = true;
+                    if(serviceTime){
+                        _self.mainTime = serviceTime + jsRenderTime;    
 
-                    // 获取 初始化 时间差
-                    _self.differenceTime = Math.abs( localTime - _self.mainTime ); 
-
-                    // 确定 初始化 大小关系
-                    if(localTime > _self.mainTime){
-                        _self.localTimeMax = true;
-                    }else if( localTime < _self.mainTime){
-                        _self.localTimeMax = false;
-                    }                   
-                },
-
-                // 差异修正方法
-                _updateTime: function(localTime, differenceTime){
-                    var _self = this,
-                        localTime = S.now(),
-                        diffRange = _self.get('deviationSeconds')*ONE_SECONDS;
-
-                    if(_self.localTimeMax){
-                        _self.mainTime = localTime - _self.differenceTime;
-                    }else{
-                        _self.mainTime = localTime + _self.differenceTime;
+                        // 校正大小 和 差异重置
+                        _self.serverLocalCompara();
                     }
-                },                
+
+                    // else{     
+                    //     _self._ajaxUpdateTime();
+                    // }            
+                },         
 
                 // 初始化 时间 和 状态/文字
                 _blockStateRender: function(){
@@ -366,7 +361,11 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                 // 根据 容器 个数 和 时间 配置参数 初始化 时间段  --- 自定义 不规则时间间隔 及 分 时间
                 renderSelfTimeBlock: function(){
                     var _self = this,
-                        tiems = _self.get('customTime');
+                        tiems = _self.sortHMtimeArray(_self.get('customTime'));
+
+                    if(!tiems){
+                        return;
+                    }    
 
                     S.each(_self.timeBlock, function(el, num){
 
@@ -490,32 +489,6 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     }
                 },
 
-                // 是否在时间段内 - 包右不包左: 59':59" -- 59':59"
-                isInTimeRange: function(startTime, curTime, endTime){
-                    var _self = this;
-
-                    if( startTime < curTime && curTime < endTime ){
-                        return true;
-                    }else{
-                        return false;
-                    }
-                },
-
-                // 有效期间内 设定时间段是否已经全部过时  
-                /* _isAllPastDone: function(){
-                    var _self = this,
-                        isAllDone = true;
-
-                    S.each(_self.timeBlock, function(el){
-                        if(!DOM.hasClass(el, DONECLS)){
-                            isAllDone = false;
-                            return false;
-                        }
-                    });
-					
-                    return isAllDone;
-                }, */
-
                 // 添加过去样式
                 _addPastState: function(el){
                     var _self = this,
@@ -591,48 +564,15 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     if(textContainer){
                         DOM.text(textContainer, '');
                     }
-                },               
-
-                // jsonp 获取服务端时间
-                getServerTime : function(){
-                    var _self = this,
-						dataType = _self.get('isJsonp') ? 'jsonp' : 'json',
-						type = dataType === 'jsonp' ? 'get': 'post'; 
-					
-					Ajax({
-						cache: false,
-						url: _self.get('url'),
-						dataType: dataType,
-						type: type,
-						data: null,
-						success : function (data, textStatus, XMLHttpRequest) {
-							
-							if(S.isObject(data)){
-								_self.mainTime = data['serviceTime'];
-								return;
-							}
-						
-							if(S.isString(data)){
-								try{
-									data = S.json.parse(data);
-								}catch(ec){
-									S.log('json数据转换出错：' + ec);
-								}  
-								
-								_self.mainTime = data['serviceTime'];						
-							}
-
-						}
-					});
-                },
+                }, 
 
                 // 判断日期 总区段 有效性
                 isValidDate: function(){
                     var _self = this,
                         startTime = _self.getDateParse(_self.get('startTime')),
                         endTime = _self.getDateParse(_self.get('endTime'));
-					
-					return _self.isInTimeRange(startTime, _self.mainTime, endTime);
+                    
+                    return _self.isInTimeRange(startTime, _self.mainTime, endTime);
                 },  
 
                 // 隐藏或者显示所有 时间 段区块儿
@@ -649,6 +589,147 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 
                         callBack && callBack.call(_self, em, index);                      
                     });
+                },
+
+                // 有效期间内 设定时间段是否已经全部过时  
+                /* _isAllPastDone: function(){
+                    var _self = this,
+                        isAllDone = true;
+
+                    S.each(_self.timeBlock, function(el){
+                        if(!DOM.hasClass(el, DONECLS)){
+                            isAllDone = false;
+                            return false;
+                        }
+                    });
+                    
+                    return isAllDone;
+                }, */
+
+
+
+                /**
+                * ****** 以下为 时间 基础方法 **********
+                */
+
+                // 获取服务器时间
+                getCurrTime: function(){
+                    var _self = this,
+                        time = _self.hasServiceTime ? _self.mainTime : null;
+
+                    return time;
+                },
+
+                // 获取 服务器 与 本地差异
+                getServerLocalDiff: function(){
+                    var _self = this,
+                        diffTime = _self.differenceTime ? _self.differenceTime : null;
+
+                    return diffTime;
+                },
+
+                // 比较服务器与本地时间关系值
+                serverLocalCompara: function(){
+                    var _self = this,
+                        localTime = S.now();
+
+                    if(!_self.mainTime){
+                        return;
+                    }    
+                        
+                    // 获取 初始化 时间差
+                    _self.differenceTime = Math.abs( localTime - _self.mainTime ); 
+
+                    // 确定 初始化 大小关系
+                    if(localTime > _self.mainTime){
+                        _self.localTimeMax = true;
+                    }else if( localTime < _self.mainTime){
+                        _self.localTimeMax = false;
+                    }     
+
+                    return _self.localTimeMax;              
+                },
+
+                // 差异修正方法
+                _updateTime: function(){
+                    var _self = this,
+                        localTime = S.now();
+
+                    _self.differenceTime = _self.differenceTime ? _self.differenceTime : 0;                            
+
+                    if(_self.localTimeMax){
+                        _self.mainTime = localTime - _self.differenceTime;
+                    }else{
+                        _self.mainTime = localTime + _self.differenceTime;
+                    }
+                },  
+
+                // 是否在时间段内 - 包右不包左: 59':59" -- 59':59"
+                isInTimeRange: function(startTime, curTime, endTime){
+                    var _self = this;
+
+                    if( startTime < curTime && curTime < endTime ){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                },
+
+                // jsonp 获取服务端时间
+                getServerTime : function(){
+                    var _self = this, 
+                        stratTime = S.now(),                    
+						dataType = _self.get('isJsonp') ? 'jsonp' : 'json',
+						type = dataType === 'jsonp' ? 'get': 'post'; 
+					
+					Ajax({
+						cache: false,
+						url: _self.get('url'),
+						dataType: dataType,
+						type: type,
+						data: null,
+						success : function (data, textStatus, XMLHttpRequest) {
+                            _self.localServerDiff = S.now() - stratTime;
+
+							if(S.isObject(data)){
+								_self.mainTime = data['serviceTime'];
+							}
+						
+							if(S.isString(data)){
+								try{
+									data = S.json.parse(data);
+								}catch(ec){
+									S.log('json数据转换出错：' + ec);
+								}  
+								
+								_self.mainTime = data['serviceTime'];						
+							}
+
+                            // 减少时差
+                            _self.mainTime = _self.mainTime + _self.localServerDiff;
+
+                            // 校正大小 和 差异重置
+                            _self.serverLocalCompara();
+						}
+					});
+                },
+
+                // 对 时分字符串时间 数组 从小到大 进行排序
+                sortHMtimeArray: function(ary){
+                    var _self = this;
+
+                    if(!S.isArray(ary)){
+                        return;
+                    }
+
+                    return ary.sort(timeStrSort);
+
+                    function timeStrSort(a, b){
+                        var a = _self.getMillisecond(a),
+                            b = _self.getMillisecond(b);
+
+                        return a - b;    
+                    }
                 },
 
                 // 输出<10 数字 补全0 字符串
@@ -763,11 +844,12 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 
                     var alhours = hourMinutes/ONE_HOURS,
                         hour = parseInt(alhours, 10),
-
                         minuteses = (alhours - hour)*ONE_HOURS/ONE_MINUTES,
-                        minutes = Math.round(minuteses); // 四舍五入 减少1分钟误差
-                        
-                    return _self.autoComplement(hour, minutes, null, true);
+                        roundMinutes = Math.round(minuteses),
+                        IntMinutes = parseInt( minuteses, 10), 
+                        endTime = Math.abs(roundMinutes - minuteses) <= 0.0000000001 ? roundMinutes : IntMinutes; // 四舍五入 减少1分钟误差
+
+                    return _self.autoComplement(hour, endTime, null, true);
                 },
 
                 /**
@@ -816,54 +898,74 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 
                 // 根据日期时间字符串 返回日期对象 毫秒数
                 getDateParse: function(dateStr){
-                    var _self = this,
-                        dateOjb = S_Date.parse(dateStr.replace(/\-/g,'/')),
+                    var _self = this;
+
+                    if(!dateStr){
+                        return;
+                    }
+
+                    var dateOjb = S_Date.parse(dateStr.replace(/\-/g,'/')),
                         nums = dateOjb ? dateOjb.getTime() : 0;
 
                     return nums;
                 },
 
-                // 自动刷新ui
+                // 开启时间更新 和 ui更新
                 startAutoUpdateUi: function(){
                     var _self = this;
 
-                    // 系统自动 轮询 监控 时间状态 
-                    _self.stopAutoUpdateUi();
-                    _self.autoUpdateIntvl = setInterval(autofn, _self.get('updateUiSeconds')*ONE_SECONDS );                     
+                    _self._ajaxUpdateTime();
+                    _self._startUpdateUi();
+                },
+
+                // 本地更新：时间、ui 方法
+                _startUpdateUi: function(){
+                    var _self = this,
+                        updateTime = _self.get('updateUiSeconds') < 1 ? 1 : _self.get('updateUiSeconds');
+
+                    if(_self.autoUpdateIntvl){
+                        return;
+                    }
+
+                    _self.autoUpdateIntvl = setInterval(autofn, updateTime*ONE_SECONDS );                     
 
                     function autofn(){
-                        // 验证有效性
-                        if(!_self.isValidDate()){                        
-                            _self.allShowHideFn();
-                            return;
-                        } 
-
-                        // 无服务器时间 ---- 更新本地时间
-                        if(!_self.hasServiceTime){
-                            _self.mainTime = S.now();
-
-                        // 异步更新服务器时间    
-                        }else if(_self.get('url')){
-                            _self.getServerTime();
-							
-                        }else{
-                        // 更新 修正 比较 时间
-                            _self._updateTime();
-                        }
+                        // 更新主时间
+                        _self._updateTime();
 
                         // 更新实时 时间 数据
                         _self._getRealTime();
 
                         // 调用 ui 更新方法
                         _self._setStateText();                          
-                    }
+                    }    
                 },
 
-                // 停止自动刷新
+                // 远程异步接口更新时间
+                _ajaxUpdateTime: function(){
+                    var _self = this,
+                        ajaxUpMinutes = _self.get('ajaxUpMinutes') < 1 ? 1 : _self.get('ajaxUpMinutes');
+
+                    // 无 url 或者 已经存在 循环定时器 退出    
+                    if(!_self.get('url') || _self.ajaxTimeUpdate){
+                        return;
+                    }
+
+                    _self.ajaxTimeUpdate = setInterval(function(){
+                        _self.getServerTime();
+                    }, 0.1*ONE_MINUTES );                    
+                },
+
+                // 停止自动更新 -- 清除 时间、ui、ajax异步 更新 循环
                 stopAutoUpdateUi: function(){
                     var _self = this;
 
+                    // 清除 ajax 异步更新服务器时间 循环
+                    _self.ajaxTimeUpdate && clearInterval(_self.ajaxTimeUpdate);
+
+                    // 清除 本地 ui 时间更新 循环
                     _self.autoUpdateIntvl && clearInterval(_self.autoUpdateIntvl);
+                   
                 }
         });
 
