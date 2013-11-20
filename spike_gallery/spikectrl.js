@@ -43,6 +43,9 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 
             // 服务器时间接口
             url: 'http://www.tmall.com/go/rgn/get_server_time.php?spm=0.0.0.0.c01Zvr',
+			
+			// 是否是jsonp  --默认
+			isJsonp: true,
 
             // 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要自己在 DOM结构上行 定义 伪类属性：data-timeLength 距离下个整点时间长度，直到24点
             isCustomTimePeriod: false,
@@ -85,6 +88,9 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 
             // 即将开始文本
             futureStateText: '即将开抢',
+			
+			// 是否开启 自动更新
+			isAutoUpdateUi: true,
 
             // ui更新时间 -- 秒
             updateUiSeconds: 5,
@@ -157,7 +163,10 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
                     _self._blockStateRender(); 
 
                     _self._eventRender();
-                    _self.startAutoUpdateUi();                      
+					
+					if(_self.get('isAutoUpdateUi')){
+						_self.startAutoUpdateUi();   
+					}                                       
                 },
 
                 // 全局变量初始化
@@ -611,19 +620,35 @@ KISSY.add('act/double11-come-on/spikectrl', function(S){
 
                 // jsonp 获取服务端时间
                 getServerTime : function(){
-                    var _self = this;                   
+                    var _self = this,
+						dataType = _self.get('isJsonp') ? 'jsonp' : 'json',
+						type = dataType === 'jsonp' ? 'get': 'post'; 
+					
+					Ajax({
+						cache: false,
+						url: _self.get('url'),
+						dataType: dataType,
+						type: type,
+						data: null,
+						success : function (data, textStatus, XMLHttpRequest) {
+							
+							if(S.isObject(data)){
+								_self.mainTime = data['serviceTime'];
+								return;
+							}
+						
+							if(S.isString(data)){
+								try{
+									data = S.json.parse(data);
+								}catch(ec){
+									S.log('json数据转换出错：' + ec);
+								}  
+								
+								_self.mainTime = data['serviceTime'];						
+							}
 
-                    Ajax.jsonp(_self.get('url'), function(data){
-                        if(S.isString(data)){
-                            try{
-                                data = S.json.parse(data);
-                            }catch(ec){
-                                S.log('json数据转换出错：' + ec);
-                            }                                    
-                        }
-
-                        _self.mainTime = data['serviceTime'];
-                    });                    
+						}
+					});
                 },
 
                 // 判断日期 总区段 有效性

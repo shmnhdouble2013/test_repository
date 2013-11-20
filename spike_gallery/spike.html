@@ -527,56 +527,59 @@
 <script type="text/javascript">
 
     /*
-        自定义不规律 时间 配置说明：
-
-        有规律的 时间下，组件会根据 你传入的：开始和结束时间范围、时间模块css钩子timeBlockCls、和 秒杀固定间隔小时hourLength  自动计算 渲染时间相关信息，但若不是规定时间，则仅仅需要 你手动在j_timeBlock 时间导航元素上 配置  data-hour="00" 秒杀小时即可， 比如 本例中：
+	  写在最先，SpikeCtrl是干嘛的：
+	  
+	  是一个 在24小时范围内，根据当前时间，标示 过去、现在、将来 进度条的控件，并关联了相应时间点展示区块，可以配置 点击样式、过去和将来是否可点击等诸多实用的 应用场景选项，当然若是持续好几天甚至是几百年，她都会 按照你一天的安排 分毫不差、周而复始的执行下去，不足一天的将一直 停留在最后时间点上，直到第二天新的开始，如此重复！
+		
+	  本组件 支持 任意时间段范围 的整点秒杀和 自定义不规则整点 ，内置 3套 时间UI 自动更新机制：
+	   a、不配置 服务器初始化时间 serviceTime 配置项，则自动按照 计算机 本地时间 计算、初始化和更新；
+	   b、配置服务器时间 ---但没有 配置 后续更新 url接口，则依据 服务器初始化时间差 模拟校正 本地时间、进行ui更新，在时间不是特别 严格的情况下 推荐使用此选项，减少请求提高效率，除非客户端恶意调整时间；
+	   c、配置 服务器 url更新 时间 接口，则自动 按照配置的 ui刷新时间 更新时间和ui，支持jsonp；
+	   
+	   组件默认 是自动更新时间，刷新ui，当然你也可以 通过 isAutoUpdateUi 配置项选择是否自动更新； 又或者 调用 startAutoUpdateUi方法 开启 自动更新， stopAutoUpdateUi方法停止 自动更新
+	
+	
+	
+        1、整点时间 无规律，需要 自定义时间 配置 特殊说明，你仅仅需要 在 j_timeBlock 所在的 时间DOM导航元素上 配置  data-hour="00" 整点 小时(不足2位数需要补充 0) 伪类属性即可，当然配置错误的整点时间 组件会自动 判断后移除掉，控制台 log错误提示； 无规律 自定义整点 时间 案例：
 
         <!-- 导航预设容器 -->
         <div class="section-block sends-container"> 
             <a class="mrg_lft155 j_timeBlock" data-hour="00" > <span class="hours"></span><span class="state"></span></a>
             <a class="j_timeBlock" data-hour="02" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" data-hour="03" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" data-hour="05" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" data-hour="08" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" data-hour="09" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" data-hour="12" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" data-hour="14" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" data-hour="17" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" data-hour="19" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" data-hour="20" > <span class="hours"></span><span class="state"></span></a>
+            <a class="j_timeBlock" data-hour="10" > <span class="hours"></span><span class="state"></span></a>
             <a class="j_timeBlock" data-hour="23" > <span class="hours"></span><span class="state"></span></a>
         </div>
-    
-        // 于时间 相对应 模块 展现内容 j_ul 为模块钩子，样式都是子调整，你只需要传入 钩子 即可；  data-hour="00" 为00:00展现的活动区块, 于j_timeBlock 钩子上 对应的 data-hour 时间 保持一致
-
-        <ul class="mui-act-items-inner mui-act-shi-10231123 mui-act-block-img j_ul section-block" data-hour="22" style="display: none;" data-hour="00">
-        </ul>
-
-        
-        * 其他配置说明，本组件 实现 时间逻辑和更新机制，本例 DOM结构和样式 只是一个 案例，根据各个业务场景，你完全可以自定义 时间 结构 和 时间相当于的活动区块，你只需要 配置相应的参数， 传入 所必备 的钩子即可:
-
-        // 秒杀结束 点击查看 标示样式
+		
+		2、有律的 时间下，就无需配置伪类属性了。组件会根据传入的：开始和结束时间范围、时间模块css钩子timeBlockCls个数、和 秒杀固定间隔小时hourLength  自动计算 渲染时间相关信息，其他个性化配置 按照如下 实例 说明配置即可；
+		
+		
+        3、关于整点模块，与 下方活动区块的关联说明： 整点时间区块 和 相对应展现内容(本例为 j_ul 钩子活动区块) data-hour 时间一一对应，比如：data-hour="00" 为00:00展现的活动区块, 对应的活动区块 data-hour 时间 保持一致
+        <ul class="j_ul section-block" style="display: none;" data-hour="00"> </ul>        
+	    
+		4、 关于组件样式、dom结构说明；  本例 DOM结构和样式 只是一个 案例，若果想 更多个性化 样式和结构，根据各个业务场景，你完全可以自定义任何的DOM结构 和 css样式，你只需要 配置相应的参数，传入下列所必备 的钩子即可:
+		
+        // 秒杀结束 点击查看 标示样式 --默认
         clickPastTimeBlockCls: 'clickPastTimeBlock',
 
-        // 即将秒杀 点击查看 标示样式
+        // 即将秒杀 点击查看 标示样式 --默认
         clickFutureTimeBlock: 'clickFutureTimeBlock',
 
-        // 时间模块 css钩子
+        // 时间模块 css钩子  --默认
         timeBlockCls: '.j_timeBlock',
 
-        // 小时时间容器
+        // 小时时间容器 --默认
         hoursContainerCls: '.hours',
 
-        // 状态文本 容器 钩子
+        // 状态文本 容器 钩子 --默认
         stateTextCls: '.state',
 
-        // 秒杀商品内容区块容器
+        // 秒杀商品内容区块容器 --默认
         merchContainer: '#J_secondContent',
 
-        // 时间段 展现商品 容器
+        // 时间段 展现商品 容器 --默认
         merchBlockCls: '.j_ul',
 
-        // 活动区块内容 图片 伪类src属性 钩子 --- 若 图片懒加载 则为 data-ks-lazyload,否则图片展现不出来哈！ 不填写 默认为 data-src
+        // 活动区块内容 图片 伪类src属性 钩子 --- 若 图片懒加载 则为 data-ks-lazyload,否则图片展现不出来哈！ --默认
         lazyLoadSrc: 'data-src'             
  
     */
@@ -599,12 +602,18 @@
         S.use('act/double11-come-on/spikectrl', function(S, SpikeCtrl){
 		
 			new SpikeCtrl('.sends-container', {
+			
+				// 是否开启 自动更新  --默认
+				// isAutoUpdateUi: true,
 
-				// ui自动更新间隔期 - 秒 - 默认5秒
-				// updateUiSeconds: 1,
+				// ui自动更新间隔期 秒 --默认
+				// updateUiSeconds: 5,
 
-				// 服务器时间 url接口 默认取tms
-				// url: 'result_jsonp.php',
+				// 服务器时间 url接口 -- 默认
+				// url: 'tms',
+				
+				// 是否是jsonp  --默认
+				// isJsonp: true,
 
 				// 不在时间范围 是否隐藏 秒杀 相关信息
 				// isInvalidTimeHide:false,
@@ -622,7 +631,7 @@
 				// 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要自己在 DOM结构上行 定义 伪类属性：data-timeLength 距离下个整点时间长度，直到24点
 				isCustomTimePeriod: true,
 
-				// 秒杀 间隔 小时
+				// 秒杀 固定 间隔 小时
 				hourLength: 2, 
 
 				// 秒杀结束 是否 可查看
