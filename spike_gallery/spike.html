@@ -573,7 +573,7 @@
     KISSY.config({
         packages:[
             {
-                name:"act/double11-come-on",
+                name:"spike_gallery",
                 path: "./",
                 charset:"utf-8",
                 ignorePackageNameInUri:true
@@ -585,71 +585,83 @@
     KISSY.ready(function(S){ 
 	
         // 双十一整点秒杀 组件
-        S.use('act/double11-come-on/spikectrl', function(S, SpikeCtrl){
-		
-			var oSpikeCtrl = new SpikeCtrl('.sends-container', {
+        S.use('spike_gallery/spikectrl, spike_gallery/real-time', function(S, RealTime, SpikeCtrl){
 			
-    				// 是否开启 自动更新  --默认
-    				// isAutoUpdateUi: true,
+			// 初始化 实时时间 对象
+			var RealTimeObj = new RealTime({
+				// 服务器初始化时间 默认 毫秒数 number、支持 标准时间字符串如：'2013-11-20 17:30:32'
+    			serviceTime: S.now(),    
+					
+				// 服务器时间 url接口 -- 默认
+				url: 'http://www.tmall.com/go/rgn/get_server_time.php?spm=0.0.0.0.c01Zvr',
+				
+				// 是否是jsonp  --默认
+				// isJsonp: true,
+				
+				// 是否开启 自动更新 --默认
+				// isAutoUpdate: true,
+				
+				// 异步更新服务器时间 配置，需要大于等于1分钟 -- 默认
+				// ajaxUpMinutes: 1              
+			});
+			
+			// 初始化 时间轴 秒杀控制js
+			var oSpikeCtrl = new SpikeCtrl('.sends-container', {					
+				// 时间对象
+				timeObj: RealTimeObj,	
+				
+				// 是否开启 自动更新  --默认
+				// isAutoUpdateUi: true,
 
-    				// 服务器时间 url接口 -- 默认
-    				url: 'http://www.tmall.com/go/rgn/get_server_time.php?spm=0.0.0.0.c01Zvr',
-    				
-    				// 是否是jsonp  --默认
-    				// isJsonp: true,
+				// 不在时间范围 是否隐藏 秒杀 相关信息
+				// isInvalidTimeHide:false,
 
-    				// 不在时间范围 是否隐藏 秒杀 相关信息
-    				// isInvalidTimeHide:false,
+				// 浏览其他区块 停留 时间 --  分钟 默认
+				// viewResidenceTime: 1,
 
-    				// 浏览其他区块 停留 时间 --  分钟 默认30秒
-    				// viewResidenceTime: 1,
+				// 时间范围 配置 --必须配置 ，否则可能导致 无js效果
+				startTime: '2013-11-20 00:00:00',  
+				endTime: '2115-11-11 23:59:59',
+				
+				// 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要 配置 下列 customTime 时间点数组
+				isCustomTimePeriod: false,
 
-    				// 时间范围 配置 --必须配置 ，否则可能导致 无js效果
-    				startTime: '2013-11-20 00:00:00',  
-    				endTime: '2115-11-11 23:59:59',
-    				  
-    				// 服务器初始化时间 默认 毫秒数 number、支持 标准时间字符串如：'2013-11-20 17:30:32'
-    				serviceTime: S.now(),    
+				// 自定义时间点 数组 --- 支持 时间大小顺序 随机排列！
+				customTime : ["17:45", "18:08", "20:45", "23:31", "17:48", "20:43", "09", "19:31", "14:32", "14:35", "20:20", "23:30"],
 
-    				// 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要 配置 下列 customTime 时间点数组
-    				isCustomTimePeriod: false,
+				// 秒杀 固定 间隔 支持 到分钟
+				timeLength: '2', 
 
-                    // 自定义时间点 数组 --- 支持 时间大小顺序 随机排列！
-                    customTime : ["17:45", "18:08", "20:45", "23:31", "17:48", "20:43", "09", "19:31", "14:32", "14:35", "20:20", "23:30"],
+				// 秒杀结束 是否 可查看
+				isPastView:true,
 
-    				// 秒杀 固定 间隔 支持 到分钟
-    				timeLength: '2:15', 
+				// 秒杀结束 点击查看 标示样式
+				clickPastTimeBlockCls: 'clickPastTimeBlock',
 
-    				// 秒杀结束 是否 可查看
-    				isPastView:true,
+				// 即将秒杀是否 可查看
+				isFutureView:true, 
 
-    				// 秒杀结束 点击查看 标示样式
-    				clickPastTimeBlockCls: 'clickPastTimeBlock',
+				// 即将秒杀 点击查看 标示样式
+				clickFutureTimeBlock: 'clickFutureTimeBlock',
 
-    				// 即将秒杀是否 可查看
-    				isFutureView:true, 
+				// 时间模块 css钩子
+				timeBlockCls: '.j_timeBlock',
 
-    				// 即将秒杀 点击查看 标示样式
-    				clickFutureTimeBlock: 'clickFutureTimeBlock',
+				// 小时时间容器
+				hoursContainerCls: '.hours',
 
-    				// 时间模块 css钩子
-    				timeBlockCls: '.j_timeBlock',
+				// 状态文本 容器 钩子
+				stateTextCls: '.state',
 
-    				// 小时时间容器
-    				hoursContainerCls: '.hours',
+				// 秒杀商品内容区块容器
+				merchContainer: '#J_secondContent',
 
-    				// 状态文本 容器 钩子
-    				stateTextCls: '.state',
+				// 时间段 展现商品 容器
+				merchBlockCls: '.j_ul',
 
-    				// 秒杀商品内容区块容器
-    				merchContainer: '#J_secondContent',
-
-    				// 时间段 展现商品 容器
-    				merchBlockCls: '.j_ul',
-
-    				// 活动区块内容 图片 伪类src属性 钩子 --- 若 图片懒加载 则为 data-ks-lazyload,否则图片展现不出来哈！ 不填写 默认为 data-src
-    				lazyLoadSrc: 'data-src'   			
-    			});
+				// 活动区块内容 图片 伪类src属性 钩子 --- 若 图片懒加载 则为 data-ks-lazyload,否则图片展现不出来哈！ 不填写 默认为 data-src
+				lazyLoadSrc: 'data-src'   			
+			});
 
         });
            
