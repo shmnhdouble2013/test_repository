@@ -4,36 +4,36 @@
 * @creator  黄甲(水木年华double)<huangjia2015@gmail.com>
 * @depends  ks-core
 * @version  2.0  
-* @update 2013-11-20  时间更新逻辑 抽出
+* @update 2013-11-20  时间更新逻辑 抽出、 待 3.0 优化 ui 更新事件通知机制 
 **/
  
-KISSY.add('spike_gallery/spikectrl', function(S){
+KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
         var Event = S.Event,
             DOM = S.DOM,
             Ajax = S.io;
 
         // 常量 1       
-        var DONECLS = 'doneCls',
-            CURRCLS = 'currCls',
-            FUTRUECLS = 'futrueCls',
-            VIEW_INDEX = 'data-index',
+        var VIEW_INDEX = 'data-index',
             BLOCK_DATA_TIME = 'data-time',
-            BLOCK_TIME_LENGTH = 'data-timelength'; 
+            BLOCK_TIME_LENGTH = 'data-timelength';
 
         // 常量 2       
-        var ONE_SECONDS = 1000,
+        var DAY_HOURS = 24,
+            ONE_SECONDS = 1000,
             ONE_MINUTES = 1000*60,
             ONE_HOURS = 1000*60*60,
             ONE_DAY = 1000*60*60*24;
 
-        var DAY_HOURS = 24;      
-            
+        var REALTIME,
+            TIMES_Ary = [];      
+    
+
         // 默认配置
         var defCfg = {
-           
-		    // 时间对象
-			timeObj: null,	
-		   
+
+            // 时间轴 timeTemplate 模板
+            timeTemplate: '<a class="j_timeBlock"><span class="hours"></span><span class="state"></span></a>',
+
             // 时间配置
             startTime: '',  
             endTime: '',
@@ -52,6 +52,15 @@ KISSY.add('spike_gallery/spikectrl', function(S){
 
             // 浏览其他区块 停留 时间 --  分钟
             viewResidenceTime: 2,
+
+            // 过去时 样式
+            doneCls: 'doneCls',
+
+            // 当前时间段样式
+            currCls: 'currCls',
+
+            // 未来预览样式
+            futrueCls: 'futrueCls',
 
             // 秒杀结束 是否 可查看
             isPastView: false,
@@ -115,7 +124,6 @@ KISSY.add('spike_gallery/spikectrl', function(S){
             _self._init();
         }
 
-
         // 支持的事件
         SpikeCtrl.events = [
             /**  
@@ -141,10 +149,9 @@ KISSY.add('spike_gallery/spikectrl', function(S){
             * @param {Array} el.elTarget Dom元素
             */
             'futureSpikeChange'   
-        ];    
+        ];   
 
-
-        S.extend(SpikeCtrl, S.Base);		
+        S.extend(SpikeCtrl, S.Base);
         S.augment(SpikeCtrl, {
 
                 // 控件 初始化
@@ -164,34 +171,40 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                         _self.stopAutoUpdateUi();
                     }                                   
                 },
+
+                // 更新 实时时间 年月日
+                _getNewYMD: function(){
+                    var _self = this;
+                    
+                    _self.dataYMD = REALTIME.getTimeYMDstr();        
+                },
 				
                 // 全局变量初始化
                 _argumentsInit: function(){
                     var _self = this;
-					
-					S.extend(SpikeCtrl, _self.get('timeObj') );
 
-                    _self._getRealTime();
+                    REALTIME = new RealTime({                        
+                        serviceTime: _self.get('serviceTime'),
+                        url: _self.get('url')                
+                    });
 
-                    // 时间段 导航 集合
-                    _self.timeBlock = S.query( _self.get('timeBlockCls'),  _self.container );
+                    _self._updateMainTime();
+
+                    _self._getNewYMD();
+
+                   
 
                     // 各个时间段 秒杀 区块儿 活动内容区 集合
                     _self.aBlocks = S.query( _self.get('merchBlockCls'), S.get(_self.get('merchContainer')) );                    
-                },
+                },  
 
-                // 获取 实时 时间参数
-                _getRealTime: function(){
-                    var _self = this;
-					
-                    _self.dataYMD = _self.getTimeYMDstr();
-                },      
+
 
                 // 初始化 时间 和 状态/文字
                 _blockStateRender: function(){
                     var _self = this;
 
-                    if(!_self.isValidDate() || _self.timeBlock.length === 0){
+                    if(!_self.isValidDate()){
                         return;
                     }  
 
@@ -199,12 +212,136 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                     if(_self.get('isCustomTimePeriod')) {
                         _self.renderSelfTimeBlock();
                     }else{
-                        _self.renderTimeBlock();
+                        _self.renderFiexdTimeText();
                     }
                    
                     _self._setStateText();
                 },
 
+
+                // 渲染时间轴元素块儿
+                renderTimeBlock: function(lenth){
+                    var _self = this,
+                        tpl = _self.get('timeTemplate'),
+                        ary = [];
+
+                    for(var i = lenth - 1; i >= 0; i--) {
+                         ary.push(tpl);
+                    };
+
+                    DOM.html(_self.container, ary.join('') );
+                    _self._saveTimeBlock();                    
+                },
+
+                // 获取元素块儿 保存 -- 时间段 导航 集合
+                _saveTimeBlock: function(){
+                    var _self = this;
+
+                    !_self.timeBlock && (_self.timeBlock = S.query(_self.get('timeBlockCls'), _self.container ));
+                    S.one( _self.timeBlock[0] ).addClass('mrg_lft155');
+                },
+                
+                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  --- 自定义 不规则时间间隔 及 分 时间
+                renderSelfTimeBlock: function(){
+                    var _self = this,                        
+                        tiems = REALTIME.sortHMtimeArray(_self.get('customTime')),
+                        length = tiems.length;
+
+                    if(!length){
+                        return;
+                    }  
+
+                    // 添加时间块儿
+                    _self.renderTimeBlock(length);  
+
+                    // TIMES_Ary = ;
+
+                    S.each(_self.timeBlock, function(el, num){
+
+                        var hoursContainer = S.one(el).first(_self.get('hoursContainerCls')),
+                            data_hour = tiems[num],                         
+                            nextDataHour = tiems[num+1] ? tiems[num+1] : ONE_DAY,
+                            hourTimeLength = REALTIME.getMillisecond(nextDataHour) - REALTIME.getMillisecond(data_hour);    
+
+                        if( REALTIME.getSelectHMS(data_hour, 'H') > 23){
+                            DOM.remove(el);
+                            S.log('时间点 ' + BLOCK_DATA_TIME+ '="' + data_hour + '" 配置无效！');
+                            return;
+                        } 
+
+                        if(!REALTIME.getSelectHMS(data_hour, 'M')){
+                            data_hour = REALTIME.autoComplement(data_hour, null, null, true); 
+                        }                     
+
+                        // 写入 活动区块序号、时间、长度标示 和 文本字符串 小时时间  
+                        DOM.attr(el, VIEW_INDEX, num); 
+                        DOM.attr(el, BLOCK_DATA_TIME, data_hour);
+                        DOM.attr(el, BLOCK_TIME_LENGTH, hourTimeLength);
+                        hoursContainer && hoursContainer.text(data_hour);
+                    });
+                },
+
+                
+                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  ---  参数配置 固定的 整点秒杀间隔小时
+                renderFiexdTimeText: function(){
+                    var _self = this;
+
+                    _self._calculateTimeLenth();
+
+                    _self._saveTimeBlock();  
+                },
+
+
+                // 固定间隔时间情况下 -- 计算时间点毫秒数 数组
+                _calculateTimeLenth: function(){
+                    var _self = this;
+
+                    var startSeconds = REALTIME.getDateParse(_self.get('startTime')),
+                        beginTimeStr = REALTIME.getAllHMSstr(startSeconds),
+                        
+                        beginHour = REALTIME.getSelectHMS(beginTimeStr, 'H');
+                        beginMinutes = REALTIME.getSelectHMS(beginTimeStr, 'M'),
+                        beginEndStr = REALTIME.autoComplement(beginHour, beginMinutes, null, true),
+                        beginSeconds = REALTIME.getMillisecond(beginEndStr);
+
+                        _self.secondesTims = REALTIME.getMillisecond(_self.get('timeLength'));
+
+                    for (var i = 0; i < 50; i++) {                        
+                        var timeRange = beginSeconds + i*_self.secondesTims,
+                            timeText = timeRange ? REALTIME.getHMstr(timeRange) : beginTimeStr,
+                            hour = REALTIME.getSelectHMS(timeText, 'H');
+                            minutes = REALTIME.getSelectHMS(timeText, 'M'),
+                            dayTimeSeconds = startSeconds + timeRange - beginSeconds,
+
+                            _self.HMstr = REALTIME.autoComplement(hour, minutes, null, true);
+
+                        if( hour > 23 || (hour === 23 && minutes > 59) ){
+                            return false;
+                        }  
+
+                        TIMES_Ary.push(dayTimeSeconds); 
+
+                        _self._writeTimeDataText(i);
+                    };
+
+                    return TIMES_Ary;                   
+                }, 
+
+                // 标示值：写入 活动区块序号、时间、长度标示 和 文本字符串 小时时间 
+                _writeTimeDataText: function(num){
+                    var _self = this,
+                        el = DOM.create(_self.get('timeTemplate')),
+                        // el = S.get(_self.get('timeBlockCls'), tiemBlock),
+                        hoursContainer = S.one(el).first(_self.get('hoursContainerCls'));
+
+                    DOM.attr(el, VIEW_INDEX, num); 
+                    DOM.attr(el, BLOCK_DATA_TIME, _self.HMstr);
+                    DOM.attr(el, BLOCK_TIME_LENGTH, _self.secondesTims);
+                    hoursContainer && hoursContainer.text(_self.HMstr);
+
+                    DOM.append(el, _self.container);
+                },
+               
                 // 渲染懒加载图片
                 renderImgLazyLoad: function(container){
                     var _self = this,
@@ -224,7 +361,7 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                     var _self = this;
 
                     // 监控点击事件
-                    Event.on(_self.timeBlock, 'click', function(el){
+                    Event.on(_self.get('timeBlockCls'), 'click', function(event){
                         _self._timeClickIf(this);
                     });
                 },
@@ -233,9 +370,9 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                 _timeClickIf: function(el){
                     var _self = this,
                         tgsContainer = el,
-                        hasPastTime = DOM.hasClass(tgsContainer, DONECLS),
-                        hasCurrTime = DOM.hasClass(tgsContainer, CURRCLS),
-                        hasFutureTime = DOM.hasClass(tgsContainer, FUTRUECLS);
+                        hasPastTime = DOM.hasClass(tgsContainer, _self.get('doneCls') ),
+                        hasCurrTime = DOM.hasClass(tgsContainer, _self.get('currCls') ),
+                        hasFutureTime = DOM.hasClass(tgsContainer, _self.get('futrueCls') );
 
                     // 过去是否可以查看    
                     if(_self.get('isPastView') && hasPastTime){                       
@@ -292,8 +429,8 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                 _clearAllClickCls: function(){
                     var _self = this;
 
-                    _self._clearClickBlockCls(DONECLS, 'clickPastTimeBlockCls');
-                    _self._clearClickBlockCls(FUTRUECLS, 'clickFutureTimeBlock');
+                    _self._clearClickBlockCls(_self.get('doneCls'), 'clickPastTimeBlockCls');
+                    _self._clearClickBlockCls(_self.get('futrueCls'), 'clickFutureTimeBlock');
                 },
 
                 // 1、传入元素参数--判断显示指定时间段活动内容;   2、不传递参数 默认 隐藏 所有 秒杀商品 区块
@@ -317,81 +454,11 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                     });
                 },
 
-                
-                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  --- 自定义 不规则时间间隔 及 分 时间
-                renderSelfTimeBlock: function(){
-                    var _self = this,
-                        tiems = _self.sortHMtimeArray(_self.get('customTime'));
-
-                    if(!tiems){
-                        return;
-                    }    
-
-                    S.each(_self.timeBlock, function(el, num){
-
-                        var hoursContainer = S.one(el).first(_self.get('hoursContainerCls')),
-                            data_hour = tiems[num],                         
-                            nextDataHour = tiems[num+1] ? tiems[num+1] : ONE_DAY,
-                            hourTimeLength = _self.getMillisecond(nextDataHour) - _self.getMillisecond(data_hour);    
-
-                        if( _self.getSelectHMS(data_hour, 'H') > 23){
-                            DOM.remove(el);
-                            S.log('时间点 ' + BLOCK_DATA_TIME+ '="' + data_hour + '" 配置无效！');
-                            return;
-                        } 
-
-                        if(!_self.getSelectHMS(data_hour, 'M')){
-                            data_hour = _self.autoComplement(data_hour, null, null, true); 
-                        }                     
-
-                        // 写入 活动区块序号、时间、长度标示 和 文本字符串 小时时间  
-                        DOM.attr(el, VIEW_INDEX, num); 
-                        DOM.attr(el, BLOCK_DATA_TIME, data_hour);
-                        DOM.attr(el, BLOCK_TIME_LENGTH, hourTimeLength);
-                        hoursContainer && hoursContainer.text(data_hour);
-                    });
-                },
-
-                
-                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  ---  参数配置 固定的 整点秒杀间隔小时
-                renderTimeBlock: function(){
-                    var _self = this,
-						startSeconds = _self.getDateParse(_self.get('startTime')),
-						beginTimeStr = _self.getAllHMSstr(startSeconds),
-						
-						beginHour = _self.getSelectHMS(beginTimeStr, 'H');
-                        beginMinutes = _self.getSelectHMS(beginTimeStr, 'M'),
-						beginEndStr = _self.autoComplement(beginHour, beginMinutes, null, true),
-						beginSeconds = _self.getMillisecond(beginEndStr), 	
-						
-                        secondesTims = _self.getMillisecond(_self.get('timeLength')),
-                        length = _self.timeBlock.length-1;
-						
-                    S.each(_self.timeBlock, function(el, num){
-                        var hoursContainer = S.one(el).first(_self.get('hoursContainerCls')),
-                            timeRange = !num ? beginSeconds : beginSeconds + num*secondesTims,
-                            timeText = timeRange ? _self.getHMstr(timeRange) : beginTimeStr,
-                            hour = _self.getSelectHMS(timeText, 'H');
-                            minutes = _self.getSelectHMS(timeText, 'M'),
-							endStr = _self.autoComplement(hour, minutes, null, true);
-
-                        if( hour > 23 || (hour === 23 && minutes > 59) ){
-                            DOM.remove(_self.timeBlock[num]);
-                            return;
-                        }    
-
-                        // 写入 活动区块序号、时间、长度标示 和 文本字符串 小时时间  
-                        DOM.attr(el, VIEW_INDEX, num); 
-                        DOM.attr(el, BLOCK_DATA_TIME, endStr);
-                        DOM.attr(el, BLOCK_TIME_LENGTH, secondesTims);
-                        hoursContainer && hoursContainer.text(endStr);
-                    });
-                },
-               
-
                 // 状态 文本 和 样式 -循环
                 _setStateText: function(){
                     var _self = this;
+                    
+                    // 记录开始时间 _self.startTIME = S.now();
 
                     if(!_self.isValidDate()){                        
                         _self.allShowHideFn();
@@ -417,19 +484,19 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                 _renderStateAll: function(el, index){
                     var _self = this,
                         timeStr = DOM.attr(el, BLOCK_DATA_TIME),
-                        hour = _self.getSelectHMS(timeStr, 'H'),
-                        minutes = _self.getSelectHMS(timeStr, 'M');
+                        hour = REALTIME.getSelectHMS(timeStr, 'H'),
+                        minutes = REALTIME.getSelectHMS(timeStr, 'M');
 
                     if(hour >= DAY_HOURS){
                         return;
                     }  
 
-                    var timeLengthSeconds = parseInt(DOM.attr(el, BLOCK_TIME_LENGTH), 10);
-                        curDateStr = _self.dataYMD +' '+ _self.autoComplement(hour, minutes);
-                        spikeTimeStart = _self.getDateParse(curDateStr),
-                        spikeTimeEnd = _self.offsetDateSeconds(curDateStr, timeLengthSeconds, '+'),                      
+                    var timeLengthSeconds = parseInt(DOM.attr(el, BLOCK_TIME_LENGTH), 10),
+                        curDateStr = REALTIME.getTimeYMDstr() +' '+ REALTIME.autoComplement(hour, minutes),
+                        spikeTimeStart = REALTIME.getDateParse(curDateStr),
+                        spikeTimeEnd = REALTIME.offsetDateSeconds(curDateStr, timeLengthSeconds, '+'),                      
                         isLastBlock = (_self.timeBlock.length-1) === index,
-                        dayEndTimeSeconds = _self.getDateParse(_self.dataYMD +' 23:59:59') + ONE_SECONDS;    
+                        dayEndTimeSeconds = REALTIME.getDateParse(REALTIME.getTimeYMDstr() +' 23:59:59') + ONE_SECONDS;    
 
                     if(!el){
                         return;
@@ -440,19 +507,21 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                         _self._addPastState(el);
 
                     // 是否 当前 时间 段:  < 设定-1秒  && <= 设定+间隔- 1秒  vs // 不足24小时情况, 则停留最后 一个时间点上     
-                    }else if( _self.isInTimeRange(spikeTimeStart, _self.mainTime, spikeTimeEnd) || _self.isInTimeRange(spikeTimeStart, _self.mainTime, dayEndTimeSeconds) && isLastBlock ){                       
+                    }else if( REALTIME.isInTimeRange(spikeTimeStart, _self.mainTime, spikeTimeEnd) || REALTIME.isInTimeRange(spikeTimeStart, _self.mainTime, dayEndTimeSeconds) && isLastBlock ){                       
                         _self._addCurrState(el);
 
                     // 是否 未来 时间  
                     }else{
-                        _self._addFutureState(el);                    
+                        _self._addFutureState(el);  
+                        // isLastBlock && S.log((S.now()) - _self.startTIME)                  
                     }
                 },
 
                 // 添加过去样式
                 _addPastState: function(el){
                     var _self = this,
-                        hasPastTime = DOM.hasClass(el, DONECLS),                      
+                        donecls = _self.get('doneCls'),
+                        hasPastTime = DOM.hasClass(el, donecls),                      
                         textContainer = S.one(el).first(_self.get('stateTextCls'));
                     
                     if(hasPastTime){
@@ -462,7 +531,7 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                     // 操作前 先 清空状态( 样式和文案 )
                     _self._clearCls(el);     
 
-                    DOM.addClass(el, DONECLS);
+                    DOM.addClass(el, donecls);
                     DOM.text(textContainer, _self.get('pastStateText'));
 
                     _self.fire('passSpikeChange', {"elTarget":el});  
@@ -471,7 +540,8 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                 // 添加当前样式
                 _addCurrState: function(el){
                     var _self = this,
-                        hasCurrTime = DOM.hasClass(el, CURRCLS),
+                        currcls = _self.get('currCls'),
+                        hasCurrTime = DOM.hasClass(el, currcls),
                         textContainer = S.one(el).first(_self.get('stateTextCls'));
                     
                     if(hasCurrTime){
@@ -481,7 +551,7 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                     // 操作前 先 清空状态( 样式和文案 )
                     _self._clearCls(el);
                       
-                    DOM.addClass(el, CURRCLS);
+                    DOM.addClass(el, currcls);
                     DOM.text(textContainer, _self.get('currtStateText'));
                     
                     // 展现当前 秒杀内容
@@ -495,8 +565,9 @@ KISSY.add('spike_gallery/spikectrl', function(S){
 
                 // 添加即将秒杀样式
                 _addFutureState: function(el){
-                    var _self = this,                        
-                        hasFutureTime = DOM.hasClass(el, FUTRUECLS),
+                    var _self = this, 
+                        futruecls = _self.get('futrueCls'),                       
+                        hasFutureTime = DOM.hasClass(el, futruecls),
                         textContainer = S.one(el).first(_self.get('stateTextCls')); 
                     
                     if(hasFutureTime){
@@ -506,7 +577,7 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                     // 操作前 先 清空状态( 样式和文案 )
                     _self._clearCls(el);
                       
-                    DOM.addClass(el, FUTRUECLS);
+                    DOM.addClass(el, futruecls);
                     DOM.text(textContainer, _self.get('futureStateText'));
 
                     _self.fire('futureSpikeChange', {"elTarget":el});
@@ -517,22 +588,29 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                     var _self = this,
                         textContainer = S.one(el).first(_self.get('stateTextCls'));
 
-                    DOM.removeClass(el, DONECLS);
-                    DOM.removeClass(el, CURRCLS);
-                    DOM.removeClass(el, FUTRUECLS);
+                    DOM.removeClass(el, _self.get('doneCls'));
+                    DOM.removeClass(el, _self.get('currCls'));
+                    DOM.removeClass(el, _self.get('futrueCls'));
 
                     if(textContainer){
                         DOM.text(textContainer, '');
                     }
                 }, 
 
+                // 更新主时间
+                _updateMainTime: function(){
+                    var _self = this;
+
+                    _self.mainTime = REALTIME.getCurrTime();
+                },
+
                 // 判断日期 总区段 有效性
                 isValidDate: function(){
                     var _self = this,
-                        startTime = _self.getDateParse(_self.get('startTime')),
-                        endTime = _self.getDateParse(_self.get('endTime'));
+                        startTime = REALTIME.getDateParse(_self.get('startTime')),
+                        endTime = REALTIME.getDateParse(_self.get('endTime'));
                     
-                    return _self.isInTimeRange(startTime, _self.mainTime, endTime);
+                    return REALTIME.isInTimeRange(startTime, _self.mainTime, endTime);
                 },  
 
                 // 隐藏或者显示所有 时间 段区块儿
@@ -557,7 +635,7 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                         isAllDone = true;
 
                     S.each(_self.timeBlock, function(el){
-                        if(!DOM.hasClass(el, DONECLS)){
+                        if(!DOM.hasClass(el, _self.get('doneCls'))){
                             isAllDone = false;
                             return false;
                         }
@@ -569,17 +647,24 @@ KISSY.add('spike_gallery/spikectrl', function(S){
                 // 本地更新：时间、ui 方法
                 _startUpdateUi: function(){
                     var _self = this,
-                        updateTime = _self.get('updateUiSeconds') < 1 ? 1 : _self.get('updateUiSeconds');
+                        updateTime = _self.get('updateUiSeconds') < 1 ? 1 : _self.get('updateUiSeconds'),
+                        secondes = updateTime*ONE_SECONDS;
 
                     if(_self.autoUpdateIntvl){
                         return;
                     }
 
-                    _self.autoUpdateIntvl = setInterval(autofn, updateTime*ONE_SECONDS );                     
+                    _self.autoUpdateIntvl = setInterval(autofn, secondes);                     
 
                     function autofn(){
-						// 更新 当前时间 年月日
-						_self._getRealTime();
+                        _self._updateMainTime();
+
+                        // S.log('时间对象获得时间：' + new Date(_self.mainTime) );
+                        // S.log('js直接获取时间：' + new Date() );
+                        // S.log('差距时间：' + (REALTIME.getServerLocalDiff())/ONE_MINUTES );
+
+						// 更新 实时时间 年月日
+						_self._getNewYMD();
 					
                         // 调用 ui 更新方法
                         _self._setStateText();                          
@@ -597,4 +682,4 @@ KISSY.add('spike_gallery/spikectrl', function(S){
 
     return SpikeCtrl;
 
-}, {'requires':['./spikectrl.css']});
+}, {'requires':['spike_gallery/real-time', './spikectrl.css']});

@@ -38,7 +38,10 @@ KISSY.add('spike_gallery/real-time', function(S){
 			isAutoUpdate: true,
 			
             // 异步更新服务器时间 配置，需要大于等于1分钟 -- 默认
-            ajaxUpMinutes: 1              
+            ajaxUpMinutes: 1,
+
+            // 本地时间更新频率 秒
+            localTimeUpdate: 1              
         };  
 
 
@@ -59,7 +62,8 @@ KISSY.add('spike_gallery/real-time', function(S){
 
         // 支持的事件
         RealTime.events = [
-            /**  
+
+            /**  _self.fire('localTimeUpdateMod', {"time": _self.mainTime});
             * 本地时间更新 模式发生
             * @event localTimeUpdateMod 
 			* @param {number} ev.time 当前时间
@@ -120,7 +124,7 @@ KISSY.add('spike_gallery/real-time', function(S){
 					return _self.getAllHMSstr(_self.mainTime);
                 },
 
-                // 初始化 主时间
+                // 初始化 主时间 
                 _renderMainTime: function(){
                     var _self = this,
                         jsRenderTime = S.now() - TIME,
@@ -137,7 +141,7 @@ KISSY.add('spike_gallery/real-time', function(S){
                     }
 
                     if(serviceTime){
-                        _self.mainTime = serviceTime + jsRenderTime;    
+                        _self.mainTime = serviceTime + 0;   // 载入时间修正 
 
                         // 校正大小 和 差异重置
                         _self.serverLocalCompara();
@@ -153,9 +157,9 @@ KISSY.add('spike_gallery/real-time', function(S){
                 // 获取服务器时间
                 getCurrTime: function(){
                     var _self = this,
-                        time = _self.hasServiceTime ? _self.mainTime : null;
+                        time = !_self.hasServiceTime ? _self.mainTime : null;
 
-                    return time;
+                    return _self.mainTime;
                 },
 
                 // 获取 服务器 与 本地差异
@@ -193,7 +197,7 @@ KISSY.add('spike_gallery/real-time', function(S){
                     var _self = this,
                         localTime = S.now();
 
-                    _self.differenceTime = _self.differenceTime ? _self.differenceTime : 0;                            
+                    _self.differenceTime = _self.differenceTime ? _self.differenceTime : 0;                           
 
                     if(_self.localTimeMax){
                         _self.mainTime = localTime - _self.differenceTime;
@@ -456,16 +460,17 @@ KISSY.add('spike_gallery/real-time', function(S){
                     _self._renderNewTime();
                 },
 
-                // 本地更新：时间、ui 方法
+                // 本地 时间 更新方法
                 _renderNewTime: function(){
                     var _self = this,
-                        updateTime = _self.get('updateUiSeconds') < 1 ? 1 : _self.get('updateUiSeconds');
+                        updateTime = _self.get('localTimeUpdate') < 1 ? 1 : _self.get('localTimeUpdate'),
+                        interTime = updateTime*ONE_SECONDS;
 
                     if(_self.autoCorrectionIntvl){
                         return;
                     }
 
-                    _self.autoCorrectionIntvl = setInterval(autofn, updateTime*ONE_SECONDS );                     
+                    _self.autoCorrectionIntvl = setInterval(autofn, interTime);                     
 
                     function autofn(){
                         // 更新主时间
@@ -476,7 +481,8 @@ KISSY.add('spike_gallery/real-time', function(S){
                 // 远程异步接口更新时间
                 _ajaxUpdateTime: function(){
                     var _self = this,
-                        ajaxUpMinutes = _self.get('ajaxUpMinutes') < 1 ? 1 : _self.get('ajaxUpMinutes');
+                        ajaxUpMinutes = _self.get('ajaxUpMinutes') < 1 ? 1 : _self.get('ajaxUpMinutes'),
+                        updateTime = ajaxUpMinutes*ONE_MINUTES;
 
                     // 无 url 或者 已经存在 循环定时器 退出    
                     if(!_self.get('url') || _self.ajaxTimeUpdate){
@@ -485,7 +491,7 @@ KISSY.add('spike_gallery/real-time', function(S){
 
                     _self.ajaxTimeUpdate = setInterval(function(){
                         _self.getServerTime();
-                    }, ajaxUpMinutes*ONE_MINUTES );                    
+                    }, updateTime);          
                 },
 
                 // 停止时间自动更新 -- 时间、ajax异步、本地纠正 循环

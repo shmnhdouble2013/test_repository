@@ -10,20 +10,19 @@
     <div class="contpage">
 
         <!-- 导航预设容器 -->
-        <div class="section-block sends-container">   
-            <a class="mrg_lft155 j_timeBlock"> <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
-            <a class="j_timeBlock" > <span class="hours"></span><span class="state"></span></a>
-        </div>
+        <div class="section-block sends-container" id="J_time-container" ></div>
+
+
+
+
+
+
+
+
+
+
+
+
 
         <!-- 秒杀活动内容区块 -->
         <div class="mui-act-items mui-act-items-240 section-block" id="J_secondContent" style="border: 1px dashed orange;">
@@ -581,34 +580,21 @@
         ]
     });
 
+    KISSY.Config.debug = true;
 
     KISSY.ready(function(S){ 
 	
         // 双十一整点秒杀 组件
-        S.use('spike_gallery/spikectrl, spike_gallery/real-time', function(S, RealTime, SpikeCtrl){
-			
-			// 初始化 实时时间 对象
-			var RealTimeObj = new RealTime({
-				// 服务器初始化时间 默认 毫秒数 number、支持 标准时间字符串如：'2013-11-20 17:30:32'
-    			serviceTime: S.now(),    
-					
-				// 服务器时间 url接口 -- 默认
-				url: 'http://www.tmall.com/go/rgn/get_server_time.php?spm=0.0.0.0.c01Zvr',
-				
-				// 是否是jsonp  --默认
-				// isJsonp: true,
-				
-				// 是否开启 自动更新 --默认
-				// isAutoUpdate: true,
-				
-				// 异步更新服务器时间 配置，需要大于等于1分钟 -- 默认
-				// ajaxUpMinutes: 1              
-			});
+        S.use('spike_gallery/spikectrl', function(S, SpikeCtrl){
 			
 			// 初始化 时间轴 秒杀控制js
-			var oSpikeCtrl = new SpikeCtrl('.sends-container', {					
-				// 时间对象
-				timeObj: RealTimeObj,	
+			new SpikeCtrl('#J_time-container', {
+
+                // 服务器初始化时间 默认 毫秒数 number、支持 标准时间字符串如：'2013-11-20 17:30:32'
+                serviceTime: S.now(),    
+                    
+                // 服务器时间 url接口 -- 默认
+                url: 'http://www.tmall.com/go/rgn/get_server_time.php?spm=0.0.0.0.c01Zvr',
 				
 				// 是否开启 自动更新  --默认
 				// isAutoUpdateUi: true,
@@ -624,7 +610,7 @@
 				endTime: '2115-11-11 23:59:59',
 				
 				// 是否 html 自定义 不规则 时间段 -- 若此处开启 则需要 配置 下列 customTime 时间点数组
-				isCustomTimePeriod: false,
+				isCustomTimePeriod: true,
 
 				// 自定义时间点 数组 --- 支持 时间大小顺序 随机排列！
 				customTime : ["17:45", "18:08", "20:45", "23:31", "17:48", "20:43", "09", "19:31", "14:32", "14:35", "20:20", "23:30"],
