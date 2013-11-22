@@ -25,6 +25,7 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
             ONE_DAY = 1000*60*60*24;
 
         var REALTIME,
+            TEMPLATE = '<a class="j_timeBlock"><span class="hours"></span><span class="state"></span></a>',
             TIMES_Ary = [];      
     
 
@@ -32,7 +33,7 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
         var defCfg = {
 
             // 时间轴 timeTemplate 模板
-            timeTemplate: '<a class="j_timeBlock"><span class="hours"></span><span class="state"></span></a>',
+            timeTemplate: '',
 
             // 时间配置
             startTime: '',  
@@ -188,17 +189,20 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                         url: _self.get('url')                
                     });
 
+
+                    if(_self.get('timeTemplate')){
+                        TEMPLATE = _self.get('timeTemplate');
+                    }else{
+                        S.use('spike_gallery/spikectrl.css');
+                    }
+
                     _self._updateMainTime();
 
                     _self._getNewYMD();
 
-                   
-
                     // 各个时间段 秒杀 区块儿 活动内容区 集合
                     _self.aBlocks = S.query( _self.get('merchBlockCls'), S.get(_self.get('merchContainer')) );                    
                 },  
-
-
 
                 // 初始化 时间 和 状态/文字
                 _blockStateRender: function(){
@@ -222,11 +226,14 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                 // 渲染时间轴元素块儿
                 renderTimeBlock: function(lenth){
                     var _self = this,
-                        tpl = _self.get('timeTemplate'),
                         ary = [];
 
-                    for(var i = lenth - 1; i >= 0; i--) {
-                         ary.push(tpl);
+                    if(!TEMPLATE){
+                        return;
+                    }    
+
+                    for(var i= lenth-1; i >= 0; i--) {
+                        ary.push(TEMPLATE);
                     };
 
                     DOM.html(_self.container, ary.join('') );
@@ -238,47 +245,51 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                     var _self = this;
 
                     !_self.timeBlock && (_self.timeBlock = S.query(_self.get('timeBlockCls'), _self.container ));
-                    S.one( _self.timeBlock[0] ).addClass('mrg_lft155');
+                    S.one(_self.timeBlock[0]).addClass('mrg_lft155');
                 },
                 
                 // 根据 容器 个数 和 时间 配置参数 初始化 时间段  --- 自定义 不规则时间间隔 及 分 时间
                 renderSelfTimeBlock: function(){
-                    var _self = this,                        
+                    var _self = this, 
+                        ary = [],                       
                         tiems = REALTIME.sortHMtimeArray(_self.get('customTime')),
                         length = tiems.length;
 
-                    if(!length){
+                    if(!length || !TEMPLATE){
+                        S.log('自定义时间数据或者模板 无效！');
                         return;
-                    }  
+                    } 
 
-                    // 添加时间块儿
-                    _self.renderTimeBlock(length);  
+                    for(var i= 0; i < length; i++) {
+                       
+                        var data_hour = tiems[i],                         
+                            nextDataHour = tiems[i+1] ? tiems[i+1] : ONE_DAY,
 
-                    // TIMES_Ary = ;
+                            timeRange = REALTIME.getMillisecond(nextDataHour) - REALTIME.getMillisecond(data_hour),
 
-                    S.each(_self.timeBlock, function(el, num){
+                            timeText = REALTIME.getHMstr(timeRange),
 
-                        var hoursContainer = S.one(el).first(_self.get('hoursContainerCls')),
-                            data_hour = tiems[num],                         
-                            nextDataHour = tiems[num+1] ? tiems[num+1] : ONE_DAY,
-                            hourTimeLength = REALTIME.getMillisecond(nextDataHour) - REALTIME.getMillisecond(data_hour);    
+                            hour = REALTIME.getSelectHMS(timeText, 'H'),
+                            minutes = REALTIME.getSelectHMS(timeText, 'M');
 
-                        if( REALTIME.getSelectHMS(data_hour, 'H') > 23){
-                            DOM.remove(el);
-                            S.log('时间点 ' + BLOCK_DATA_TIME+ '="' + data_hour + '" 配置无效！');
-                            return;
+                            dayTimeSeconds = startSeconds + timeRange - beginSeconds;
+
+                        if(!REALTIME.getSelectHMS(timeText, 'M')){
+                            minutes = REALTIME.autoComplement(hour, null, null, true); 
                         } 
 
-                        if(!REALTIME.getSelectHMS(data_hour, 'M')){
-                            data_hour = REALTIME.autoComplement(data_hour, null, null, true); 
-                        }                     
+                        _self.HMstr = REALTIME.autoComplement(hour, minutes, null, true);
+                        _self.hourTimeLength = timeRange;  
 
-                        // 写入 活动区块序号、时间、长度标示 和 文本字符串 小时时间  
-                        DOM.attr(el, VIEW_INDEX, num); 
-                        DOM.attr(el, BLOCK_DATA_TIME, data_hour);
-                        DOM.attr(el, BLOCK_TIME_LENGTH, hourTimeLength);
-                        hoursContainer && hoursContainer.text(data_hour);
-                    });
+                        if( hour > 23 || (hour === 23 && minutes > 59) ){
+                            S.log('时间点:' + _self.HMstr + '" 配置无效！');
+                            return false;
+                        }  
+
+                        TIMES_Ary.push(dayTimeSeconds); 
+
+                        _self._writeTimeDataText(i);
+                    };
                 },
 
                 
@@ -329,8 +340,13 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
 
                 // 标示值：写入 活动区块序号、时间、长度标示 和 文本字符串 小时时间 
                 _writeTimeDataText: function(num){
-                    var _self = this,
-                        el = DOM.create(_self.get('timeTemplate')),
+                    var _self = this;
+
+                    if(!TEMPLATE){
+                        return;
+                    }  
+
+                    var el = DOM.create(TEMPLATE),
                         // el = S.get(_self.get('timeBlockCls'), tiemBlock),
                         hoursContainer = S.one(el).first(_self.get('hoursContainerCls'));
 
@@ -682,4 +698,4 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
 
     return SpikeCtrl;
 
-}, {'requires':['spike_gallery/real-time', './spikectrl.css']});
+}, {'requires':['spike_gallery/real-time']});
