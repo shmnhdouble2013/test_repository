@@ -4,7 +4,7 @@
 * @creator  黄甲(水木年华double)<huangjia2015@gmail.com>
 * @depends  ks-core
 * @version  2.0  
-* @update 2013-11-20  时间更新逻辑 抽出、 待 3.0 优化 ui 更新事件通知机制 
+* @update 2013-11-20  修正自定义 img-layzload机制、时间轴生成2套模式 优化 
 **/
  
 KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
@@ -24,7 +24,8 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
             ONE_HOURS = 1000*60*60,
             ONE_DAY = 1000*60*60*24;
 
-        var REALTIME,
+        var IMG_SRC = 'http://g.tbcdn.cn/s.gif',
+			REALTIME,
             TEMPLATE = '<a class="j_timeBlock"><span class="hours"></span><span class="state"></span></a>',
             TIMES_Ary = [];      
     
@@ -161,7 +162,9 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                        
                     _self._argumentsInit();
 					
-                    _self._hideAllAcitve(); 					
+					_self.renderImgSrc();					
+                    _self._hideAllAcitve(); 
+					
                     _self._blockStateRender(); 
 
                     _self._eventRender();
@@ -188,7 +191,12 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                         serviceTime: _self.get('serviceTime'),
                         url: _self.get('url')                
                     });
-
+					
+					// 整个 开始日期 毫秒数	
+					_self.startDateMillisecond = REALTIME.getDateParse(_self.get('startTime'));
+					
+					// 固定的时间 间隔毫秒数
+					_self.timeLengthSecondes = REALTIME.getMillisecond(_self.get('timeLength'));
 
                     if(_self.get('timeTemplate')){
                         TEMPLATE = _self.get('timeTemplate');
@@ -248,11 +256,12 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                     S.one(_self.timeBlock[0]).addClass('mrg_lft155');
                 },
                 
-                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  --- 自定义 不规则时间间隔 及 分 时间
+                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  --- 自定义 不规则时间间隔
                 renderSelfTimeBlock: function(){
                     var _self = this, 
-                        ary = [],                       
+                        fragment = document.createDocumentFragment(),                      
                         tiems = REALTIME.sortHMtimeArray(_self.get('customTime')),
+                        tiems = REALTIME.allStrHMtimeRenderFn(tiems),						
                         length = tiems.length;
 
                     if(!length || !TEMPLATE){
@@ -261,85 +270,82 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                     } 
 
                     for(var i= 0; i < length; i++) {
-                       
-                        var data_hour = tiems[i],                         
-                            nextDataHour = tiems[i+1] ? tiems[i+1] : ONE_DAY,
+                        var curTimeStr = tiems[i],
+							nextTimeStr = tiems[i+1], 
+							nextDataHour = nextTimeStr ? nextTimeStr : ONE_DAY,	
+							timeRange = REALTIME.getMillisecond(nextDataHour) - REALTIME.getMillisecond(curTimeStr),
+                            dayTimeSeconds = _self.startDateMillisecond + timeRange;
+						
+						// 添加完整时间 毫秒数
+						if(!i){
+							TIMES_Ary.push(_self.startDateMillisecond); 
+						}else{
+							TIMES_Ary.push(_self.startDateMillisecond); 
+						}
 
-                            timeRange = REALTIME.getMillisecond(nextDataHour) - REALTIME.getMillisecond(data_hour),
-
-                            timeText = REALTIME.getHMstr(timeRange),
-
-                            hour = REALTIME.getSelectHMS(timeText, 'H'),
-                            minutes = REALTIME.getSelectHMS(timeText, 'M');
-
-                            dayTimeSeconds = startSeconds + timeRange - beginSeconds;
-
-                        if(!REALTIME.getSelectHMS(timeText, 'M')){
-                            minutes = REALTIME.autoComplement(hour, null, null, true); 
-                        } 
-
-                        _self.HMstr = REALTIME.autoComplement(hour, minutes, null, true);
-                        _self.hourTimeLength = timeRange;  
-
-                        if( hour > 23 || (hour === 23 && minutes > 59) ){
-                            S.log('时间点:' + _self.HMstr + '" 配置无效！');
-                            return false;
-                        }  
-
-                        TIMES_Ary.push(dayTimeSeconds); 
-
-                        _self._writeTimeDataText(i);
+                        fragment.appendChild( _self._writeTimeDataText(i, curTimeStr, timeRange) );
                     };
+					
+					DOM.append(fragment, _self.container); 
                 },
-
                 
-                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  ---  参数配置 固定的 整点秒杀间隔小时
+                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  ---固定的 整点秒杀 间隔小时
                 renderFiexdTimeText: function(){
                     var _self = this;
 
                     _self._calculateTimeLenth();
 
-                    _self._saveTimeBlock();  
+                    //_self._saveTimeBlock();  
                 },
+				
+				// 获取设定的 开始时间 数据
+				_getStartDateHMstr: function(){
+					var _self = this;
+				},
 
 
                 // 固定间隔时间情况下 -- 计算时间点毫秒数 数组
                 _calculateTimeLenth: function(){
-                    var _self = this;
+                    var _self = this,
+						fragment = document.createDocumentFragment(),
+					
+						HMSstr = REALTIME.getAllHMSstr(_self.startDateMillisecond),
+						startDateHMS_Millisecond = REALTIME.getMillisecond(HMSstr),
+						
+						beginHour = REALTIME.getSelectHMS(HMSstr, 'H'),
+                        beginMinutes = REALTIME.getSelectHMS(HMSstr, 'M'),
+                        beginSeconds = REALTIME.getSelectHMS(HMSstr, 'S'),
+											
+						startDateHMstr = REALTIME.autoComplement(beginHour, beginMinutes);
 
-                    var startSeconds = REALTIME.getDateParse(_self.get('startTime')),
-                        beginTimeStr = REALTIME.getAllHMSstr(startSeconds),
-                        
-                        beginHour = REALTIME.getSelectHMS(beginTimeStr, 'H');
-                        beginMinutes = REALTIME.getSelectHMS(beginTimeStr, 'M'),
-                        beginEndStr = REALTIME.autoComplement(beginHour, beginMinutes, null, true),
-                        beginSeconds = REALTIME.getMillisecond(beginEndStr);
-
-                        _self.secondesTims = REALTIME.getMillisecond(_self.get('timeLength'));
-
-                    for (var i = 0; i < 50; i++) {                        
-                        var timeRange = beginSeconds + i*_self.secondesTims,
-                            timeText = timeRange ? REALTIME.getHMstr(timeRange) : beginTimeStr,
+                    for(var i = 0; i < 50; i++) {   
+					
+                        var timeRange = startDateHMS_Millisecond + i*_self.timeLengthSecondes,
+                            timeText = timeRange ? REALTIME.getHMstr(timeRange) : startDateHMstr,
+							
                             hour = REALTIME.getSelectHMS(timeText, 'H');
                             minutes = REALTIME.getSelectHMS(timeText, 'M'),
-                            dayTimeSeconds = startSeconds + timeRange - beginSeconds,
+							
+                            dayTimeSeconds = _self.startDateMillisecond + timeRange - startDateHMS_Millisecond,
 
-                            _self.HMstr = REALTIME.autoComplement(hour, minutes, null, true);
+                            _self.HMstr = REALTIME.autoComplement(hour, minutes);
 
                         if( hour > 23 || (hour === 23 && minutes > 59) ){
-                            return false;
+                            break;
                         }  
 
                         TIMES_Ary.push(dayTimeSeconds); 
 
-                        _self._writeTimeDataText(i);
+                        //fragment.appendChild( _self._writeTimeDataText(i, , ) );
                     };
+		
+                    DOM.append(fragment, _self.container); 
 
                     return TIMES_Ary;                   
                 }, 
 
-                // 标示值：写入 活动区块序号、时间、长度标示 和 文本字符串 小时时间 
-                _writeTimeDataText: function(num){
+                // 时间轴 标示值写入方法：展现文本小时分时间、时间段内长度标示 和 活动区块序号index 
+                _writeTimeDataText: function(num, HMstr, timeLengthSecondes){
                     var _self = this;
 
                     if(!TEMPLATE){
@@ -347,30 +353,53 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                     }  
 
                     var el = DOM.create(TEMPLATE),
-                        // el = S.get(_self.get('timeBlockCls'), tiemBlock),
                         hoursContainer = S.one(el).first(_self.get('hoursContainerCls'));
 
                     DOM.attr(el, VIEW_INDEX, num); 
-                    DOM.attr(el, BLOCK_DATA_TIME, _self.HMstr);
-                    DOM.attr(el, BLOCK_TIME_LENGTH, _self.secondesTims);
-                    hoursContainer && hoursContainer.text(_self.HMstr);
-
-                    DOM.append(el, _self.container);
+                    DOM.attr(el, BLOCK_DATA_TIME, HMstr);
+                    DOM.attr(el, BLOCK_TIME_LENGTH, timeLengthSecondes);
+                    hoursContainer && hoursContainer.text(HMstr);
+					
+					return el;
                 },
                
-                // 渲染懒加载图片
-                renderImgLazyLoad: function(container){
+			    // 渲染懒加载图片
+				renderImgLazyLoad: function(el){
+					var _self = this,
+						Aimgs = [];
+						
+					if(el){
+						Aimgs = S.query('img', el);
+					}
+					
+                    S.each(Aimgs, function(el){
+                        var rotoSrc = DOM.attr(el, _self.get('lazyLoadSrc') ),
+							src = DOM.attr(el, 'src');
+						
+						if(rotoSrc === src){
+							return;
+						}
+						
+                        rotoSrc && DOM.attr(el, 'src', rotoSrc);                        
+                    }); 
+					
+				},				
+			   
+                // 懒加载 图片 初始化
+                renderImgSrc: function(){
                     var _self = this,
-                        Aimgs = S.query('img', container);
+                        Aimgs = S.query('img', S.get(_self.get('merchContainer')) );
 
                     S.each(Aimgs, function(el){
-                        var src = DOM.attr( el, _self.get('lazyLoadSrc'));
-
-                        if(src){
-                            DOM.attr( el, 'src', src);
-                        }                        
+                        var rotoSrc = DOM.attr(el, 'src');
+						
+						DOM.attr(el, 'src', IMG_SRC);
+						
+                        rotoSrc && DOM.attr(el, _self.get('lazyLoadSrc'), rotoSrc);                        
                     }); 
                 },
+				
+				
 
                 // 事件初始化
                 _eventRender: function(){

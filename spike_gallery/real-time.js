@@ -118,7 +118,7 @@ KISSY.add('spike_gallery/real-time', function(S){
 				},
 				
 				// 获取当前时间 时分秒 字符串
-                getTimeHMSstr: function(){
+                getCurrTimeHMSstr: function(){
                     var _self = this;
 					
 					return _self.getAllHMSstr(_self.mainTime);
@@ -287,7 +287,7 @@ KISSY.add('spike_gallery/real-time', function(S){
                 },
 
                 /**
-                * 根据时分秒 残缺信息 自动补全完整 合法时间字符串
+                * 根据时分秒 残缺信息 自动补全完整 合法时间字符串 --- base基础方法
                 * @method autoComplement
                 * @param {string} 时间字符串 小时 '3'
                 * @param {string} 时间字符串 分钟 '19'
@@ -297,6 +297,7 @@ KISSY.add('spike_gallery/real-time', function(S){
                 **/ 
                 autoComplement: function(hour, minutes, seconds, isHideSeconds){
                     var _self = this,
+						isHideSeconds = isHideSeconds ? isHideSeconds : true,
                         ary,
                         zeroNorml = '00',
                         concat = ":";
@@ -343,14 +344,56 @@ KISSY.add('spike_gallery/real-time', function(S){
                     }
 
                     return S_Date.format(d, 'HH:MM:ss');
-                },     
+                }, 
+				
+				// 随机 杂乱 自定义 时分 字符串 数据处理函数 -- // 为了配置参数的 高度灵活性 -- 支持 小时9 || 09、分 7 || 07、支持 时分 联合9:27 || 09:1 || 9:29
+				allStrHMtimeRenderFn: function(strTimeAry){
+					var _self = this,
+						endTimeStrAry = [],
+						strTimeAry = S.isArray(strTimeAry) ? strTimeAry : [strTimeAry]; 
+					
+					S.each(strTimeAry, function(val){
+						var timeStr = val ? val : '',                             						
+							hour = _self.getSelectHMS(timeStr, 'H'),
+                            minutes = _self.getSelectHMS(timeStr, 'M'),
+							hmStr = _self.formatHMSstr(timeStr);
+							
+                        if( hour > 23 || (hour === 23 && minutes > 59) ){
+                            S.log('时间点:' + timeStr + '" 配置无效！');
+                            return;
+                        }  
+						
+						endTimeStrAry.push(hmStr);
+					});
+					
+					return endTimeStrAry;				
+				},
+
+				 /**
+                * 根据 处理规范 时分秒字符串值
+                * @method formatHMSstr(str)
+                * @param {string} 不规范的 时分秒字符串值 H:M:S 
+                * @param {boolean} 时分只输出 时分 
+                * @return {string} 规范的时分秒值 || ''
+                */
+				formatHMSstr: function(str, isHideSeconds){
+					var _self = this,
+						isHideSeconds = isHideSeconds ? isHideSeconds : true,
+						str = str ? str : '';
+					
+					var hour = _self.getSelectHMS(str, 'H'),
+                        minutes = _self.getSelectHMS(str, 'M'),
+                        seconds = _self.getSelectHMS(str, 'S');
+						
+					return _self.autoComplement(hour, minutes, seconds, isHideSeconds)
+				},	
 
                 /**
                 * 根据 时分秒 字符串 获取 3段指定 时分秒 值
                 * @method getSelectHMS(date, dateType)
                 * @param {data} 日期时间
                 * @param {string} 要获取的 时分秒 类型 H M S
-                * @return {number || undefined}
+                * @return {number || 0}
                 */
                 getSelectHMS: function(hourMinutesStr, dateType){
                     var _self = this,
@@ -368,7 +411,7 @@ KISSY.add('spike_gallery/real-time', function(S){
                             break;         
                     }
 
-                    return timeNum; 
+                    return timeNum || 0; 
                 },
                 
                 /**
@@ -391,7 +434,7 @@ KISSY.add('spike_gallery/real-time', function(S){
                         IntMinutes = parseInt( minuteses, 10), 
                         endTime = Math.abs(roundMinutes - minuteses) <= 0.0000000001 ? roundMinutes : IntMinutes; // 四舍五入 减少1分钟误差
 
-                    return _self.autoComplement(hour, endTime, null, true);
+                    return _self.autoComplement(hour, endTime);
                 },
 
                 /**
