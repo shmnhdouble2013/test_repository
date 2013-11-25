@@ -1,10 +1,10 @@
 /** 
-* @fileOverview 自动时间更新 及其丰富 的时间方法 js
+* @fileOverview 自动时间更新组件 及其 丰富 的时间处理方法 js
 * @extends  KISSY.Base
 * @creator  黄甲(水木年华double)<huangjia2015@gmail.com>
 * @depends  ks-core
 * @version  1.0  
-* @update 2013-11-21  本地、模拟、ajax异步 3套 时间更新机制
+* @update 2013-11-21  本地时间、时间差模拟时间、ajax间隔性异步纠正时间 3套时间更新机制
 */        
  
 KISSY.add('spike_gallery/real-time', function(S){
@@ -51,7 +51,7 @@ KISSY.add('spike_gallery/real-time', function(S){
             _self.config = S.merge(defCfg, config);
 
             if( !(_self instanceof RealTime) ){
-                return new RealTime(container, _self.config);
+                return new RealTime(_self.config);
             }
 
             RealTime.superclass.constructor.call(_self, _self.config);
@@ -94,7 +94,7 @@ KISSY.add('spike_gallery/real-time', function(S){
                     var _self = this;    
                        
                     _self._argumentsInit();
-                    _self._eventRender();
+                    //_self._eventRender();
 					
 					if(_self.get('isAutoUpdate') ){
                         _self.startAutoUpdateTime();  
@@ -141,7 +141,7 @@ KISSY.add('spike_gallery/real-time', function(S){
                     }
 
                     if(serviceTime){
-                        _self.mainTime = serviceTime + 0;   // 载入时间修正 
+                        _self.mainTime = serviceTime + jsRenderTime;   // 载入时间修正 
 
                         // 校正大小 和 差异重置
                         _self.serverLocalCompara();
@@ -204,9 +204,11 @@ KISSY.add('spike_gallery/real-time', function(S){
                     }else{
                         _self.mainTime = localTime + _self.differenceTime;
                     }
+					
+					return _self.mainTime;
                 },  
 
-                // 是否在时间段内 -  01':00" -- 02':00"
+                // 是否在时间段内
                 isInTimeRange: function(startTime, curTime, endTime){
                     var _self = this;
 
@@ -300,7 +302,7 @@ KISSY.add('spike_gallery/real-time', function(S){
 						isHideSeconds = isHideSeconds ? isHideSeconds : true,
                         ary,
                         zeroNorml = '00',
-                        concat = ":";
+                        concat = ':';
 
                     var hour = hour ? _self.addZeroFn(hour) : zeroNorml,
                         minutes = minutes ? _self.addZeroFn(minutes) : zeroNorml,
@@ -346,7 +348,12 @@ KISSY.add('spike_gallery/real-time', function(S){
                     return S_Date.format(d, 'HH:MM:ss');
                 }, 
 				
-				// 随机 杂乱 自定义 时分 字符串 数据处理函数 -- // 为了配置参数的 高度灵活性 -- 支持 小时9 || 09、分 7 || 07、支持 时分 联合9:27 || 09:1 || 9:29
+				/**
+                * 总时分秒 字符串 数组处理函数 -- 过滤 不合法的时间 --调用了规范函数
+                * @method allStrHMtimeRenderFn(ary)
+                * @param {array} 随机的 时分秒字符串值 数组 ['H:M:S', 'H:M:S' ... ] 
+                * @return {array} 规范处理过的 时分秒 数组 || []
+                */
 				allStrHMtimeRenderFn: function(strTimeAry){
 					var _self = this,
 						endTimeStrAry = [],
@@ -358,7 +365,7 @@ KISSY.add('spike_gallery/real-time', function(S){
                             minutes = _self.getSelectHMS(timeStr, 'M'),
 							hmStr = _self.formatHMSstr(timeStr);
 							
-                        if( hour > 23 || (hour === 23 && minutes > 59) ){
+                        if( hour > 23 || minutes > 59 ){
                             S.log('时间点:' + timeStr + '" 配置无效！');
                             return;
                         }  
@@ -369,8 +376,8 @@ KISSY.add('spike_gallery/real-time', function(S){
 					return endTimeStrAry;				
 				},
 
-				 /**
-                * 根据 处理规范 时分秒字符串值
+				/**
+                * 根据 处理规范 时分秒字符串值 -- 随机 杂乱 自定义 时分 字符串 数据处理函数 --为了配置参数的 高度灵活性 -- 支持 小时9 || 09、分 7 || 07、支持 时分 联合9:27 || 09:1 || 9:29
                 * @method formatHMSstr(str)
                 * @param {string} 不规范的 时分秒字符串值 H:M:S 
                 * @param {boolean} 时分只输出 时分 
@@ -378,14 +385,13 @@ KISSY.add('spike_gallery/real-time', function(S){
                 */
 				formatHMSstr: function(str, isHideSeconds){
 					var _self = this,
-						isHideSeconds = isHideSeconds ? isHideSeconds : true,
 						str = str ? str : '';
 					
 					var hour = _self.getSelectHMS(str, 'H'),
                         minutes = _self.getSelectHMS(str, 'M'),
                         seconds = _self.getSelectHMS(str, 'S');
 						
-					return _self.autoComplement(hour, minutes, seconds, isHideSeconds)
+					return _self.autoComplement(hour, minutes, seconds, isHideSeconds);
 				},	
 
                 /**
@@ -393,7 +399,7 @@ KISSY.add('spike_gallery/real-time', function(S){
                 * @method getSelectHMS(date, dateType)
                 * @param {data} 日期时间
                 * @param {string} 要获取的 时分秒 类型 H M S
-                * @return {number || 0}
+                * @return {number || undefined}
                 */
                 getSelectHMS: function(hourMinutesStr, dateType){
                     var _self = this,
@@ -411,7 +417,7 @@ KISSY.add('spike_gallery/real-time', function(S){
                             break;         
                     }
 
-                    return timeNum || 0; 
+                    return timeNum; 
                 },
                 
                 /**
@@ -453,6 +459,12 @@ KISSY.add('spike_gallery/real-time', function(S){
                     var hour = _self.getSelectHMS(hourMinutesStr, 'H'),
                         minutes = _self.getSelectHMS(hourMinutesStr, 'M'),
                         seconds = _self.getSelectHMS(hourMinutesStr, 'S');
+						
+					// 容错性 校验
+					if(minutes>59 || seconds>59 || hour>23 ){
+						S.log('配置时间错误！');
+						return;
+					}	
 
                     var hourMillisecond = hour ? hour*ONE_HOURS : 0,
                         minutesMillisecond = minutes ? minutes*ONE_MINUTES : 0,
@@ -461,7 +473,7 @@ KISSY.add('spike_gallery/real-time', function(S){
                     return (hourMillisecond + minutesMillisecond + secondsMillisecond); 
                 },
 
-                // 小时偏移量 计算 -- 返回毫秒数
+                // 时间毫秒数 偏移量 计算 -- 返回毫秒数
                 offsetDateSeconds: function(date, offset, PreviousLater){
                     var _self = this,
                         dataParse = S.isString(date) ? _self.getDateParse(date) : ( S.isNumber(date) ? date : (new Date()).getTime() ),

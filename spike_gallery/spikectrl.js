@@ -1,5 +1,5 @@
 /** 
-* @fileOverview 天猫双十一秒杀页面控制js -- 固定间隔时间 和 自定义 时/分时间字符串 数组 时间轴生成 和 状态控制
+* @fileOverview 天猫双十一秒杀时间轴控制器(固定间隔时间 和 自定义 时间数组 2套生成时间轴方式，支持 时/分 时间高度灵活配置)    
 * @extends  KISSY.Base
 * @creator  黄甲(水木年华double)<huangjia2015@gmail.com>
 * @depends  ks-core
@@ -175,13 +175,6 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                         _self.stopAutoUpdateUi();
                     }                                   
                 },
-
-                // 更新 实时时间 年月日
-                _getNewYMD: function(){
-                    var _self = this;
-                    
-                    _self.dataYMD = REALTIME.getTimeYMDstr();        
-                },
 				
                 // 全局变量初始化
                 _argumentsInit: function(){
@@ -197,7 +190,8 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
 					
 					// 固定的时间 间隔毫秒数
 					_self.timeLengthSecondes = REALTIME.getMillisecond(_self.get('timeLength'));
-
+	
+					// 自定义模板
                     if(_self.get('timeTemplate')){
                         TEMPLATE = _self.get('timeTemplate');
                     }else{
@@ -211,7 +205,14 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                     // 各个时间段 秒杀 区块儿 活动内容区 集合
                     _self.aBlocks = S.query( _self.get('merchBlockCls'), S.get(_self.get('merchContainer')) );                    
                 },  
-
+				
+				// 更新 实时时间 年月日
+                _getNewYMD: function(){
+                    var _self = this;
+                    
+                    _self.dataYMD = REALTIME.getTimeYMDstr();        
+                },
+				
                 // 初始化 时间 和 状态/文字
                 _blockStateRender: function(){
                     var _self = this;
@@ -222,30 +223,12 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
 
                     // 是否 自定义 不规则时间段 
                     if(_self.get('isCustomTimePeriod')) {
-                        _self.renderSelfTimeBlock();
+                        _self._renderSelfTimeBlock();
                     }else{
-                        _self.renderFiexdTimeText();
+                        _self._calculateTimeLenth();
                     }
                    
                     _self._setStateText();
-                },
-
-
-                // 渲染时间轴元素块儿
-                renderTimeBlock: function(lenth){
-                    var _self = this,
-                        ary = [];
-
-                    if(!TEMPLATE){
-                        return;
-                    }    
-
-                    for(var i= lenth-1; i >= 0; i--) {
-                        ary.push(TEMPLATE);
-                    };
-
-                    DOM.html(_self.container, ary.join('') );
-                    _self._saveTimeBlock();                    
                 },
 
                 // 获取元素块儿 保存 -- 时间段 导航 集合
@@ -256,8 +239,8 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                     S.one(_self.timeBlock[0]).addClass('mrg_lft155');
                 },
                 
-                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  --- 自定义 不规则时间间隔
-                renderSelfTimeBlock: function(){
+                // 根据时间 配置数组 初始化 时间段 --- 自定义 不规则时间 时间轴生成
+                _renderSelfTimeBlock: function(){
                     var _self = this, 
                         fragment = document.createDocumentFragment(),                      
                         tiems = REALTIME.sortHMtimeArray(_self.get('customTime')),
@@ -280,79 +263,55 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
 						if(!i){
 							TIMES_Ary.push(_self.startDateMillisecond); 
 						}else{
-							TIMES_Ary.push(_self.startDateMillisecond); 
+							TIMES_Ary.push(dayTimeSeconds); 
 						}
 
                         fragment.appendChild( _self._writeTimeDataText(i, curTimeStr, timeRange) );
                     };
 					
 					DOM.append(fragment, _self.container); 
-                },
-                
-                // 根据 容器 个数 和 时间 配置参数 初始化 时间段  ---固定的 整点秒杀 间隔小时
-                renderFiexdTimeText: function(){
-                    var _self = this;
 
-                    _self._calculateTimeLenth();
-
-                    //_self._saveTimeBlock();  
+                    _self._saveTimeBlock();  
                 },
 				
-				// 获取设定的 开始时间 数据
-				_getStartDateHMstr: function(){
-					var _self = this;
-				},
-
-
-                // 固定间隔时间情况下 -- 计算时间点毫秒数 数组
+                // 根据固定间隔时间 初始化 时间段 -- 固定间隔时间--- 时间轴生成
                 _calculateTimeLenth: function(){
                     var _self = this,
-						fragment = document.createDocumentFragment(),
-					
+						fragment = document.createDocumentFragment(),					
 						HMSstr = REALTIME.getAllHMSstr(_self.startDateMillisecond),
 						startDateHMS_Millisecond = REALTIME.getMillisecond(HMSstr),
-						
-						beginHour = REALTIME.getSelectHMS(HMSstr, 'H'),
-                        beginMinutes = REALTIME.getSelectHMS(HMSstr, 'M'),
-                        beginSeconds = REALTIME.getSelectHMS(HMSstr, 'S'),
-											
-						startDateHMstr = REALTIME.autoComplement(beginHour, beginMinutes);
-
-                    for(var i = 0; i < 50; i++) {   
-					
-                        var timeRange = startDateHMS_Millisecond + i*_self.timeLengthSecondes,
-                            timeText = timeRange ? REALTIME.getHMstr(timeRange) : startDateHMstr,
-							
-                            hour = REALTIME.getSelectHMS(timeText, 'H');
-                            minutes = REALTIME.getSelectHMS(timeText, 'M'),
-							
-                            dayTimeSeconds = _self.startDateMillisecond + timeRange - startDateHMS_Millisecond,
-
-                            _self.HMstr = REALTIME.autoComplement(hour, minutes);
-
-                        if( hour > 23 || (hour === 23 && minutes > 59) ){
-                            break;
-                        }  
-
-                        TIMES_Ary.push(dayTimeSeconds); 
-
-                        //fragment.appendChild( _self._writeTimeDataText(i, , ) );
-                    };
-		
-                    DOM.append(fragment, _self.container); 
-
-                    return TIMES_Ary;                   
-                }, 
-
-                // 时间轴 标示值写入方法：展现文本小时分时间、时间段内长度标示 和 活动区块序号index 
-                _writeTimeDataText: function(num, HMstr, timeLengthSecondes){
-                    var _self = this;
+                        startDateHMstr = REALTIME.formatHMSstr(HMSstr);
 
                     if(!TEMPLATE){
+                        S.log('自定义时间轴模板错误！');
                         return;
-                    }  
+                    }     
 
-                    var el = DOM.create(TEMPLATE),
+                    for(var i = 0; i < 100; i++) {  
+                        var timeRange = startDateHMS_Millisecond + i*_self.timeLengthSecondes,
+                            timeText = timeRange ? REALTIME.getHMstr(timeRange) : startDateHMstr,                           
+							renderText = REALTIME.allStrHMtimeRenderFn(timeText)[0],
+                            dayTimeSeconds = _self.startDateMillisecond + timeRange - startDateHMS_Millisecond;
+
+                        if(!renderText){
+                            break;
+                        }
+
+                        // 添加完整时间 毫秒数
+                        TIMES_Ary.push(dayTimeSeconds); 
+
+                        fragment.appendChild( _self._writeTimeDataText(i, renderText, _self.timeLengthSecondes) );
+                    };
+		
+                    DOM.append(fragment, _self.container);   
+
+                    _self._saveTimeBlock();               
+                }, 
+
+                // 时间轴 标示值写入方法 ------ 展现文本小时分时间、时间段内长度标示、活动区块序号index 
+                _writeTimeDataText: function(num, HMstr, timeLengthSecondes){
+                    var _self = this,
+						el = DOM.create(TEMPLATE),
                         hoursContainer = S.one(el).first(_self.get('hoursContainerCls'));
 
                     DOM.attr(el, VIEW_INDEX, num); 
@@ -381,8 +340,7 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
 						}
 						
                         rotoSrc && DOM.attr(el, 'src', rotoSrc);                        
-                    }); 
-					
+                    }); 					
 				},				
 			   
                 // 懒加载 图片 初始化
@@ -398,8 +356,6 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                         rotoSrc && DOM.attr(el, _self.get('lazyLoadSrc'), rotoSrc);                        
                     }); 
                 },
-				
-				
 
                 // 事件初始化
                 _eventRender: function(){
@@ -445,11 +401,12 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
 
                 // 点击 查看过去 或者 未来 活动视图后 延迟指定时间返回当前时间段面板
                 _layzBackCurrView: function(){
-                    var _self = this;
+                    var _self = this,
+						time = _self.get('viewResidenceTime')*ONE_MINUTES;
 
                     // 定时重启 自动更新
                     _self.lazyBackTimeOut && clearTimeout(_self.lazyBackTimeOut);
-                    _self.lazyBackTimeOut = setTimeout(backfn, _self.get('viewResidenceTime')*ONE_MINUTES );
+                    _self.lazyBackTimeOut = setTimeout(backfn, time);
 
                     function backfn(){
                         // 显示 当前时间 活动
@@ -466,7 +423,7 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                         pastBlocks = S.query( '.'+j_cls , _self.container);
 
                     S.each(pastBlocks, function(el){
-                        DOM.removeClass(el, _self.get(stateCls));
+                        DOM.removeClass(el, stateCls);
                     });  
                 },  
 
@@ -474,11 +431,11 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                 _clearAllClickCls: function(){
                     var _self = this;
 
-                    _self._clearClickBlockCls(_self.get('doneCls'), 'clickPastTimeBlockCls');
-                    _self._clearClickBlockCls(_self.get('futrueCls'), 'clickFutureTimeBlock');
+                    _self._clearClickBlockCls(_self.get('doneCls'), _self.get('clickPastTimeBlockCls') );
+                    _self._clearClickBlockCls(_self.get('futrueCls'), _self.get('clickFutureTimeBlock') );
                 },
 
-                // 1、传入元素参数--判断显示指定时间段活动内容;   2、不传递参数 默认 隐藏 所有 秒杀商品 区块
+                // 1、传入元素参数--判断显示指定时间段活动内容;
                 _showRangeTimeMeched: function(el){
                     var _self = this,
                         showIndex = parseInt(DOM.attr(el, VIEW_INDEX), 10),
@@ -528,20 +485,17 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                 // 设定 文本状态 方法
                 _renderStateAll: function(el, index){
                     var _self = this,
-                        timeStr = DOM.attr(el, BLOCK_DATA_TIME),
-                        hour = REALTIME.getSelectHMS(timeStr, 'H'),
-                        minutes = REALTIME.getSelectHMS(timeStr, 'M');
-
-                    if(hour >= DAY_HOURS){
-                        return;
-                    }  
-
-                    var timeLengthSeconds = parseInt(DOM.attr(el, BLOCK_TIME_LENGTH), 10),
-                        curDateStr = REALTIME.getTimeYMDstr() +' '+ REALTIME.autoComplement(hour, minutes),
-                        spikeTimeStart = REALTIME.getDateParse(curDateStr),
-                        spikeTimeEnd = REALTIME.offsetDateSeconds(curDateStr, timeLengthSeconds, '+'),                      
-                        isLastBlock = (_self.timeBlock.length-1) === index,
-                        dayEndTimeSeconds = REALTIME.getDateParse(REALTIME.getTimeYMDstr() +' 23:59:59') + ONE_SECONDS;    
+						
+						timeStr = DOM.attr(el, BLOCK_DATA_TIME),						
+                        timeLengthSeconds = parseInt(DOM.attr(el, BLOCK_TIME_LENGTH), 10),
+						curYMDstr = REALTIME.getTimeYMDstr(),
+                        curDateStr = curYMDstr +' '+ timeStr,	
+						
+                        spikeTimeStart = REALTIME.getDateParse(curDateStr),						
+                        spikeTimeEnd = REALTIME.offsetDateSeconds(curDateStr, timeLengthSeconds, '+'),
+						
+                        isLastBlock = (_self.timeBlock.length-1) === index,						
+                        dayEndTimeSeconds = REALTIME.getDateParse(curYMDstr +' 23:59:59') + ONE_SECONDS;    
 
                     if(!el){
                         return;
@@ -653,9 +607,12 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
                 isValidDate: function(){
                     var _self = this,
                         startTime = REALTIME.getDateParse(_self.get('startTime')),
-                        endTime = REALTIME.getDateParse(_self.get('endTime'));
+                        endTime = REALTIME.getDateParse(_self.get('endTime')),
+						isInTimeRange = REALTIME.isInTimeRange(startTime, _self.mainTime, endTime);
                     
-                    return REALTIME.isInTimeRange(startTime, _self.mainTime, endTime);
+					!isInTimeRange && S.log('时间有效性验证失败！');
+					
+                    return isInTimeRange;
                 },  
 
                 // 隐藏或者显示所有 时间 段区块儿
@@ -672,21 +629,6 @@ KISSY.add('spike_gallery/spikectrl', function(S, RealTime){
 
                         callBack && callBack.call(_self, em, index);                      
                     });
-                },
-
-                // 有效期间内 设定时间段是否已经全部过时  
-                _isAllPastDone: function(){
-                    var _self = this,
-                        isAllDone = true;
-
-                    S.each(_self.timeBlock, function(el){
-                        if(!DOM.hasClass(el, _self.get('doneCls'))){
-                            isAllDone = false;
-                            return false;
-                        }
-                    });
-                    
-                    return isAllDone;
                 },
 
                 // 本地更新：时间、ui 方法
