@@ -1,0 +1,121 @@
+<!Doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>快乐百事捐赠</title>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		
+		<link rel="./baishi.css" type="text/css" />
+		<style type="text/css">
+			a, a:hover{
+				text-decoration:none;
+			}
+		
+			.minus-btn, .plus-btn{
+				display:inline-block;
+				width:80px;
+				height:70px;
+				background-color:red;
+			}
+			
+			
+			
+		</style>
+		
+	</head>
+
+<body>
+
+
+<form name="basihi" action="www.alipay.com" method="post" id="J-form">
+    <div class="content">
+		<div class="banner"><div>
+	
+		<div>
+			<span class="start-num">2元</span>
+			<a href="javascript:void(0)" class="minus-btn j-minus">-</a>
+			<input type="text" name="nos" id="input-num" value="1" class="text-input" />
+			<a href="javascript:void(0)" class="plus-btn j-plus">+</a>
+			<span class="j-toal toal">您捐赠了：2元</span>
+		<div>
+	
+		<div>
+			<a href="javascript:void(0)" class="sub-btn j-sub-btn"></a>
+		</div>
+	
+		<div class="agreement">		
+			<a href="#" class="link-baishi"><<关于百事捐赠基金>></a>
+		</div>
+	<div>
+</form>
+
+
+ <script src="http://g.tbcdn.cn/kissy/k/1.3.0/seed-min.js" type="text/javascript"></script>
+ <script type="text/javascript">
+	KISSY.ready(function(S){
+	
+		S.use('dom,event', function(S, DOM, Event){
+		
+			// 单击按钮 数量 减、加 计算
+			Event.on('.j-minus', 'click', function(){
+				var value = minusPlus('-');
+				writNum(value);
+			});			
+			Event.on('.j-plus', 'click', function(){
+				var value = minusPlus('+');
+				writNum(value);
+			});
+			
+			// 手动输入数值 情况
+			Event.on('#input-num', 'keyup', function(){
+				var value = parseInt( DOM.val(this), 10);
+				writNum(value);
+			});		
+			
+			
+			// 提交表单 数据 
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			// 计算 数字 value
+			function minusPlus(minusPlus){
+				var baseNum = 1,
+					inputValue = parseInt( DOM.val('#input-num'), 10),
+					value = inputValue ? inputValue : 0;
+				
+				switch(minusPlus){
+					case '-' : value = value - baseNum;
+						break;
+					case '+' : value = value + baseNum;
+						break;	
+				}
+				return value;
+			}
+			
+			// 写入 计算值 和 联动
+			function writNum (value){
+				var value = value >= 0 ? value : 0,
+					endNum = value * 2,
+					endNum = '您捐赠了：' + endNum +'元';
+					
+				DOM.val('#input-num', value);
+				DOM.text('.j-toal', endNum);			
+			}
+	
+		});
+		
+	});
+ </script>
+
+</body>
+</html>
