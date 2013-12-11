@@ -3,9 +3,6 @@ test_repository
 
 日常代码仓库
 
-
-
-// 分割线
-
-<div class="hrcls hack-ie67"></div>
-
+- 常用代码片段
+- 单纯功能代码
+- 其他

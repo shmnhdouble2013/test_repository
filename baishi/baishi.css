@@ -1,0 +1,216 @@
+
+/**
+* 百事捐赠页面
+* 20131210
+*/
+
+body{
+	padding: 0;
+	margin: 0;
+}
+a, a:hover{
+	display: inline-block;
+	text-decoration:none;
+}
+.no-marg{
+	margin: 0;
+}
+.agreement p a{
+	color:#1d4870;
+}
+.pad-forms{
+	padding: 10px 20px;
+}
+
+
+/* 适配 小屏幕320*480 例如：iphone4 */
+.content{
+	border: 1px solid gray;
+	width:320px;
+	height: auto;
+	margin:0 auto;
+	clear: both;
+	overflow: hidden;
+}
+
+.banner{
+	width: 100%;
+	height: 305px;
+	background: url(http://gtms01.alicdn.com/tps/i1/T1buUXFl4cXXb4fVIs-640-610.jpg_320x320.jpg) no-repeat;
+}
+
+/* 表单容器 */
+.form-inputs{				
+	height: 37px;
+	line-height: 37px;
+	margin-bottom: 20px;
+}
+.form-inputs span, .form-inputs input, .form-inputs a{
+	display: inline-block;
+	float: left;
+}
+
+/* 表单灰黑色字体统一 */
+.start-num, .text-input, .toal{
+	font-weight: bold;
+	font-size: 15px;
+	color: #5f5f5f;	
+	height: 36px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+
+/* 乘号 */
+.start-num{
+	vertical-align: bottom;
+	margin-right: 5px;
+	width: 42px;
+	background: url(http://gtms01.alicdn.com/tps/i1/T1wvr.FelcXXcVuwLd-33-30.png_16x16.jpg) no-repeat right center;
+}
+/* 加减 */
+.minus-btn, .plus-btn{
+	width:27px;
+	background-repeat: no-repeat;
+	height:35px;
+	text-indent: -999999px;
+}
+.minus-btn{
+	background-image: url(http://gtms01.alicdn.com/tps/i1/T19e2.FmVbXXcUcfbk-62-71.png_30x30.jpg);
+}
+.plus-btn{
+	background-image: url(http://gtms01.alicdn.com/tps/i1/T1Ggv3FXXcXXcUcfbk-62-71.png_30x30.jpg);
+}
+.text-input{
+	width: 75px;
+	text-align: center;
+	height: 39px;
+	line-height: 39px;
+	vertical-align: middle;
+	border: none;
+	padding: 0;
+	background:url(http://gtms01.alicdn.com/tps/i1/T1d5H9FnXbXXXBecYc-150-72.png_75x100.jpg) no-repeat; 
+}
+/* 去除input上下箭头 */
+.text-input::-webkit-inner-spin-button, .text-input::-webkit-outer-spin-button {
+     -webkit-appearance: none;
+}
+.toal{
+	width: 100px;	
+}
+.toal i{
+	display: inline-block;
+	font-style:normal;
+	max-width: 54px;
+	height:25px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+/* 按钮间距 */
+.sub-btn{
+	width: 280px;
+	height:50px;
+	margin-bottom: 20px;
+	background:url(http://gtms01.alicdn.com/tps/i1/T1_Fn0Fb4cXXagwiI_-560-100.png_280x410.jpg) no-repeat left top; 
+}
+
+/* 协议 */
+.agreement{
+	background:url(http://gtms01.alicdn.com/tps/i1/T13cDRFhXcXXamt9jd-34-34.png_16x16.jpg) no-repeat left top;
+}
+.agreement p{
+	margin: 5px 0;
+	height: 16px;
+	line-height: 16px;
+	padding-left: 15px;
+	color: #5f5f5f;
+	font-weight: bold;	
+	font-size: 13px;
+}
+.agreement p b{
+	color:#646464;
+	font-size: 15px;
+}
+
+
+/**
+* 640大屏幕样式 639 
+* 原图展现
+*/
+
+@media screen and (min-width:639px){
+	.content{
+		width:640px;
+	}
+	.banner{
+		width: 100%;
+		height: 610px;
+		background: url(http://gtms01.alicdn.com/tps/i1/T1buUXFl4cXXb4fVIs-640-610.jpg_q75.jpg) no-repeat;
+	}
+	.pad-forms{
+		padding: 10px 40px;
+	}
+	/* 表单容器 */
+	.form-inputs{				
+		height: 72px;
+		line-height: 72px;
+		margin-bottom: 20px;
+	}
+	/* 表单灰黑色字体统一 */
+	.start-num, .text-input, .toal{
+		font-size: 30px;
+		height: 72px;
+	}
+	/* 乘号 */
+	.start-num{
+		width: 85px;
+		font-size: 30px;
+		background: url(http://gtms01.alicdn.com/tps/i1/T1wvr.FelcXXcVuwLd-33-30.png) no-repeat right center;
+	}
+	/* 加减 */
+	.minus-btn, .plus-btn{
+		height:70px;
+		width: 62px;
+	}
+	.minus-btn{
+		background-image: url(http://gtms01.alicdn.com/tps/i1/T19e2.FmVbXXcUcfbk-62-71.png);
+	}
+	.plus-btn{
+		background-image: url(http://gtms01.alicdn.com/tps/i1/T1Ggv3FXXcXXcUcfbk-62-71.png);
+	}
+	.text-input{
+		width: 150px;
+		height: 72px;
+		line-height: 72px;
+		background:url(http://gtms01.alicdn.com/tps/i1/T1d5H9FnXbXXXBecYc-150-72.png) no-repeat; 
+	}
+	.toal{
+		width: 190px;
+		height: 72px;
+	}
+	.toal i{
+		max-width: 95px;
+		height:48px;
+	}
+	/* 按钮间距 */
+	.sub-btn{
+		width: 560px;
+		height:100px;
+		margin-bottom: 20px;
+		background:url(http://gtms01.alicdn.com/tps/i1/T1_Fn0Fb4cXXagwiI_-560-100.png) no-repeat left top; 
+	}
+	/* 协议 */
+	.agreement{
+		background:url(http://gtms01.alicdn.com/tps/i1/T13cDRFhXcXXamt9jd-34-34.png) no-repeat left top;
+	}
+	.agreement p{
+		height: 34px;
+		line-height: 34px;
+		padding-left: 41px;
+		font-size: 25px;
+	}
+	.agreement p b{
+		font-size: 30px;
+	}	
+}
