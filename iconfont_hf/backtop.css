@@ -1,0 +1,45 @@
+
+/**
+* 好房app 右侧固定二维码 和 回到顶端 css
+* author： huangjia
+* Date： 20140813
+*/
+
+/* 回到顶部 和 下载app  */
+#J_backTop{
+    position: fixed;
+    right: -35px;
+    bottom: 60px;
+    width: 120px;
+    height: 70px;
+}
+
+/* 置顶4个图标 */
+.small-rcode, .small-rcode-hover,
+.back-top, .back-top-hover{
+    display: block;
+    background: url("http://static.pinganfang.com/img/web/home2.0/back-top-sprite.png") no-repeat;
+}
+/* 二维码 */
+.small-rcode{
+    margin-top: 150px;
+    width: 60px;
+    height: 60px;
+    background-position: -77px 0;
+}
+.small-rcode:hover{
+    background-position: -1px 0;
+}
+/* 回顶部 */
+.back-top{
+    width: 61px;
+    height: 41px;
+    background-position: -76px -70px;
+}
+.back-top:hover{
+    background-position: 0 -70px;
+}
+
+.hide{
+    display: none;
+}
