@@ -56,7 +56,7 @@ table { border-collapse: collapse; border-spacing: 0; }
   *zoom: 1;
 }
 
-.main {padding: 30px 80px;}
+.main {padding: 30px 85px;}
 .main h1{font-size:36px; color:#333; text-align:left;margin-bottom:30px; border-bottom: 1px solid #eee;}
 
 .helps{margin-top:40px;}
@@ -106,9 +106,13 @@ table { border-collapse: collapse; border-spacing: 0; }
 .col_fc6800{
     color: #fc6800;
 }
-.col_red{
+.col_green{
     color: green;
 }
+.col_orange{
+    color: orangered;
+}
+
 
 .hide{
     display: none;

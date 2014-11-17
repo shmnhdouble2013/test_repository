@@ -939,17 +939,17 @@
         </ul>
 
 
-        <h1 class="h1_title">如何使用icon-font: </h1>
-        <p class="nortice">如果您开发是web前台页面，继承了公用页头，那么就无需再引入<b class="col_red">iconfont.css</b>了，因为公用页头里已经集中引入！反之往下看：</p>
+        <h1 class="h1_title">如何使用icon-font ? </h1>
+        <p class="nortice">如果您开发是web前台页面，并且继承了公用页头，那么就无需再引入<b class="col_green">iconfont.css或iconfont-https.css</b>了，因为公用页头里已经集中引入了！<span class="col_orange">(好房宝业务使用的是https安全加密协议，目前是继承公用页头的基础上覆盖引入iconfont-https.css)</span>反之往下看：</p>
         <div class="helps">
         第一步：引入iconfont字体css文件：
         <pre>
 
         方式一：直接引用线上一个发布的稳定版本 iconfont.css 比如：
-            代码(http普通业务)：  &lt;link href="http://static.pinganfang.com/201411131728/css/iconfont/iconfont.css" rel="text/css">
-            代码(https好房宝业务): &lt;link href="https://static.pinganfang.com/201411131728/css/iconfont/iconfont-https.css" rel="text/css">
+            代码(http普通业务)：  &lt;link href="http://static.pinganfang.com/201411131728/css/iconfont/iconfont.css" rel="text/css"&gt;
+            代码(https好房宝业务): &lt;link href="https://hfb.pinganfang.com/static/201411131839/css/iconfont/iconfont-https.css" rel="text/css"&gt;
 
-        方式二：在目前现有的php框架基础上，直接在相应的php资源引入里配置，示例如下：
+        方式二：在目前现有的php框架基础上，直接在页面相应的.php资源引入里配置，比如：
             /**
              * 使用的样式
              * @return array
@@ -957,36 +957,35 @@
             static function useOStyle(){
                 return array(
                     'static://css/iconfont/iconfont.css',
-                    'static://css/web/common2.0/header2.0.css'
                 );
             }
         </pre>
 
 
-            第二步：给需要使用字体icon的html元素 添加字体class标示 .iconfont
-            <pre>
-            &lt;span class="iconfont">&lt;/span&gt;
-            </pre>
+        第二步：给需要使用字体icon的html元素 添加字体class标示 .iconfont
+        <pre>
+        &lt;span class="iconfont">&lt;/span&gt;
+        </pre>
 
-            第三步：挑选相应图标并获取字体编码，引用元素上
-            <pre>
-            &lt;span class=&quot;iconfont&quot;&gt;&amp;#xe643;&lt;&#x2F;span&gt;
-            </pre>
+        第三步：挑选相应图标并获取字体编码，引用元素上
+        <pre>
+        &lt;span class=&quot;iconfont&quot;&gt;&amp;#xe643;&lt;&#x2F;span&gt;
+        </pre>
 
-            第四步：看下效果吧
-            <pre>
+        第四步：看下效果吧
+        <pre>
 
-            <span class="iconfont" style="font-size: 30px;">&#xe643;</span>
-            </pre>
+        <span class="iconfont" style="font-size: 30px;">&#xe643;</span>
+        </pre>
 
 
-            <br/>
-            <br/>
+        <br/>
+        <br/>
 
-            <h1 style="margin:20px 0;">图标制作说明</h1>
-            <img src="http://img03.taobaocdn.com/imgextra/i3/650029601/TB2ZBVNaXXXXXa9XXXXXXXXXXXX_!!650029601.png" width="100%">
-            <p style="margin-top: 20px;font-size: 15px;">注：制作完成的图形需要转换成<b style="padding: 0 3px;color: #fc6800;">svg</b>文件格式！</p>
-        </div>
+        <h1 style="margin:20px 0;">图标制作说明</h1>
+        <img src="http://img03.taobaocdn.com/imgextra/i3/650029601/TB2ZBVNaXXXXXa9XXXXXXXXXXXX_!!650029601.png" width="100%">
+        <p style="margin-top: 20px;font-size: 15px;">注：制作完成的图形需要转换成<b style="padding: 0 3px;color: #fc6800;">svg</b>文件格式！</p>
+    </div>
 
 
         <h1 class="h1_title">法律声明: </h1>
