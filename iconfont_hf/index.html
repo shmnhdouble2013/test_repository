@@ -940,16 +940,12 @@
 
 
         <h1 class="h1_title">如何使用icon-font ? </h1>
-        <p class="nortice">如果您开发是web前台页面，并且继承了公用页头，那么就无需再引入<b class="col_green">iconfont.css或iconfont-https.css</b>了，因为公用页头里已经集中引入了！<span class="col_orange">(好房宝业务使用的是https安全加密协议，目前是继承公用页头的基础上覆盖引入iconfont-https.css)</span>反之往下看：</p>
+        <p class="nortice">如果您开发是web前台页面，并且继承了公用页头，那么就无需再引入<b class="col_green">iconfont.css或<del id="J_nortice">iconfont-https.css</del></b>了，因为公用页头里已经集中引入！<del class="col_orange" id="J_nortice2">(好房宝业务使用的是https安全加密协议，目前是继承公用页头的基础上覆盖引入iconfont-https.css)</del>反之往下看：</p>
         <div class="helps">
-        第一步：引入iconfont字体css文件：
+        第一步：项目中引入iconfont字体文件 2种方式：
         <pre>
 
-        方式一：直接引用线上一个发布的稳定版本 iconfont.css 比如：
-            代码(http普通业务)：  &lt;link href="http://static.pinganfang.com/201411131728/css/iconfont/iconfont.css" rel="stylesheet" type="text/css"&gt;
-            代码(https好房宝业务): &lt;link href="https://hfb.pinganfang.com/static/201411131839/css/iconfont/iconfont-https.css" rel="stylesheet" type="text/css"&gt;
-
-        方式二：在目前现有的php框架基础上，直接在页面相应的.php资源引入里配置，比如：
+        方式一：<b class="col_orange">现有的php框架自动引入</b>！直接在页面相应的.php资源引入里配置，这样可以随时引用到最新的字体库文件(<b class="col_orange">推荐</b>) 示例代码如下：
             /**
              * 使用的样式
              * @return array
@@ -959,16 +955,24 @@
                     'static://css/iconfont/iconfont.css',
                 );
             }
+
+        方式二：<b class="col_orange">手动引入</b>！直接引用线上一个发布的稳定版本 iconfont.css 比如：
+            代码(http普通业务)：  &lt;link href="http://static.pinganfang.com/201412111658/css/iconfont/iconfont.css" rel="stylesheet" type="text/css"&gt;
+
+            <span class="col_green">字体库文件部署已经优化，无需再特殊引入iconfont-https.css文件，已经引入的代码依然有效，可删除可不删。为了维护的统一性，建议后期维护时候删除iconfont-https.css文件，只引入iconfont.css文件！</span>
+            <del>代码(https好房宝业务): &lt;link href="https://hfb.pinganfang.com/static/201411131839/css/iconfont/iconfont-https.css" rel="stylesheet" type="text/css"&gt;</del>
         </pre>
 
 
         第二步：给需要使用字体icon的html元素 添加字体class标示 .iconfont
         <pre>
+
         &lt;span class="iconfont">&lt;/span&gt;
         </pre>
 
         第三步：挑选相应图标并获取字体编码，引用元素上
         <pre>
+
         &lt;span class=&quot;iconfont&quot;&gt;&amp;#xe643;&lt;&#x2F;span&gt;
         </pre>
 
@@ -1006,5 +1010,31 @@
 
     <script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy-min.js" ></script>
     <script src="./backtop.js" ></script>
+
+
+    <!-- tip 样式 -->
+    <link rel="stylesheet" href="http://gallery.kissyui.com/tip/1.0/demo/style.css">
+    <link rel="stylesheet" href="http://gallery.kissyui.com/tip/1.0/demo/tip.css">
+
+    <script>
+        var tipStr = '字体库文件部署已经优化，无需再特殊引入iconfont-https.css文件，已经引入的代码依然有效，可删除可不删。<br/>为了维护的统一性，建议后期维护时候删除iconfont-https.css文件，只引入iconfont.css文件！';
+
+        KISSY.use('gallery/tip/1.0/index',function(S, Tip){
+
+            // 调用Tip
+            new Tip("#J_nortice",{
+                headerText:'',
+                contentText: tipStr,
+                delayIn:100
+            });
+
+            new Tip("#J_nortice2",{
+                headerText:'',
+                contentText: tipStr,
+                delayIn:100
+            });
+        });
+
+    </script>
 </body>
 </html>
