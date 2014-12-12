@@ -945,7 +945,7 @@
         第一步：项目中引入iconfont字体文件 2种方式：
         <pre>
 
-        方式一：<b class="col_orange">现有的php框架自动引入</b>！直接在页面相应的.php资源引入里配置，这样可以随时引用到最新的字体库文件(<b class="col_orange">推荐</b>) 示例代码如下：
+        方式一：<b class="col_orange">常规方式，现有的php框架自动引入</b>！直接在页面相应的.php资源引入里配置(引用static仓库master分支当前最新的字体文件)，示例代码如下：
             /**
              * 使用的样式
              * @return array
@@ -956,7 +956,7 @@
                 );
             }
 
-        方式二：<b class="col_orange">手动引入</b>！直接引用线上一个发布的稳定版本 iconfont.css 比如：
+        方式二：<b class="col_orange">手动引入</b>！直接引用线上最新发布的iconfont.css 字体文件(和PHP框架引入是同一来源，static仓库master分支当前最新的字体文件)，比如：
             代码(http普通业务)：  &lt;link href="http://static.pinganfang.com/css/iconfont/iconfont.css" rel="stylesheet" type="text/css"&gt;
 
             <span class="col_green">字体库文件部署已经优化，无需再特殊引入iconfont-https.css文件，已经引入的代码依然有效，可删除可不删。为了维护的统一性，建议后期维护时候删除iconfont-https.css文件，只引入iconfont.css文件！</span>
