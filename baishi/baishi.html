@@ -1,8 +1,8 @@
 <!Doctype html>
 <html>
 	<head>
-		<meta charset="utf-8">
-		<title>å¿«ä¹ç™¾äº‹æèµ </title>
+		<meta charset="gbk">
+		<title>¿ìÀÖ°ÙÊÂ¾èÔù</title>
 
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -20,13 +20,14 @@
 	<div class="pad-forms">
 		<div class="form-inputs">
 			<form name="basihi" action="http://www.alipay.com" method="post" id="J-form">
-				<input type="hidden" value="" name="total_amount" id="J-total_amount" /> <!-- æ€»é‡‘é¢ -->
+				<input type="hidden" value="" name="total_amount" id="J-total_amount" /> <!-- ×Ü½ð¶î -->
+				<input type="hidden" value="" name="sid" id="J-sid" /> <!-- sid -->
 
-				<span class="start-num">2å…ƒ</span>
+				<span class="start-num">2Ôª</span>
 				<a href="javascript:void(0)" class="minus-btn j-minus">&nbsp;</a>
 				<input type="number" name="nos" id="input-num" value="1" class="text-input"  />
 				<a href="javascript:void(0)" class="plus-btn j-plus">&nbsp;</a>
-				<span class="toal">ä»½å…±<i class="j-toal">2</i>å…ƒ</span>
+				<span class="toal">·Ý¹²<i class="j-toal">2</i>Ôª</span>
 				
 			</form>	
 		</div>
@@ -36,8 +37,8 @@
 		</div>
 	
 		<div class="agreement">
-			<p>åŒæ„å¹¶æŽ¥å—<a href="#" class="link-baishi">&nbsp;<<æ”¯ä»˜å®ç™¾äº‹å…¬ç›Šææ¬¾åè®®>></a></p>
-			<p class="no-marg">æ´»åŠ¨å’¨è¯¢ç”µè¯<b>010-65267696</b></p>
+			<p>Í¬Òâ²¢½ÓÊÜ<a href="#" class="link-baishi">&nbsp;<<Ö§¸¶±¦°ÙÊÂ¹«Òæ¾è¿îÐ­Òé>></a></p>
+			<p class="no-marg">»î¶¯×ÉÑ¯µç»°<b>010-65267696</b></p>
 		</div>
 	</div>
 	
@@ -48,8 +49,11 @@
 	KISSY.ready(function(S){
 	
 		S.use('dom,event', function(S, DOM, Event){
+
+			// »ñÈ¡sid
+			getSid();
 		
-			// å•å‡»æŒ‰é’® æ•°é‡ å‡ã€åŠ  è®¡ç®—
+			// µ¥»÷°´Å¥ ÊýÁ¿ ¼õ¡¢¼Ó ¼ÆËã
 			Event.on('.j-minus', 'click', function(){
 				var value = minusPlus('-');
 				writNum(value);
@@ -59,26 +63,43 @@
 				writNum(value);
 			});
 			
-			// æ‰‹åŠ¨è¾“å…¥æ•°å€¼ æƒ…å†µ
+			// ÊÖ¶¯ÊäÈëÊýÖµ Çé¿ö
 			Event.on('#input-num', 'touchend keyup', function(){
 				var value = parseInt( DOM.val(this), 10);
 				writNum(value);
 			});		
 			
 			
-			// æäº¤è¡¨å• æ•°æ® 
+			// Ìá½»±íµ¥ Êý¾Ý 
 			Event.on('#J-sub-btn', 'click', function(){
-				var inputValue = parseInt( DOM.val('#input-num'), 10);
+				var inputValue = parseInt( DOM.val('#input-num'), 10),
+					sid = DOM.val('#J-sid');
 
+				// ÏÂµ¥ÖµÎª¿Õ
 				if(!inputValue){
 					return;
 				}
 
-				S.get('#J-form').submit();
+				// ÅÐ¶ÏÊÇ·ñµÇÂ¼
+				if(!sid){
+					window.location.href = 'http://login.m.taobao.com/login.htm?tpl_redirect_url=http://m.tmall.com/channel/act/baishi-agreement.html';
+				}else{
+					S.get('#J-form').submit();
+				}	
 			});
 			
 			
-			// è®¡ç®— æ•°å­— value
+			// »ñÈ¡ sid
+			function getSid(){
+				var lochref = window.location.href,
+					sid = lochref.split('sid=')[1],
+					sid = sid.split('&')[0],
+					sid = sid ? sid : '';
+
+				DOM.val('#J-sid', sid);
+			}
+
+			// ¼ÆËã Êý×Ö value
 			function minusPlus(minusPlus){
 				var baseNum = 1,
 					inputValue = parseInt( DOM.val('#input-num'), 10),
@@ -93,7 +114,7 @@
 				return value;
 			}
 			
-			// å†™å…¥ è®¡ç®—å€¼ å’Œ è”åŠ¨
+			// Ð´Èë ¼ÆËãÖµ ºÍ Áª¶¯
 			function writNum (value){
 				var value = value >= 0 ? value : 0,
 					endNum = value * 2;
