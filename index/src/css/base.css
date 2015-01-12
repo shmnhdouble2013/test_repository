@@ -1,0 +1,180 @@
+/*
+ * base2.0
+ * author: huangjia
+ * Date: 201408
+ * update: 20140826 竖线修改颜色
+ */
+
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+body, button, input, select, textarea {
+    font: 12px Tahoma, Helvetica Neue, Hiragino Sans GB, Microsoft Yahei, sans-serif; color: #333; line-height:1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: normal;
+}
+
+address, cite, dfn, em, var {
+    font-style: normal;
+}
+
+code, kbd, pre, samp {
+    font-family: courier new, courier, monospace;
+}
+
+small {
+    font-size: 12px;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+sup {
+    vertical-align: text-top;
+}
+
+sub {
+    vertical-align: text-bottom;
+}
+
+legend {
+    color: #000;
+}
+
+fieldset, img {
+    border: 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* new clearfix */
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+* html .clearfix  {
+    zoom: 1;
+} /* IE6 */
+*:first-child+html .clearfix {
+    zoom: 1;
+} /* IE7 */
+
+
+/* 常用css样式 */
+.hide{
+    display: none;
+    overflow: hidden;
+}
+.show{
+    display: block;
+    overflow: visible;
+}
+
+/* 分割线 */
+hr.hr-slip {
+    display: block;
+    margin: 20px 0;
+    border: 0;
+    height:0;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #ffffff;
+}
+
+.fl-left{
+    float: left;
+}
+.fl-right{
+    float: right;
+}
+.clear-left{
+    clear: left;
+}
+.clear-right{
+    clear: right;
+}
+.dinl-block{
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+.pos-relative{
+    position: relative;
+}
+.pos-absolute{
+    position: absolute;
+}
+
+/*超长文字截断*/
+.text-ellipsis{
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+}
+
+/* 竖分割线 */
+.vertical-slip{
+    margin:0 5px;
+    width: 1px;
+    height: 10px;
+    background-color: #ccc;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+.no-cursor-hander{
+    cursor:default;
+}
+
+
+/* zindex 层级控制 */
+
+/* 普通50以下 */
+.zindex-50{
+    z-index: 50;
+}
+
+/* 超普通 50 -- 100 比如屏幕幕布 */
+.zindex-100{
+    z-index: 100;
+}
+
+/* dialog */
+.zindex-500{
+    z-index: 500;
+}
+
+/* 日历 */
+.zindex-700{
+    z-index: 700;
+}
+/* 备用超高 */
+.zindex-999{
+    z-index: 999;
+}
+
+/* placeholder公用样式 */
+input, textarea { color: #000; }
+.placeholder { color: #aaa; }

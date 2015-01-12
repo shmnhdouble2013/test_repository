@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>平安好房首页2.0</title>
+    <link rel="Shortcut Icon" href="http://static.pinganfang.com/201407311922/img/web/common/favicon.ico" />
+
+    <link rel="stylesheet" href="../src/css/base.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="../iconfont/iconfont.css" type="text/css" media="screen" />
+
+    <link rel="stylesheet" href="../src/css/layout.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="../src/css/home.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="../src/css/header2.0.css" type="text/css" media="screen" />
+
+    <link rel="dns-prefetch" href="//g.tbcdn.cn">
+    <link rel="dns-prefetch" href="//a.tbcdn.cn">
+    <link rel="dns-prefetch" href="//www.jack.com">
+    <link rel="dns-prefetch" href="//gtms01.alicdn.com">
+    <link rel="dns-prefetch" href="//gtms02.alicdn.com">
+    <link rel="dns-prefetch" href="//gtms03.alicdn.com">
+    <link rel="dns-prefetch" href="//gtms04.alicdn.com">
+
+
+    <style>
+        #baidu-advertisementId-1,
+        #baidu-advertisementId-2,
+        #baidu-advertisementId-3,
+        #baidu-advertisementId-4,
+        #baidu-advertisementId-5,
+        #baidu-advertisementId-6,
+        #baidu-advertisementId-7,
+        #baidu-advertisementId-8,
+        #baidu-advertisementId-9,
+        #baidu-advertisementId-10,
+        #baidu-advertisementId-11,
+        #baidu-advertisementId-12,
+        #baidu-advertisementId-13,
+        #baidu-advertisementId-14,
+        #baidu-advertisementId-15,
+        #baidu-advertisementId-16{
+            border: 1px solid darkslategray;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div id="header">
+
+    <!-- 第一楼层 -->
+    <div class="bg-f5f5f5">
+        <div class="header-login">
+            <div class="fl-left hide">
+                <p class="">您好，<a href="javascript:void(0)" class="color-fc6800" id="topLogin">登录</a><em class="vertical-slip dinl-block marg-leftright-8px"></em><a href="javascript:void(0)" class="color-fc6800" id="topRegister">注册</a> </p>
+            </div>
+
+            <div class="fl-left welcome-login">
+                <p class="">您好，<span class="color-fc6800">huangjia123456</span> <a href="javascript:void(0)" class="color-666" id="topLogout">退出</a> </p>
+            </div>
+            <div class="fl-right contact-msg">
+                <a href="javascript:void(0)" class="color-fc6800 color-ff8f41">我的好房</a><em class="vertical-slip dinl-block marg-leftright-8px"></em>客服电话：<i>400-818-1111</i>  关注我们：<a href="javascript:void(0)" class="iconfont color-333 pad-lr-3px">&#xe610;</a> <a href="javascript:void(0)" class="iconfont color-333 qr-code-content">&#xe623;<!--二维码--><div class="qr-code zindex-50"></div></a>
+            </div>
+        </div>
+    </div>
+
+    <div id="J_head-notice" class="header-notice-content hide" data-hasdata="1">
+        <p>这里是全站公告内容！</p>
+    </div>
+
+    <!-- 第二楼层 -->
+    <div>
+        <div class="header-search">
+            <a class="haofang_logo" title="平安好房" href="http://www.pinganfang.com/sh/default.html"></a>
+
+            <div class="city_box">
+                <a class="color-666" href="javascript:void(0);">上海<em class="iconfont up-triangle-icon">&#xe633;</em></a>
+
+                <div class="hd_city_pop">
+                    <a class="item" href="http://www.pinganfang.com/sh/" data-ga-event="公共页面/导航栏/$text">上海</a>
+                    <a class="item" href="http://www.pinganfang.com/gz/" data-ga-event="公共页面/导航栏/$text">广州</a>
+                    <a class="item" href="http://www.pinganfang.com/bj/" data-ga-event="公共页面/导航栏/$text">北京</a>
+                </div>
+            </div>
+
+            <div class="haofang_info">中国平安集团成员</div>
+
+            <div class="search_box">
+                <form class="search-form " id="J_serch-form" name="topSearchBox" method="get" action="http://xf.pinganfang.com/sh/">
+
+                    <div class="search_type_box">
+                        <a class="search_type" href="javascript:void(0)"><span id="headerSearchType">新房</span><!-- <em class="iconfont up-triangle-icon">&#xe633;</em> --></a>
+
+                        <div class="hd_search_pop">
+                            <a class="item j_house-type-set" href="javascript:void(0)" data-href="http://xf.pinganfang.com/sh/">新房</a>
+                            <a class="item j_house-type-set" href="javascript:void(0)" data-href="http://esf.pinganfang.com/sh/">二手房</a>
+                            <a class="item j_house-type-set" href="javascript:void(0)" data-href="http://zf.pinganfang.com/sh/">租房</a>
+                        </div>
+                    </div>
+
+                    <input id="" class="search_input" type="text" placeholder="请输入楼盘名或小区名称" name="kw" value="" />
+
+                    <button type="submit" class="btn_search iconfont zindex-50" value="">&#xe60a;</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 导航栏 3楼 -->
+    <div class="bg-f9f9f9 bor-top-e5e5e5 nav-bottom-bg" id="J_nav-menu">
+
+        <div class="header-navlist">
+            <div class="nav_list">
+               <a class="nav_link  " href="http://www.pinganfang.com/sh/default.html" data-ga-event="公共页面/导航栏/$text">首 页</a>
+               <a class="nav_link " href="http://xf.pinganfang.com/sh/" data-ga-event="公共页面/导航栏/$text">新 房</a>
+               <a class="nav_link nav_selected" href="http://esf.pinganfang.com/sh/" data-ga-event="公共页面/导航栏/$text">二手房</a>
+               <a class="nav_link " href="http://zf.pinganfang.com/sh/" data-ga-event="公共页面/导航栏/$text">租 房</a>
+               <a class="nav_link " target="overseas" href="http://overseas.pinganfang.com/" data-ga-event="公共页面/导航栏/$text">海外房产</a>
+               <a class="nav_link " href="http://hgj.pinganfang.com/sh" data-ga-event="公共页面/导航栏/$text">好管家</a>
+               <a class="nav_link " href="http://gold.pinganfang.com/hfbweb/info/active.html" data-ga-event="公共页面/导航栏/$text">好房金融</a>
+            </div>
+            <p class="mobile-container">
+                <span class="iconfont color-fc6800">&#xe625;</span>
+                <a href="pinganfang_index2.0.html" class="color-666">手机找好房</a><em class="vertical-slip dinl-block marg-leftright-8px"></em><a href="pinganfang_index2.0.html" class="color-666">手机找管家</a>
+            </p>
+        </div>
+
+        <!-- 二级导航 data-item="6" 从0开始 -->
+        <div class="zindex-100 leveltwo-list-content">
+
+            <ul class="level-two-ulist" data-item="6">
+                <li><a href="" class="color-333 color-fc6800" >好房金融</a></li>
+                <li><a href="" class="color-333">好房贷</a></li>
+                <li><a href="" class="color-333">好房贷</a></li>
+                <li class="noboder-right"><a href="" class="color-333">海外众酬</a></li>
+            </ul>
+
+            <ul class="level-two-ulist" data-item="5">
+                <li><a href="" class="color-333 color-fc6800" >好管家</a></li>
+                <li><a href="" class="color-333">好房贷</a></li>
+                <li class="noboder-right"><a href="" class="color-333">海外众酬</a></li>
+            </ul>
+
+            <ul class="level-two-ulist" data-item="3">
+                <li><a href="" class="color-333 color-fc6800" >租房</a></li>
+                <li><a href="" class="color-333">好房贷</a></li>
+                <li><a href="" class="color-333">好房贷</a></li>
+                <li><a href="" class="color-333">好房贷</a></li>
+                <li><a href="" class="color-333">好房贷</a></li>
+                <li class="noboder-right"><a href="" class="color-333">海外众酬</a></li>
+            </ul>
+
+            <ul class="level-two-ulist" data-item="2">
+                <li><a href="" class="color-333 color-fc6800" >二手房</a></li>
+                <li><a href="" class="color-333">好房贷</a></li>
+                <li><a href="" class="color-333">好房贷</a></li>
+                <li><a href="" class="color-333">好房贷</a></li>
+                <li><a href="" class="color-333">好房贷</a></li>
+                <li><a href="" class="color-333">好房贷</a></li>
+                <li class="noboder-right"><a href="" class="color-333">海外众酬</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<!--轮播banner-->
+<div class="banner-content" id="J_banner-content">
+
+    <div class="header-bannder" >
+        <div class="tab-pannel_first pannel-content" style="background-color: #fed700">
+            <a class="pic_box" href="http://gold.pinganfang.com/hfbweb/info/active.html" target="_blank" ><img src="http://static.pinganfang.com/201408011614/img/web/newhouse/index/banner_02_pfk_140721.jpg?140721.jpg" width="1200" height="300" ></a>
+        </div>
+        <div class="tab-pannel_first pannel-content hidden" style="background-color: #1079CC">
+            <textarea class="data-lazyload”><script>alert(1)</script> </textarea>
+            <a class="pic_box" href="http://www.pinganfang.com/event/pfk/index.html" target="_blank" ><img data-ks-lazyload="http://static.pinganfang.com/201408011614/img/web/hgj/home/banner_steward.jpg" src="http://g.tbcdn.cn/s.gif" width="1200" height="300" ></a>
+        </div>
+        <div class="tab-pannel_first pannel-content" style="background-color: #EA0B3A">
+            <a class="pic_box" href="http://www.pinganfang.com/app/" target="_blank"><img data-ks-lazyload="http://static.pinganfang.com/201408011614/img/web/newhouse/index/banner_01_hfb_69_2.jpg" src="http://g.tbcdn.cn/s.gif" width="1200" height="300" ></a>
+        </div>
+        <div class="tab-pannel_first pannel-content" style="background-color: #eef9d7">
+            <a class="pic_box" href="http://hgj.pinganfang.com/sh" target="_blank"><img data-ks-lazyload="http://static.pinganfang.com/201408011614/img/web/newhouse/index/banner_app.jpg" src="http://g.tbcdn.cn/s.gif" width="1200" height="300" ></a>
+        </div>
+
+    </div>
+
+    <!--banner list-->
+    <ul class="banner_tab_list">
+        <li class="banner-selected"><a href="javascript:void(0);">●</a></li>
+        <li class=""><a href="javascript:void(0);">●</a></li>
+        <li class=""><a href="javascript:void(0);">●</a></li>
+        <li class=""><a href="javascript:void(0);">●</a></li>
+    </ul>
+
+</div>
+
+<!--tip标签-->
+<div class="banner-tip-content">
+    <div class="baner-tips zindex-50">
+        <div class="tip-up">
+            <h3 class="hfb-font">好房宝</h3>
+            <p class="til-1 text-ellipsis">超高受益 随存随便取</p>
+            <p class="til-2 text-ellipsis">已有<strong class="num">1483738</strong>人使用好房宝</p>
+        </div>
+        <div class="tip-bottom">
+            <p class="rate-of-retur text-ellipsis">昨日综合收益率</p>
+            <div>
+                <span class="num-big">14.8</span><span class="bfh-num">%</span><a href="" class="des-now">立即体验</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="page">
+
+	<div id="content">
+
+		<!-- 三栏：sub : main : extra 快速找新房 -->
+		<div class="grid-c3">
+			<div class="col-main">
+				<div class="main-wrap">
+                    <a href=""><img src="http://ubmcmm.baidustatic.com/media/v1/0f000DEpf2Y8xA5LJj_R3f.jpg" alt="" width="368" height="327"/></a>
+				</div>
+			</div>
+
+			<div class="col-sub qfind-house bg-f5f5f5 bor-top-orange">
+                <h2>快速找新房</h2>
+                <p> <a href="" class="color-666">松松松江江松江江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">松江</a></p>
+                <p> <a href="" class="color-666">松江松江</a><a href="" class="color-666">松江松松江江松江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">更多</a></p>
+
+                <hr class="hr-slip" />
+
+                <p> <a href="" class="color-666">松松江江</a><a href="" class="color-666">松江松松江江松江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">松江</a></p>
+                <p> <a href="" class="color-666">松松江江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">松江</a></p>
+                <p> <a href="" class="color-666">松松江江</a><a href="" class="color-666">松松松江江江松江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">更多</a></p>
+
+                <hr class="hr-slip" />
+
+                <p> <a href="" class="color-666">松松松松江江江江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">松江</a></p>
+                <p> <a href="" class="color-666">松松江江</a><a href="" class="color-666">松江松松江江松江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">松江松江</a><a href="" class="color-666">更多</a></p>
+
+
+            </div>
+
+			<div class="col-extra">
+                <div class="pos-relative fl-left marg-botom10">
+                    <a href=""><img src="http://file.anhouse.com/view/7a630cdb88e1effa45e507937c546415a3bde6bd/160x120.png" alt="" width="204" height="136"/> </a>
+                    <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平</p>
+                    <p class="hbf-tj-bg">好房宝推荐</p>
+                </div>
+
+                <div class="pos-relative fl-right marg-botom10">
+                    <a href=""><img src="http://file.anhouse.com/view/7a630cdb88e1effa45e507937c546415a3bde6bd/160x120.png" alt="" width="204" height="136"/> </a>
+                    <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平</p>
+                    <p class="hbf-tj-bg">好房宝推荐</p>
+                </div>
+
+                <div class="pos-relative fl-left">
+                    <a href=""><img src="http://file.anhouse.com/view/7a630cdb88e1effa45e507937c546415a3bde6bd/160x120.png" alt="" width="204" height="136"/> </a>
+                    <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平</p>
+                    <p class="hbf-tj-bg">好房宝推荐</p>
+                </div>
+
+                <div class="pos-relative fl-right">
+                    <a href=""><img src="http://file.anhouse.com/view/7a630cdb88e1effa45e507937c546415a3bde6bd/160x120.png" alt="" width="204" height="136"/> </a>
+                    <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平</p>
+                    <p class="hbf-tj-bg">好房宝推荐</p>
+                </div>
+			</div>
+		</div>
+
+
+        <!-- 两栏：sub : main  广告一 -->
+        <div class="grid-c2">
+            <div class="col-main">
+                <div class="main-wrap" id="baidu-advertisementId-1"></div>
+            </div>
+
+            <div class="col-sub" id="baidu-advertisementId-2"></div>
+        </div>
+
+
+        <!-- 两栏：sub : main 广告二 -->
+        <div class="grid-c2">
+            <div class="col-main">
+                <div class="main-wrap" id="baidu-advertisementId-3"></div>
+            </div>
+
+            <div class="col-sub" id="baidu-advertisementId-4"></div>
+        </div>
+
+
+
+        <!-- 三栏：sub : main : extra 好房宝 || 好房贷-->
+        <div class="grid-c3a">
+            <div class="col-main">
+                <div class="main-wrap bor-top-orange bor-all-e5e5e5">
+                    <div class="hfbd-cont">
+                        <h2 class="hfb-hfd-lab">好房贷</h2>
+
+                        <div class="hfb-icon">&nbsp;</div>
+                        <div>
+                            <p class="hfb-hfd-lab"><span class="hfb-hfd-btxt hfb-text-org">免息</span><span>贷款，助你有家</span></p>
+                            <p class="text-ellipsis">最高<span class="color-fc6800">30万</span>贷款，最低<span class="color-fc6800">0利息</span></p>
+                            <p class="text-ellipsis">最快<span class="color-fc6800">2天</span>放款</p>
+                        </div>
+                        <p class="clear-left">还款期限任你选<a href="http://gold.pinganfang.com/hfd/apply/home.html" target="_blank" class="des-now-big">&nbsp;</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sub bor-top-orange bor-all-e5e5e5 noboder-right">
+                <div class="hfbd-cont">
+                    <h2 class="hfb-hfd-lab">好房宝</h2>
+
+                    <div class="hfd-icon">&nbsp;</div>
+                    <div>
+                        <p class="hfb-hfd-lab"><span>综合收益率高达</span><span class="hfb-hfd-btxt ">14%</span></p>
+                        <p class="text-ellipsis"><span class="color-fc6800">不买房</span>可享受<span class="color-fc6800">12-20倍</span>的活期收益</p>
+                        <p class="text-ellipsis"><span class="color-fc6800">买房</span>更可享受<span class="color-fc6800">38-40倍</span>的活期收益</p>
+                    </div>
+                    <p class="clear-left">随时提现 随时赎回<a href="http://gold.pinganfang.com/hfbweb/info/active.html" target="_blank" class="des-now-big">&nbsp;</a></p>
+                </div>
+            </div>
+
+            <div class="col-extra">
+                <div class="returns-timer mart-botom13">
+                    <a href="http://gold.pinganfang.com/hfbweb/info/active2.redirect.0.html#calculator" target="_blank">
+                        <div class="chart-up">&nbsp;</div>
+                    </a>
+                </div>
+                <div class="returns-timer">
+                    <a href="http://www.pinganfang.com/sh/tools/fangdai.html" target="_blank">
+                        <div class="calculator-char">&nbsp;</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 两栏：sub : main 看房团 -->
+        <div class="grid-c2 bor-top-orange bor-all-e5e5e5 noboder-right">
+            <div class="col-main">
+                <div class="main-wrap bg-f5f5f5">
+                    <div class="splendid-content">
+                        <p class="marg-botom30"><span class="big-til18">精彩回顾</span><a href="http://xf.pinganfang.com/sh/kft/hg/" target="_blank" class="color-0085eb padd-left10">更多</a></p>
+
+                        <a data-ga-event="上海首页/看房团/小图1" href="http://xf.pinganfang.com/sh/kft/hg/15.html" target="_blank" class="splendid-img marg-botom10">
+                            <img src="http://file.anhouse.com/view/banner/8d2b40e4bcf241b8c0bf37772c2447639f211362.jpg" src="http://file.anhouse.com/view/banner/8d2b40e4bcf241b8c0bf37772c2447639f211362.jpg" width="174" height="113" alt="" >
+                            <p class="opcity-bg p2">9.13金地看房团首次登场</p>
+                        </a>
+
+                        <a data-ga-event="上海首页/看房团/小图2" href="http://xf.pinganfang.com/sh/kft/hg/14.html" target="_blank" class="splendid-img marg-botom10">
+                            <img data-ks-lazyload="http://file.anhouse.com/view/banner/891637eb7443b37bd747a42478aa569d6e9d74d0.jpg" src="http://file.anhouse.com/view/banner/891637eb7443b37bd747a42478aa569d6e9d74d0.jpg" width="174" height="113" alt="" style="display: inline;">
+                            <p class="opcity-bg p2 ptop88">8.30金山香港城看房一日游</p>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-sub">
+                <div class="see-fang-group">
+                    <p class="marg-botom20"><span class="big-til">看房团</span><span class="til-marks">参团看房享优惠，</span><a href="http://xf.pinganfang.com/sh/kft/" target="_blank" class="color-0085eb color-666hover">查看更多线路&gt;&gt;</a></p>
+                    <div class="hb-kft">
+                        <a data-ga-event="上海首页/看房团/大图1" href="http://xf.pinganfang.com/sh/kft/12.html" target="_blank" class="mar-rt5 marg-botom20"><img data-ks-lazyload="http://file.anhouse.com/view/banner/fa149247ccf9539e5b79d6ef4308d3e51fd62f4a.jpg" src="http://file.anhouse.com/view/banner/fa149247ccf9539e5b79d6ef4308d3e51fd62f4a.jpg" width="378" height="236" alt="" style="display: inline;"> </a>
+                        <a data-ga-event="上海首页/看房团/大图2" href="http://xf.pinganfang.com/sh/kft/9.html" target="_blank"> <img data-ks-lazyload="http://file.anhouse.com/view/banner/43ed549838a3927dfc249211eefa1a2a745d1631.jpg" src="http://file.anhouse.com/view/banner/43ed549838a3927dfc249211eefa1a2a745d1631.jpg" width="378" height="236" alt="" style="display: inline;"> </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 两栏：sub : main 广告二 -->
+        <div class="grid-c2">
+            <div class="col-main">
+                <div class="main-wrap" id="baidu-advertisementId-5"></div>
+            </div>
+
+            <div class="col-sub" id="baidu-advertisementId-6"></div>
+        </div>
+
+
+        <!-- 两栏：sub : main 广告二 -->
+        <div class="grid-c2">
+            <div class="col-main">
+                <div class="main-wrap" id="baidu-advertisementId-7"></div>
+            </div>
+
+            <div class="col-sub" id="baidu-advertisementId-8"></div>
+        </div>
+
+
+        <!--最近开盘-->
+        <div class="bor-top-orange bor-all-e5e5e5 recently-kp-content marg-botom30" id="J_recentlynav-container">
+
+            <!--通用 导航标题list -->
+            <div class="tab-nav-comm marg-botom20">
+                <div class="big-til">最近开盘</div>
+                <ul class="tab-ul j_recently-list tab-nav">
+                    <li class="tab1"><a class="" href="javascript:void(0)">本月开盘</a><em class="iconfont up-triangle">&#xe64a;</em></li> <em class="vertical-slip"></em>
+                    <li class="tab2"><a class="" href="javascript:void(0)">上月开盘</a><em class="iconfont up-triangle">&#xe64a;</em></li> <em class="vertical-slip"></em>
+                    <li class="tab3"><a class="" href="javascript:void(0)">下月开盘</a><em class="iconfont up-triangle">&#xe64a;</em></li>
+                </ul>
+                <a href="" class="color-0085eb padd-left10 find-more">更多</a>
+            </div>
+
+            <!--通用 导航主体content-->
+            <div class="j_recently-content tab-content">
+
+                <div class="tab-nav-content j_recently-pannel tab-pannel">
+                    <div  class="recently-kp">
+                        <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://file.anhouse.com/view/13995ba29717eea128e13d55a52c2b993c17a559/160x120.jpg"   src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                            <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                            <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                        </div>
+                    </div>
+
+                    <div  class="recently-kp">
+                        <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://file.anhouse.com/view/13995ba29717eea128e13d55a52c2b993c17a559/160x120.jpg" src="http://g.tbcdn.cn/s.gif"  alt="" width="184" height="120"> </a>
+                            <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                            <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                        </div>
+                    </div>
+
+                    <div  class="recently-kp">
+                        <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://file.anhouse.com/view/13995ba29717eea128e13d55a52c2b993c17a559/160x120.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                            <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                            <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                        </div>
+                    </div>
+
+                    <div  class="recently-kp">
+                        <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://file.anhouse.com/view/13995ba29717eea128e13d55a52c2b993c17a559/160x120.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                            <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                            <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                        </div>
+                    </div>
+
+                    <div  class="recently-kp">
+                        <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://file.anhouse.com/view/13995ba29717eea128e13d55a52c2b993c17a559/160x120.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                            <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                            <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="tab-nav-content j_recently-pannel tab-pannel">
+
+                        <div  class="recently-kp">
+                            <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://gi4.md.alicdn.com/bao/uploaded/i4/T1VWUuFIpbXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg" src="http://g.tbcdn.cn/s.gif"  alt="" width="184" height="120"> </a>
+                                <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                                <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                            </div>
+                        </div>
+
+                        <div  class="recently-kp">
+                            <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://gi4.md.alicdn.com/bao/uploaded/i4/T1VWUuFIpbXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                                <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                                <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                            </div>
+                        </div>
+
+                        <div  class="recently-kp">
+                            <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://gi4.md.alicdn.com/bao/uploaded/i4/T1VWUuFIpbXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                                <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                                <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                            </div>
+                        </div>
+
+                        <div  class="recently-kp">
+                            <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://gi4.md.alicdn.com/bao/uploaded/i4/T1VWUuFIpbXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                                <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                                <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                            </div>
+                        </div>
+
+                        <div  class="recently-kp">
+                        <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://gi4.md.alicdn.com/bao/uploaded/i4/T1VWUuFIpbXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                            <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                            <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="tab-nav-content j_recently-pannel tab-pannel">
+                    <div  class="recently-kp">
+                        <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://file.anhouse.com/view/f4f1e773512280c4cdc9b65c6f49e9b046af36ef/160x120.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                                    <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                                    <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                                </div>
+                            </div>
+
+                            <div  class="recently-kp">
+                                <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://file.anhouse.com/view/f4f1e773512280c4cdc9b65c6f49e9b046af36ef/160x120.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                                    <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                                    <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                                </div>
+                            </div>
+
+                            <div  class="recently-kp">
+                                <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://file.anhouse.com/view/f4f1e773512280c4cdc9b65c6f49e9b046af36ef/160x120.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                                    <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                                    <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                                </div>
+                            </div>
+
+                            <div  class="recently-kp">
+                                <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://file.anhouse.com/view/f4f1e773512280c4cdc9b65c6f49e9b046af36ef/160x120.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                                    <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                                    <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                                </div>
+                            </div>
+
+                            <div  class="recently-kp">
+                                <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://file.anhouse.com/view/f4f1e773512280c4cdc9b65c6f49e9b046af36ef/160x120.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                                    <p class="hfb-msg"><a class="lp-name color-666 text-ellipsis" href="">万科金未来城</a> <span class="lp-price text-ellipsis color-fc6800">1483738</span>元/平米</p>
+                                    <p class="kt-time">开盘时间&nbsp;&nbsp;2014年9月13日</p>
+                                </div>
+                            </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- 两栏：海外房产 -->
+        <div class="grid-c2 bor-top-orange bor-all-e5e5e5 noboder-right">
+        <div class="col-main">
+            <div class="main-wrap bg-f5f5f5">
+                <div class="hot-top-content">
+                    <p class="marg-botom20"><span class="big-til18">热点资讯</span><a target="_blank" href="http://overseas.pinganfang.com/article_list.php" class="color-0085eb padd-left10 find-more">更多</a></p>
+
+                    <ul id="J_hot-top">
+                        <li><a target="_blank" href="http://overseas.pinganfang.com/article.php?id=29" title="葡萄牙房产成中国投资者投资热点" class="color-666 text-ellipsis color-666hover">葡萄牙房产成中国投资者投资热点</a></li>
+                        <li><a target="_blank" href="http://overseas.pinganfang.com/article.php?id=51" title="瞄准悉尼墨尔本 李嘉诚布局澳洲房地产市场" class="color-666 text-ellipsis color-666hover">瞄准悉尼墨尔本 李嘉诚布局澳洲房地产市场</a></li>
+                        <li><a target="_blank" href="http://overseas.pinganfang.com/article.php?id=46" title="怎样在美国出租房产获利" class="color-666 text-ellipsis color-666hover">怎样在美国出租房产获利</a></li>
+                        <li><a target="_blank" href="http://overseas.pinganfang.com/article.php?id=47" title="2031年， 新移民和年轻人将没房住， 澳洲将短缺超过66万栋住宅" class="color-666 text-ellipsis color-666hover">2031年， 新移民和年轻人将没房住， 澳洲将短缺超过66万栋住宅</a></li>
+                        <li><a target="_blank" href="http://overseas.pinganfang.com/article.php?id=48" title="中国欲将目光投向塞浦路斯天然气计划" class="color-666 text-ellipsis color-666hover">中国欲将目光投向塞浦路斯天然气计划</a></li>
+                        <li><a target="_blank" href="http://overseas.pinganfang.com/article.php?id=50" title="中外经济“逆周期”加速理财资金出海" class="color-666 text-ellipsis color-666hover">中外经济“逆周期”加速理财资金出海</a></li>
+                        <li><a target="_blank" href="http://overseas.pinganfang.com/article.php?id=52" title="中国公民赴美非移民签证有望明年起延长至2到3年" class="color-666 text-ellipsis color-666hover">中国公民赴美非移民签证有望明年起延长至2到3年</a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sub" id="J_overseas-house">
+
+            <div class="see-fang-group">
+
+                <!--通用 导航标题list -->
+                <div class="tab-nav-comm marg-botom20">
+                    <div class="big-til">海外房产</div>
+                    <ul class="tab-ul tab-nav">
+                        <li class="tab1 banner-selected" data-tab-index="0"><a class="" href="javascript:void(0)">北美置业</a><em class="iconfont up-triangle"></em></li> <em class="vertical-slip"></em>
+                        <li class="tab2" data-tab-index="1"><a class="" href="javascript:void(0)">欧洲置业</a><em class="iconfont up-triangle"></em></li> <em class="vertical-slip"></em>
+                        <li class="tab3" data-tab-index="2"><a class="" href="javascript:void(0)">亚太置业</a><em class="iconfont up-triangle"></em></li>
+                    </ul>
+                    <a href="http://overseas.pinganfang.com/house_list.php" target="_blank" class="color-0085eb padd-left10 find-more">更多</a>
+                </div>
+
+                <!--通用 导航主体content-->
+                <div class="tab-content">
+
+                    <div class="tab-nav-content tab-pannel">
+                        <div class="recently-kp">
+                            <div class="fl-left mar-rt10 marg-botom20">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=141"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/53eb312c45526.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120" style="display: inline;"> </a>
+                                </div>
+                                <div class="fl-left explain-text-list">
+                                    <h3 class="text-ellipsis"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=141" class="color-666hover">佛州李郡高级海景公寓</a></h3>
+                                    <ul class="seefang-group-ul">
+                                        <li title="1房，2房，3房；885-1663平方英尺">户型面积: 1房，2房，3房；885-1663平方英尺</li>
+                                        <li>地址: 李郡</li>
+                                        <li>装修: 精装修</li>
+                                        <li><span>售价: </span><span class="lp-price text-ellipsis color-fc6800" title="245,000-439,000美元">245,000-439,000美元</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="fl-left marg-botom20">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=18"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/53eb302dceaf2.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120" style="display: inline;"> </a>
+                                </div>
+                                <div class="fl-left explain-text-list">
+                                    <h3 class="text-ellipsis"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=18" class="color-666hover">Chandler Oaks 公寓</a></h3>
+                                    <ul class="seefang-group-ul">
+                                        <li title="一卧 41.1-49.3平方米  两卧 58.2-65.2平方米">户型面积: 一卧 41.1-49.3平方米  两卧 58.2-65.2平方米</li>
+                                        <li>地址: 美国南卡罗来纳州加夫尼市</li>
+                                        <li>装修: 精装修</li>
+                                        <li><span>售价: </span><span class="lp-price text-ellipsis color-fc6800" title="$48,671.00 ~ $77,145.00 美元">$48,671.00 ~ $77,145.00 美元</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="along-lp-list">
+                            <div class="fl-left mar-rt10 ">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=21"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/53eb3058af876.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="48" height="43" style="display: inline;"> </a>
+                                </div>
+                                <ul class="fl-left explain-text-list text-ellipsis">
+                                    <li class="color-999" title="曼哈顿540West公寓"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=21" class="color-666hover">曼哈顿540West公寓</a></li>
+                                    <li class="lp-price color-fc6800" title="单间 $785,000美元起 1卧1卫 $950,000美元起 1卧2卫 $1,450,000美元起 2卧2卫 $2,700,000美元起">单间 $785,000美元起 1卧1卫 $950,000美元起 1卧2卫 $1,450,000美元起 2卧2卫 $2,700,000美元起</li>
+                                </ul>
+                            </div>
+                            <div class="fl-left mar-rt10 ">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=12"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/533f00e25c51c.png" src="http://g.tbcdn.cn/s.gif" alt="" width="48" height="43" style="display: inline;"> </a>
+                                </div>
+                                <ul class="fl-left explain-text-list text-ellipsis">
+                                    <li class="color-999" title="Granville at 70th 格兰威尔70街"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=12" class="color-666hover">Granville at 70th 格兰威尔70街</a></li>
+                                    <li class="lp-price color-fc6800" title="40万-155万加币">40万-155万加币</li>
+                                </ul>
+                            </div>
+                            <div class="fl-left mar-rt10 ">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=130"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/53df1eae2eece.png" src="http://g.tbcdn.cn/s.gif" alt="" width="48" height="43" style="display: inline;"> </a>
+                                </div>
+                                <ul class="fl-left explain-text-list text-ellipsis">
+                                    <li class="color-999" title="佛州水景土地"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=130" class="color-666hover">佛州水景土地</a></li>
+                                    <li class="lp-price color-fc6800" title="43333美元">43333美元</li>
+                                </ul>
+                            </div>
+                            <div class="fl-left mar-rt10 ">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=10"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/533efa3578ff9.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="48" height="43" style="display: inline;"> </a>
+                                </div>
+                                <ul class="fl-left explain-text-list text-ellipsis">
+                                    <li class="color-999" title="书香苑"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=10" class="color-666hover">书香苑</a></li>
+                                    <li class="lp-price color-fc6800" title="70万-700万美元">70万-700万美元</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-nav-content tab-pannel" >
+                        <!--<textarea class="data-lazyload">-->
+                            <div class="recently-kp">
+                                <div class="fl-left mar-rt10 marg-botom20">
+                                    <div class="fl-left mar-rt10">
+                                        <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=20"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/5398147f21335.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                                    </div>
+                                    <div class="fl-left explain-text-list">
+                                        <h3 class="text-ellipsis"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=20" class="color-666hover">Spectrum 学生公寓</a></h3>
+                                        <ul class="seefang-group-ul">
+                                            <li title="一卧 41.1-49.3平方米  两卧 58.2-65.2平方米">户型面积: 一卧 41.1-49.3平方米  两卧 58.2-65.2平方米</li>
+                                            <li>地址: 美国南卡罗来纳州加夫尼市</li>
+                                            <li>装修: 精装修</li>
+                                            <li><span>售价: </span><span class="lp-price text-ellipsis color-fc6800" title="55,995英镑起">55,995英镑起</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="fl-left marg-botom20">
+                                    <div class="fl-left mar-rt10">
+                                        <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=23"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/53df1c33eee72.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                                    </div>
+                                    <div class="fl-left explain-text-list">
+                                        <h3 class="text-ellipsis"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=23" class="color-666hover">Vilamoura高尔夫公寓</a></h3>
+                                        <ul class="seefang-group-ul">
+                                            <li title="一卧 41.1-49.3平方米  两卧 58.2-65.2平方米">户型面积: 一卧 41.1-49.3平方米  两卧 58.2-65.2平方米</li>
+                                            <li>地址: 美国南卡罗来纳州加夫尼市</li>
+                                            <li>装修: 全装修全配置</li>
+                                            <li><span>售价: </span><span class="lp-price text-ellipsis color-fc6800" title="142,000-208,000欧元">142,000-208,000欧元</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="along-lp-list">
+                            <div class="fl-left mar-rt10 ">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=4"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/533ea2c4eadbe.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="48" height="43"> </a>
+                                </div>
+                                <ul class="fl-left explain-text-list text-ellipsis">
+                                    <li class="color-999" title="D Bloque 18"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=4" class="color-666hover">D Bloque 18</a></li>
+                                    <li class="lp-price color-fc6800" title="149,000欧元">149,000欧元</li>
+                                </ul>
+                            </div>
+                            <div class="fl-left mar-rt10 ">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=32"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/53994adaaa0d1.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="48" height="43"> </a>
+                                </div>
+                                <ul class="fl-left explain-text-list text-ellipsis">
+                                    <li class="color-999" title="普罗多米花园"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=32" class="color-666hover">普罗多米花园</a></li>
+                                    <li class="lp-price color-fc6800" title="287,000欧元">287,000欧元</li>
+                                </ul>
+                            </div>
+                            <div class="fl-left mar-rt10 ">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=51"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/53998e61a3989.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="48" height="43"> </a>
+                                </div>
+                                <ul class="fl-left explain-text-list text-ellipsis">
+                                    <li class="color-999" title="圣托里尼岛海景别墅"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=51" class="color-666hover">圣托里尼岛海景别墅</a></li>
+                                    <li class="lp-price color-fc6800" title="49万欧元">49万欧元</li>
+                                </ul>
+                            </div>
+                            <div class="fl-left mar-rt10 ">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=33"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/53994fdad140a.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="48" height="43"> </a>
+                                </div>
+                                <ul class="fl-left explain-text-list text-ellipsis">
+                                    <li class="color-999" title="英国投资型储藏室"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=33" class="color-666hover">英国投资型储藏室</a></li>
+                                    <li class="lp-price color-fc6800" title="3,750英镑起">3,750英镑起</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--</textarea>-->
+                    </div>
+
+                    <div class="tab-nav-content tab-pannel" >
+                        <!--<textarea class="data-lazyload">-->
+                            <div class="recently-kp">
+                                <div class="fl-left mar-rt10 marg-botom20">
+                                    <div class="fl-left mar-rt10">
+                                        <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=16"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/5371e786a9b99.png" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                                    </div>
+                                    <div class="fl-left explain-text-list">
+                                        <h3 class="text-ellipsis"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=16" class="color-666hover">Rose Hill</a></h3>
+                                        <ul class="seefang-group-ul">
+                                            <li title="1房，2房；82-110平方米">户型面积: 1房，2房；82-110平方米</li>
+                                            <li>地址: 1-5 Western St, Rose Hill NSW 2142</li>
+                                            <li>装修: 精装修</li>
+                                            <li><span>售价: </span><span class="lp-price text-ellipsis color-fc6800" title="384，000－554，000澳币">384，000－554，000澳币</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="fl-left marg-botom20">
+                                    <div class="fl-left mar-rt10">
+                                        <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=148"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/53edd58bcae89.png" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="120"> </a>
+                                    </div>
+                                    <div class="fl-left explain-text-list">
+                                        <h3 class="text-ellipsis"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=148" class="color-666hover">东京中野区高回报投资房</a></h3>
+                                        <ul class="seefang-group-ul">
+                                            <li title="83.72平米">户型面积: 83.72平米</li>
+                                            <li>地址: 中野区</li>
+                                            <li>装修: 精装修</li>
+                                            <li><span>售价: </span><span class="lp-price text-ellipsis color-fc6800" title="4116万日圆">4116万日圆</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="along-lp-list">
+                            <div class="fl-left mar-rt10 ">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=132"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/53df242438a93.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="48" height="43"> </a>
+                                </div>
+                                <ul class="fl-left explain-text-list text-ellipsis">
+                                    <li class="color-999" title="Emerald Park"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=132" class="color-666hover">Emerald Park</a></li>
+                                    <li class="lp-price color-fc6800" title="62.7万澳币起">62.7万澳币起</li>
+                                </ul>
+                            </div>
+                            <div class="fl-left mar-rt10 ">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=22"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/5398248f6aecb.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="48" height="43"> </a>
+                                </div>
+                                <ul class="fl-left explain-text-list text-ellipsis">
+                                    <li class="color-999" title="SugarTree 唐朝公寓"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=22" class="color-666hover">SugarTree 唐朝公寓</a></li>
+                                    <li class="lp-price color-fc6800" title="309,500-921,000新西兰元">309,500-921,000新西兰元</li>
+                                </ul>
+                            </div>
+                            <div class="fl-left mar-rt10 ">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=8"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/533ef2f286beb.png" src="http://g.tbcdn.cn/s.gif" alt="" width="48" height="43"> </a>
+                                </div>
+                                <ul class="fl-left explain-text-list text-ellipsis">
+                                    <li class="color-999" title="Williams Landing"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=8" class="color-666hover">Williams Landing</a></li>
+                                    <li class="lp-price color-fc6800" title="40-80万澳元">40-80万澳元</li>
+                                </ul>
+                            </div>
+                            <div class="fl-left mar-rt10 ">
+                                <div class="fl-left mar-rt10">
+                                    <a target="_blank" href="http://overseas.pinganfang.com/house.php?id=13"><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/533f02f03d377.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="48" height="43"> </a>
+                                </div>
+                                <ul class="fl-left explain-text-list text-ellipsis">
+                                    <li class="color-999" title="济州岛乐园国际度假别墅"><a target="_blank" href="http://overseas.pinganfang.com/house.php?id=13" class="color-666hover">济州岛乐园国际度假别墅</a></li>
+                                    <li class="lp-price color-fc6800" title="300万人民币起">300万人民币起</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--</textarea>-->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        </div>
+
+
+        <!-- 两栏：sub : main 广告二 -->
+        <div class="grid-c2">
+            <div class="col-main">
+                <div class="main-wrap" id="baidu-advertisementId-9"></div>
+            </div>
+
+            <div class="col-sub" id="baidu-advertisementId-10"></div>
+        </div>
+
+
+        <!-- 两栏：sub : main 广告二 -->
+        <div class="grid-c2">
+            <div class="col-main">
+                <div class="main-wrap" id="baidu-advertisementId-11"></div>
+            </div>
+
+            <div class="col-sub" id="baidu-advertisementId-12"></div>
+        </div>
+
+
+        <!-- 两栏：sub : main 品房客报到 -->
+        <div class="grid-c2">
+            <div class="col-main">
+                <div class="main-wrap bor-top-orange bor-all-e5e5e5 ">
+
+                    <div class="pfk-top-content">
+                        <h4 class="hot-title">品房客热榜</h4>
+
+                        <ul>
+                            <li class="">
+                                <div class="person-list">
+                                    <div class="fl-left mar-rt10">
+                                        <a href=""><img data-ks-lazyload="http://gtms01.alicdn.com/tps/i1/TB1FHu3FVXXXXbpXFXXlYwGYXXX-180-160.png_160x160.jpg" alt="" src="http://g.tbcdn.cn/s.gif" width="67" height="62"> </a>
+                                    </div>
+                                    <div class="fl-left persons">
+                                        <h4 class="">Yolandia</h4>
+                                        <p class="a-briefing">票数: 968</p>
+                                        <p class="a-briefing">职业: 教师</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="">
+                                <div class="person-list">
+                                    <div class="fl-left mar-rt10">
+                                        <a href=""><img data-ks-lazyload="http://gtms01.alicdn.com/tps/i1/TB1FHu3FVXXXXbpXFXXlYwGYXXX-180-160.png_160x160.jpg" alt="" src="http://g.tbcdn.cn/s.gif" width="67" height="62"></a>
+                                    </div>
+                                    <div class="fl-left persons">
+                                        <h4 class="">Yolandia</h4>
+                                        <p class="a-briefing">票数: 968</p>
+                                        <p class="a-briefing">职业: 教师</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="">
+                                <div class="person-list">
+                                    <div class="fl-left mar-rt10">
+                                        <a href=""><img data-ks-lazyload="http://gtms01.alicdn.com/tps/i1/TB1FHu3FVXXXXbpXFXXlYwGYXXX-180-160.png_160x160.jpg" alt=""  src="http://g.tbcdn.cn/s.gif"  width="67" height="62"></a>
+                                    </div>
+                                    <div class="fl-left persons">
+                                        <h4 class="">Yolandia</h4>
+                                        <p class="a-briefing">票数: 968</p>
+                                        <p class="a-briefing">职业: 教师</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="">
+                                <div class="person-list">
+                                    <div class="fl-left mar-rt10">
+                                        <a href=""><img data-ks-lazyload="http://gtms01.alicdn.com/tps/i1/TB1FHu3FVXXXXbpXFXXlYwGYXXX-180-160.png_160x160.jpg" alt="" src="http://g.tbcdn.cn/s.gif" width="67" height="62"></a>
+                                    </div>
+                                    <div class="fl-left persons">
+                                        <h4 class="">Yolandia</h4>
+                                        <p class="a-briefing">票数: 968</p>
+                                        <p class="a-briefing">职业: 教师</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="">
+                                <div class="person-list">
+                                    <div class="fl-left mar-rt10">
+                                        <a href=""><img data-ks-lazyload="http://gtms01.alicdn.com/tps/i1/TB1FHu3FVXXXXbpXFXXlYwGYXXX-180-160.png_160x160.jpg" src="http://g.tbcdn.cn/s.gif"  alt="" width="67" height="62"></a>
+                                    </div>
+                                    <div class="fl-left persons">
+                                        <h4 class="">Yolandia</h4>
+                                        <p class="a-briefing">票数: 968</p>
+                                        <p class="a-briefing">职业: 教师</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="">
+                                <div class="person-list">
+                                    <div class="fl-left mar-rt10">
+                                        <a href=""><img data-ks-lazyload="http://gtms01.alicdn.com/tps/i1/TB1FHu3FVXXXXbpXFXXlYwGYXXX-180-160.png_160x160.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="67" height="62"></a>
+                                    </div>
+                                    <div class="fl-left persons">
+                                        <h4 class="">Yolandia</h4>
+                                        <p class="a-briefing">票数: 968</p>
+                                        <p class="a-briefing">职业: 教师</p>
+                                    </div>
+                                </div>
+                            </li>
+
+
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-sub bor-top-orange bor-all-e5e5e5">
+
+                <div class="marg-left20">
+                    <p class="marg-botom20"><span class="big-til mar-rt10">品房客报道</span><a href="" class="color-0085eb">更多</a></p>
+
+                    <div class="pfk-page-list">
+                        <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/53df1eae2eece.png" src="http://g.tbcdn.cn/s.gif" alt="" width="184" height="122"> </a>
+                        </div>
+                        <div class="fl-left text-areas">
+                            <h3 class="text-ellipsis marg-botom10 text-ellipsis"><a href="">【爱尔兰英伦情调】---- 2014英国行迹，你所想不到的异国风情！</a></h3>
+                            <p class="a-briefing marg-botom10 text-ellipsis-big">此贴为作者一年前一次说走就走的旅行，只为探寻7月 花开最盛的 普罗旺斯薰衣草。 36小时走完 Aix-en-Provence 东面最著名的薰衣草花田只为探寻7月 花开最盛的 普罗旺斯薰衣草只为探寻7月 花开最盛的 普罗旺斯薰衣草</p>
+                            <div class="see-read-last color-999">
+                                <div class="fl-left">
+                                    <em class="iconfont review">&#xe67f;</em>131
+                                    <em class="iconfont see-num">&#xe681;</em>2713
+                                    <em class="iconfont like-it">&#xe653;</em>2713
+                                </div>
+                                <p class="fl-right">水木年华double &nbsp;&nbsp; 2014-09-24</p>
+                            </div>
+                        </div>
+                        <div class="like-num"></div>
+                    </div>
+
+                    <div class="pfk-page-list">
+                        <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/53df1eae2eece.png"  alt="" width="184" height="122"> </a>
+                        </div>
+                        <div class="fl-left text-areas">
+                            <h3 class="text-ellipsis marg-botom10 text-ellipsis"><a href="">【爱尔兰英伦情调】---- 2014英国行迹，你所想不到的异国风情你所想不到的异国风情你所想不到的异国风情你所想不到的异国风情！</a></h3>
+                            <p class="a-briefing marg-botom10 text-ellipsis-big">此贴为作者一年前一次说走就走的旅行，只为探寻7月 花开最盛的 普罗旺斯薰衣草。 36小时走完 Aix-en-Provence 东面最著名的薰衣草花田只为探寻7月 花开最盛的 普罗旺斯薰衣草只为探寻7月 花开最盛的 普罗旺斯薰衣草</p>
+                            <div class="see-read-last color-999">
+                                <div class="fl-left">
+                                    <em class="iconfont review">&#xe67f;</em>131
+                                    <em class="iconfont see-num">&#xe681;</em>2713
+                                    <em class="iconfont like-it">&#xe653;</em>2713
+                                </div>
+                                <p class="fl-right">水木年华double &nbsp;&nbsp; 2014-09-24</p>
+                            </div>
+                        </div>
+                        <div class="like-num"></div>
+                    </div>
+
+                    <div class="pfk-page-list">
+                        <div class="fl-left mar-rt10">
+                            <a href=""><img data-ks-lazyload="http://overseas.pinganfang.com/image/house/53df1eae2eece.png"  alt="" width="184" height="122"> </a>
+                        </div>
+                        <div class="fl-left text-areas">
+                            <h3 class="text-ellipsis marg-botom10 text-ellipsis"><a href="">【爱尔兰英伦情调】---- 2014英国行迹，你所想不到的异国风情你所想不到的异国风情你所想不到的异国风情你所想不到的异国风情！</a></h3>
+                            <p class="a-briefing marg-botom10 text-ellipsis-big">此贴为作者一年前一次说走就走的旅行，只为探寻7月 花开最盛的 普罗旺斯薰衣草。 36小时走完 Aix-en-Provence 东面最著名的薰衣草花田只为探寻7月 花开最盛的 普罗旺斯薰衣草只为探寻7月 花开最盛的 普罗旺斯薰衣草</p>
+                            <div class="see-read-last color-999">
+                                <div class="fl-left">
+                                    <em class="iconfont review">&#xe67f;</em>131
+                                    <em class="iconfont see-num">&#xe681;</em>2713
+                                    <em class="iconfont like-it">&#xe653;</em>2713
+                                </div>
+                                <p class="fl-right">水木年华double &nbsp;&nbsp; 2014-09-24</p>
+                            </div>
+                        </div>
+                        <div class="like-num"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- 图片墙 -->
+        <table class="imgs-wall">
+            <tr>
+                <td><a href="" ><img data-ks-lazyload="http://img03.taobaocdn.com/imgextra/i3/650029601/TB25NhPaXXXXXa.XXXXXXXXXXXX_!!650029601.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="165" height="90" /></a></td>
+                <td><a href="" ><img data-ks-lazyload="http://img03.taobaocdn.com/imgextra/i3/650029601/TB25NhPaXXXXXa.XXXXXXXXXXXX_!!650029601.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="165" height="90" /></a></td>
+                <td><a href="" ><img data-ks-lazyload="http://img03.taobaocdn.com/imgextra/i3/650029601/TB25NhPaXXXXXa.XXXXXXXXXXXX_!!650029601.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="165" height="90" /></a></td>
+                <td><a href="" ><img data-ks-lazyload="http://img03.taobaocdn.com/imgextra/i3/650029601/TB25NhPaXXXXXa.XXXXXXXXXXXX_!!650029601.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="165" height="90" /></a></td>
+                <td><a href="" ><img data-ks-lazyload="http://img03.taobaocdn.com/imgextra/i3/650029601/TB25NhPaXXXXXa.XXXXXXXXXXXX_!!650029601.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="165" height="90" /></a></td>
+                <td><a href="" ><img data-ks-lazyload="http://img03.taobaocdn.com/imgextra/i3/650029601/TB25NhPaXXXXXa.XXXXXXXXXXXX_!!650029601.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="165" height="90" /></a></td>
+            </tr>
+            <tr>
+                <td><a href="" ><img data-ks-lazyload="http://img03.taobaocdn.com/imgextra/i3/650029601/TB25NhPaXXXXXa.XXXXXXXXXXXX_!!650029601.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="165" height="90" /></a></td>
+                <td><a href="" ><img data-ks-lazyload="http://img03.taobaocdn.com/imgextra/i3/650029601/TB25NhPaXXXXXa.XXXXXXXXXXXX_!!650029601.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="165" height="90" /></a></td>
+                <td><a href="" ><img data-ks-lazyload="http://img03.taobaocdn.com/imgextra/i3/650029601/TB25NhPaXXXXXa.XXXXXXXXXXXX_!!650029601.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="165" height="90" /></a></td>
+                <td><a href="" ><img data-ks-lazyload="http://img03.taobaocdn.com/imgextra/i3/650029601/TB25NhPaXXXXXa.XXXXXXXXXXXX_!!650029601.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="165" height="90" /></a></td>
+                <td><a href="" ><img data-ks-lazyload="http://img03.taobaocdn.com/imgextra/i3/650029601/TB25NhPaXXXXXa.XXXXXXXXXXXX_!!650029601.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="165" height="90" /></a></td>
+                <td><a href="" ><img data-ks-lazyload="http://img03.taobaocdn.com/imgextra/i3/650029601/TB25NhPaXXXXXa.XXXXXXXXXXXX_!!650029601.jpg" src="http://g.tbcdn.cn/s.gif" alt="" width="165" height="90" /></a></td>
+            </tr>
+        </table>
+
+
+        <!-- 两栏：sub : main 广告二 -->
+        <div class="grid-c2">
+            <div class="col-main">
+                <div class="main-wrap" id="baidu-advertisementId-13"></div>
+            </div>
+
+            <div class="col-sub" id="baidu-advertisementId-14"></div>
+        </div>
+
+        <!-- 两栏：sub : main 广告二 -->
+        <div class="grid-c2">
+            <div class="col-main">
+                <div class="main-wrap" id="baidu-advertisementId-15"></div>
+            </div>
+
+            <div class="col-sub" id="baidu-advertisementId-16"></div>
+        </div>
+
+
+
+	<!--<div id="footer">-->
+		<!--<a class="top" href="#hd">返回页首</a>-->
+	<!--</div>-->
+
+</div>
+
+<script src="http://g.tbcdn.cn/kissy/k/1.3.2/seed-min.js"></script>
+<script>
+
+// kissy 包配置阿里最新内增，之前gallery依旧
+KISSY.config({
+
+    combine:true,
+    charset: 'utf-8',
+    debug: true,
+
+    packages:[
+        {
+            name:"kg",
+            path:"http://g.tbcdn.cn/",
+            charset:"utf-8",
+            ignorePackageNameInUri: false
+        },
+        {
+            name: "pinganfang-gallary",
+            path:"../src/js",
+            charset:"utf-8",
+            ignorePackageNameInUri: true,
+            combine:false
+        }
+    ]
+});
+   
+
+// 初始化 kissy
+KISSY.use('pinganfang-gallary/header_kissy, gallery/slide/1.2/, datalazyload', function(S, PageHeader, Slide, Datalazyload){
+
+    // 初始化页头js
+    new PageHeader();
+
+    // 初始化 banner轮播 组件
+    var slide1 = new Slide('J_banner-content', {
+        autoSlide: true,
+        effect: 'hSlide',
+        eventType: 'click',
+        hoverStop:true,     //鼠标经过内容是否停止播放
+        touchmove:true,
+
+        contentClass:'header-bannder',
+        pannelClass:'tab-pannel_first',
+        navClass:'banner_tab_list',
+
+        triggerSelector:'li',
+        selectedClass:'banner-selected',
+        speed:600   // 速度可以调整，单位ms
+    });
+
+
+    // 初始化 tab 切换器 --- 最近开盘
+    var slide2 = new Slide('J_recentlynav-container', {
+        triggerSelector:'li',
+        selectedClass:'banner-selected'
+    });
+
+    // 初始化 tab 切换器 --- 海外房产
+    var slide3 = new Slide('J_overseas-house', {
+        triggerSelector:'li',
+        selectedClass:'banner-selected'
+    });
+
+    // 图片 懒加载 实例化
+    var lazyLoad = new Datalazyload();
+
+    // 轮播切换后 懒加载优化
+    slide1.on('afterSwitch', function(){
+        lazyLoad.refresh();
+    });
+    slide2.on('afterSwitch', function(){
+        lazyLoad.refresh();
+    });
+    slide3.on('afterSwitch', function(){
+        lazyLoad.refresh();
+    });
+});
+
+</script>
+
+
+
+
+</body>
+</html>

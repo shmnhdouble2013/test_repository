@@ -1,0 +1,126 @@
+/**
+ * 楼盘名称链接 SEO 和 合作伙伴css
+ * author: huangjia
+ * Date : 20140807
+ * update: 调整总宽度为1000宽度
+ */
+
+.navlist-container {
+    width: 978px;
+    margin: 0 auto;
+    border: 1px solid #efefef;
+    padding: 10px;
+    margin-top: 80px
+}
+
+.border-top2px {
+    border-top-width: 2px;
+}
+
+.hide {
+    display: none
+}
+
+.bottom-border-pad {
+    padding-top: 0;
+    border-top-color: #fff;
+    margin-top:0;
+}
+
+.lp-names, .lp-title, .navlist-container ul {
+    overflow: hidden
+}
+
+.mbx a {
+    color: #666
+}
+
+.list-tile {
+    margin: 5px 0;
+    color: #666
+}
+
+.a-link {
+    padding: 2px 0;
+    color: #1178ca
+}
+
+.a-link:hover {
+    text-decoration: none
+}
+
+.navlist-container li, .navlist-container ul {
+    padding: 0;
+    margin: 0;
+    list-style: none
+}
+
+.navlist-container ul li {
+    margin: 3px 0
+}
+
+.navlist-container .abtn-up {
+    position: relative;
+    top: -3px;
+    display: inline-block;
+    margin-left: 8px;
+    height: 5px;
+    line-height: 5px;
+    width: 9px;
+    background: url(../../../img/web/common/more.png) -2px -66px no-repeat
+}
+
+.navlist-container .vert-agn {
+    background-position: -2px -72px
+}
+
+ul.all-lp {
+    margin-top: 20px
+}
+
+.navlist-container ul span {
+    display: inline-block;
+    height: 17px;
+    line-height: 17px;
+    text-align: left
+}
+
+.all-lp .lp-title8, .all-lp .lp-title9 {
+    width: 105px;
+    overflow: hidden;
+    color: #333
+}
+
+.all-lp .lp-title8 {
+    width: 166px
+}
+
+.lp-names8, .lp-names9 {
+    width: 85px;
+    overflow: hidden;
+    color: #666
+}
+
+.lp-names9 {
+    margin-right: 5px;
+    *margin-right: 3px
+}
+
+.lp-names8 {
+    margin-right: 9px;
+    *margin-right: 7px
+}
+
+.lp-names8 .a-link, .lp-names9 .a-link {
+    color: #666
+}
+
+.row-lp-group ul.marlef-align9 {
+    margin-left: 109px;
+    *margin-left: 110px
+}
+
+.row-lp-group ul.marlef-align8 {
+    margin-left: 171px;
+    *margin-left: 172px
+}

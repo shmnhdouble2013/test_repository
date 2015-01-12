@@ -1,0 +1,453 @@
+/**
+* 新版2.0 header 头部 css
+* author: huangjia
+* Date:   20140814
+* update: 20140826 微博图标颜色、一级导航字号
+* update: 201401104 城市选择从 下拉框 改为 城市选择 div块儿
+* update: 201401124 一级导航增加 好房重酬 菜单项
+* update: 20150105 查找icon 火狐和chrome各个版本偏移问题 inherit
+*/
+
+/* 基础颜色 */
+.color-333 {
+    color: #333;
+}
+
+.color-333:hover {
+    color: #fc6800;
+}
+
+/* 新浪微博、微信 */
+.color-666-6800 {
+    color: #666;
+}
+
+.color-666-6800:hover {
+    color: #fc6800;
+}
+
+/* hover 选中状态 */
+.color-fc6800 {
+    color: #fc6800;
+}
+
+.color-ff8f41:hover {
+    color: #ff8f41;
+}
+
+.bg-f5f5f5 {
+    background-color: #f5f5f5;
+}
+
+.bg-f9f9f9 {
+    background-color: #f9f9f9;
+}
+
+.color-666:hover {
+    color: #333;
+}
+
+.color-666 {
+    color: #666;
+}
+
+.header-navlist a.hover_nav {
+    color: #ffffff;
+    background-color: #e2511b;
+}
+
+/* padding 和 margin 相关 */
+.marg-leftright-8px {
+    margin: 0 8px;
+}
+
+.pad-lr-3px {
+    padding: 0 3px;
+}
+
+.bor-top-e5e5e5 {
+    border-top: 1px solid #e5e5e5;
+}
+
+.noboder-right {
+    border-right: 0 !important;
+}
+
+/* 开始布局文件 */
+.min-1000 {
+    width: auto !important;
+    width: 1000px;
+    min-width: 1000px;
+}
+
+.header-login, .header-search,
+.header-navlist {
+    width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    clear: both;
+}
+
+/* header 登录置顶 css*/
+.header-login {
+    height: 36px;
+    line-height: 36px;
+}
+
+.welcome-login {
+    width: 204px;
+}
+
+.contact-msg {
+    position: relative;
+}
+
+.contact-msg i {
+    color: #666;
+    font-style: normal;
+}
+
+/* 联系我们 */
+.qr-code-content {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    /*height: 25px;*/
+    font-size: 17px;
+}
+
+.qr-code-content:hover .qr-code {
+    display: block;
+}
+
+/* 二维码 */
+.qr-code {
+    position: absolute;
+    top: 30px;
+    right: 0px;
+    width: 140px;
+    padding: 0 10px;
+    height: 175px;
+    background: white url("../../../img/web/common/qrcode_paf.jpg") no-repeat 10px 10px;
+    display: none;
+}
+
+.qr-code p {
+    margin-top: 140px;
+    font-size: 12px;
+    text-align: center;
+    height: 27px;
+    line-height: 27px;
+}
+
+.qr-code p em {
+    color: #666;
+}
+
+.qr-code .up-triangle {
+    height: 10px;
+    width: 20px;
+    text-align: center;
+    position: relative;
+    top: -15px;
+    left: 127px;
+    color: #ffffff;
+}
+
+/* header 二楼 查询下拉 样式 */
+.header-search {
+    position: relative;
+    height: 61px;
+    padding: 24px 0 27px 0;
+    *zoom: 1;
+    z-index: 10;
+}
+
+.header-search:after {
+    clear: both;
+    content: '.';
+    display: block;
+    height: 0;
+    overflow: hidden;
+}
+
+.header-search .haofang_logo {
+    float: left;
+    width: 178px;
+    height: 60px;
+    background: url("../../../img/web/common/logo_haofang.png") no-repeat; /* /img/web/headerfooter/haofang_logo_detail.png */
+}
+
+/* 平安好房集团成员文字 */
+.header-search .haofang_info {
+    float: left;
+    width: 150px;
+    margin-top: 26px;
+    font-size: 18px;
+    color: #A7A7A7;
+}
+
+/* 城市选择 */
+.header-search .city_box {
+    position: relative;
+    float: left;
+    width: 66px;
+    height: 30px;
+    line-height: 30px;
+    margin: 24px 0 0 8px;
+}
+
+.city_box a.color-666 {
+    /* for icon */
+    font-size: 15px;
+    width: 50px;
+}
+
+.header-search .hd_city_pop {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    display: none;
+    padding: 5px;
+    width: 175px; /*  5个最低175，适中200，最大240   包含 padding10px 值 */
+    height: 75px; /* 85px 包含 padding10px 值 */
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    background-color: #fff;
+    z-index: 2;
+    overflow: hidden;
+    clear: left;
+}
+
+/*.header-search .city_box:hover .hd_city_pop {*/
+    /*display: block;*/
+/*}*/
+
+.hd_city_pop .item {
+    float: left;
+    height: 26px;
+    line-height: 26px;
+    padding: 0 5px;
+    color: #666;
+    zoom: 1;
+}
+
+.hd_city_pop .item:hover {
+    background-color: #F0F0F0;
+    color: #fc6800;
+}
+
+/* 搜索框 房屋类型选择 */
+.header-search .search_type_box {
+    position: relative;
+    float: left;
+}
+.header-search .search_type {
+    position: relative;
+    display: block;
+    width: 60px;
+    height: 28px;
+    line-height: 28px;
+    border-right: 1px solid #ccc;
+    color: #666;
+    cursor: default;
+    text-align: center;
+}
+.header-search .hd_search_pop {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    display: none;
+    width: 58px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    background-color: #fff;
+    z-index: 2;
+    border-top: none;
+}
+.header-search .hd_search_pop .item {
+    display: block;
+    height: 26px;
+    padding-left: 9px;
+    border-top: 1px solid #ccc;
+    line-height: 26px;
+    color: #666;
+}
+
+.hd_search_pop .item:hover {
+    background-color: #F0F0F0;
+    color: #fc6800;
+}
+
+/* 搜索框 */
+.header-search .search_input {
+    float: left;
+    width: 325px;
+    height: 18px;
+    padding: 5px 0 5px 10px;
+    border: 0 none;
+    outline: 0;
+    line-height: 18px;
+}
+
+.header-search .search_box {
+    float: left;
+    display: inline;
+    width: 450px;
+    height: 28px;
+    margin: 22px 0 0 145px;
+    border: 3px solid #F96800;
+    border-right: 0 none;
+    *zoom: 1;
+}
+
+.header-search .search_box:after {
+    clear: both;
+    content: '.';
+    display: block;
+    height: 0;
+    overflow: hidden;
+}
+
+.search-form {
+    z-index: 40;
+    height: 28px;
+    clear: left;
+}
+
+.header-search .btn_search {
+    float: right;
+    display: block;
+    width: 50px;
+    height: 29px;
+    line-height: 29px;
+    border: 0 none;
+    background-color: #F96800;
+    cursor: pointer;
+    color: white;
+    font-size: 26px;
+    text-align: center;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .header-search .btn_search {
+        line-height: inherit;
+    }
+}
+
+/* 导航列表 */
+.header-navlist {
+    height: 58px;
+}
+
+.header-navlist .nav_list, .header-navlist .mobile-container {
+    float: left;
+    height: 59px;
+    line-height: 59px;
+    overflow: hidden;
+}
+
+.nav_list {
+    width: 840px;
+}
+
+/* 手机联系 */
+.mobile-container {
+    width: 160px; /* 手机好房 手机管家 宽度1000写死 */
+    text-align: right;
+}
+
+.header-navlist .nav_link {
+    float: left;
+    padding: 0 20px;
+    text-align: center;
+    color: #333;
+    font-size: 20px;
+    white-space: nowrap;
+}
+
+.header-navlist .nav_selected {
+    color: #ffffff;
+    background-color: #fc6800;
+}
+
+/**+html .nav_list{*/
+/*width: 842px;*/
+/*}*/
+/**+html .mobile-container{*/
+/*width: 158px;*/
+/*}*/
+
+/*.header-navlist .nav_link:hover {*/
+/*background-color: #e2511b;*/
+/*text-decoration: none;*/
+/*color: #fff;*/
+/*}*/
+.header-navlist .header-navlist {
+    position: relative;
+    width: 1024px;
+    margin: 0 auto;
+    z-index: 1;
+}
+
+.header-navlist .nav_side a {
+    float: left;
+    font-size: 14px;
+    color: #fff;
+}
+
+.nav-bottom-bg {
+    border-bottom: 6px solid #fc6800;
+}
+
+/* 二级菜单 */
+.leveltwo-list-content {
+    position: absolute;
+    margin-top: 6px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #e5e5e5;
+    display: none;
+    height: 40px;
+    line-height: 40px;
+    width: 100% !important;
+    width: 1000px;
+    min-width: 1000px;
+}
+
+.level-two-ulist {
+    height: 18px;
+    line-height: 18px;
+    margin: 11px 0;
+    float: left;
+}
+
+.level-two-ulist li, .level-two-ulist li a {
+    float: left;
+}
+
+.level-two-ulist li {
+    padding: 0 2px;
+    border-right: 1px solid #ccc;
+}
+
+.level-two-ulist li a {
+    width: 80px;
+    text-align: center;
+    font-size: 15px;
+}
+
+/* 全局头部消息提示 */
+.header-notice-content {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.header-notice-content p {
+    border-radius: 5px;
+    margin: 10px 0;
+    height: 40px;
+    line-height: 40px;
+    color: #696967;
+    background-color: #fef5e4;
+    text-align: center;
+}

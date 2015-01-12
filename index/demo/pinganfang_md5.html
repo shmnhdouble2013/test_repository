@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>好房md5加密</title>
+</head>
+<body>
+
+<script src="http://static.pinganfang.com/201412261358/js/load.js"></script>
+
+<script>
+    require.config = {
+        baseurl: "/static/js/web",
+        rules: [ [/^(?:([^:]*)\:)?([^\/:]+)$/, function (e, o, r) {
+            return(o || "common") + "/mod/" + r + "/" + r + ".js"
+        }] ],
+        charset: "utf-8",
+        map: {},
+        deps: {},
+        domain: "http://static.pinganfang.com/201412291136"
+    };
+</script>
+
+<script>
+    require.config.deps = {
+        "/static/js/web/common/mod/placeholder/placeholder.js": ["/static/js/web/common/mod/jquery/jquery.js", "/static/js/web/common/mod/placeholder/placeholder.css"],
+        "/static/js/web/common/mod/formValid/formValid.js": ["/static/js/web/common/mod/jquery/jquery.js", "/static/js/web/common/mod/formValid/formValid.css"],
+        "/static/js/web/common/mod/dialog/dialog.js": ["/static/js/web/common/mod/jquery/jquery.js", "/static/js/web/common/mod/mask/mask.js", "/static/js/web/common/mod/dialog/dialog.css"],
+        "/static/js/web/common/mod/util/util.js": ["/static/js/web/common/mod/util/lib/md5.js"],
+        "/static/js/web/common/mod/mask/mask.js": ["/static/js/web/common/mod/jquery/jquery.js", "/static/js/web/common/mod/mask/mask.css"]
+    }
+</script>
+
+<script>
+    require.config.map = {
+        "/js/web/common/mod/jquery/jquery.js": ["/static/js/web/common/mod/jquery/jquery.js"],
+        "/js/web/user/common.js": ["/static/js/web/user/common.js"],
+        "/js/web/user/component/register.js": ["/static/js/web/user/component/register.js"],
+        "/js/web/common/mod/placeholder/placeholder.js": ["/static/js/web/common/mod/placeholder/placeholder.js"],
+        "/js/web/common/mod/formValid/formValid.js": ["/static/js/web/common/mod/formValid/formValid.js"],
+        "/js/web/common/mod/dialog/dialog.js": ["/static/js/web/common/mod/dialog/dialog.js"],
+        "/js/web/common/mod/util/util.js": ["/static/js/web/common/mod/util/util.js"],
+        "/js/web/common/mod/placeholder/placeholder.css": ["/static/js/web/common/mod/placeholder/placeholder.css"],
+        "/js/web/common/mod/formValid/formValid.css": ["/static/js/web/common/mod/formValid/formValid.css"],
+        "/js/web/common/mod/mask/mask.js": ["/static/js/web/common/mod/mask/mask.js"],
+        "/js/web/common/mod/dialog/dialog.css": ["/static/js/web/common/mod/dialog/dialog.css"],
+        "/js/web/common/mod/util/lib/md5.js": ["/static/js/web/common/mod/util/lib/md5.js"],
+        "/js/web/common/mod/mask/mask.css": ["/static/js/web/common/mod/mask/mask.css"],
+        "/js/web/user/component/code_intensity.js": ["/static/js/web/user/component/code_intensity.js"]
+    }
+</script>
+
+
+<script>
+    var pasword = 'S@123456';
+
+    require.async(['jquery', 'util'], function (e, r) {
+        var md5Str = r.string.md5(pasword, "paf");
+
+        alert(md5Str + ': token :' + ss);
+    });
+</script>
+
+
+</body>
+</html>
