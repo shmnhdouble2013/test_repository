@@ -1,0 +1,99 @@
+/* 好房通用分页样式 */
+.pagination-pa .pagination-start,
+.pagination-pa .pagination-prev,
+.pagination-pa .pagination-next,
+.pagination-pa .pagination-end,
+.pagination-pa .pagination-spec,
+.pagination-pa .pagination-curr,
+.pagination-pa .pagination-break {
+  min-width: 18px;
+  _width: 18px;
+  border: 1px solid #ccc;
+  display: inline;
+  float: left;
+  height: 28px;
+  margin-right: 8px;
+  padding: 0 5px;
+  line-height: 28px;
+  text-align: center;
+  font-family: Tahoma,SimSun,Arial;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: hidden;
+  background-color: #F0F0F0;
+  font-size:14px;
+}
+.pagination-pa .pagination-start,
+.pagination-pa .pagination-end{
+  color:#999;
+}
+.pagination-pa .pagination-curr {
+  font-weight: 700;
+  color: #fff;
+  background-color: #fd6d01;
+  border: 1px solid #fd6d01;
+}
+.pagination-pa .pagination-break {
+  color: #c0c0c0;
+  border: 0;
+}
+.pagination-pa a {
+  color: #333;
+  cursor: pointer;
+}
+.pagination-pa a:hover {
+  border: 1px solid #fd6d01;
+}
+/** 插件默认分页样式 **/
+.pagination-default {
+  color: #999;
+  font-size: 14px;
+  font-weight: bold;
+  padding-top: 19px;
+  height: auto;
+}
+.pagination-default .pagination-start,
+.pagination-default .pagination-prev,
+.pagination-default .pagination-next,
+.pagination-default .pagination-end,
+.pagination-default .pagination-spec,
+.pagination-default .pagination-curr,
+.pagination-default .pagination-break {
+  width: auto;
+  border: 1px solid #e5e5e5;
+  height: 28px;
+  padding: 10px 14px 0;
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
+  float: left;
+}
+.pagination-default .pagination-prev {
+}
+.pagination-default .pagination-curr {
+  background-color: #efefef;
+  border-left-width: 0;
+}
+.pagination-default .pagination-break {
+  border: 0;
+  border-right: 1px solid #e5e5e5;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.pagination-default .pagination-spec {
+  border-left-width: 0;
+}
+.pagination-default .pagination-next {
+  border-left-width: 0;
+}
+.pagination-default .pagination-end {
+  border-left-width: 0;
+}
+.pagination-default a {
+  cursor: pointer;
+  color: #2953a6;
+}
+.pagination-default a:hover {
+  background-color: #efefef;
+  text-decoration: underline;
+}

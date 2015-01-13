@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>countdownHelper的demo</title>
+    <script src="http://g.tbcdn.cn/kissy/k/1.3.0/kissy-min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="http://g.tbcdn.cn/kissy/k/1.3.0/css/dpl/base-min.css">
+
+    <style>
+    .timebox {
+        font-size: 24px;
+        width: 990px;
+        margin: 20px auto;
+    }
+    .timebox button {
+        background: none;
+        border:1px solid #ccc;
+        padding: 5px;
+        margin: 5px;
+        outline: none;
+    }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="timebox">
+        <h1>倒计时助手</h1>
+        <div>倒计时:
+            <span id="time"></span>
+        </div>
+        <div>
+            <button id="control">停止</button>
+        </div>
+        <div>
+            <button id="getTime">获取剩余时间</button>：
+            <span id="leftTime"></span>
+        </div>
+        <pre>
+var countdownHelper = new CountdownHelper(10, function(seconds) {
+  console.log(seconds); 
+}, function() {
+   console.log("Countdown complete!");
+});
+countdownHelper.stop();
+countdownHelper.start();
+countdownHelper.getTime();
+        </pre>
+    </div>
+
+    <script>
+    var S = KISSY;
+    S.Config.debug = true;
+    if (S.Config.debug) {
+        var srcPath = "../";
+        S.config({
+            packages: [{
+                name: "gallery",
+                path: srcPath,
+                charset: "utf-8",
+                ignorePackageNameInUri: true
+            }]
+        });
+    }
+
+    S.use('gallery/countdownHelper/1.0/index', function(S, CountdownHelper) {
+        var countdownHelper = new CountdownHelper(10, function(seconds) {
+            console.log(seconds);
+            S.one("#time").html(seconds);
+        }, function() {
+            console.log("Countdown complete!");
+            S.one("#time").html('完成');
+        });
+
+
+        S.Event.on('#control', 'click', function() {
+            if (S.one("#control").html() == '停止') {
+                countdownHelper.stop();
+                S.one("#control").html('开始');
+            } else {
+                countdownHelper.start();
+                S.one("#control").html('停止');
+            }
+
+        });
+
+
+        S.Event.on('#getTime', 'click', function() {
+            S.one("#leftTime").html(countdownHelper.getTime());
+
+        });
+    })
+    </script>
+</body>
+
+</html>

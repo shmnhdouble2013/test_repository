@@ -1,0 +1,243 @@
+<html>
+<head>
+    <title>平安好房后台系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <!--<link href="http://a.tbcdn.cn/??apps/alimall/app/aliadmin/loo/dapai/s/lpsp/base-min.css" rel="stylesheet"-->
+          <!--type="text/css"/>-->
+
+    <link href="http://g.alicdn.com/bui/bui/1.1.5/css/bs3/dpl.css" rel="stylesheet">
+    <link href="http://g.alicdn.com/bui/bui/1.1.5/css/bs3/bui.css" rel="stylesheet">
+
+    <!-- icon文件 -->
+    <link rel="stylesheet" type="text/css" href="http://static.pinganfang.com/css/iconfont/iconfont.css">
+
+    <!-- 好房fav-icon -->
+    <link rel="Shortcut Icon" href="http://static.pinganfang.com/201408281522/img/web/common/favicon.ico"/>
+
+    <!--<link rel="stylesheet" type="text/css" href="base.css" >-->
+
+    <link rel="stylesheet" type="text/css" href="main-new.css">
+
+
+</head>
+<body>
+
+<!-- 页头 -->
+<div id="header">
+
+    <div class="hf-title">
+        <span class="iconfont hf-icon">&#xe609;</span>
+        <span class="lp-title-port">平安好房后台系统</span>
+        <span class="lp-title-text"></span>
+    </div>
+
+    <!--<div id="J_head-notice" class="pull-left header-notice-content" >-->
+    <!--<i class="icon-volume-up"></i>-->
+    <!--<div class="slide-div dis-block">-->
+    <!--<p>数据默认展现当前30天数据！或根据开始时间后推30天，或根据结束时间前推30天！</p>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <div class="lp4-log">欢迎您，<span class="lp4-log-user"><a href="###" class="col_fc6800">水木年华double</a></span><a
+            href="###" title="退出系统" class="lp4-log-quit">[退出]</a></div>
+</div>
+
+
+<!-- 主体 -->
+<div id="content">
+
+    <div class="main-nav">
+
+        <div class="inform">
+            <div class="inform-title">贴心小秘书<s class="inform-icon lp-up"></s></div>
+        </div>
+
+        <ul id="J_mainNav" class="nav-list ks-clear">
+            <li class="nav-item">
+                <div class="nav-item-inner nav-order">用户中心</div>
+            </li>
+            <li class="nav-item">
+                <div class="nav-item-inner nav-order">数据中心</div>
+            </li>
+        </ul>
+
+    </div>
+
+    <!-- 主体菜单大容器  侧边菜单 和 tab选项菜单 -->
+    <ul id="J_mainNavContent" class="lp4-tab-content"></ul>
+
+</div>
+
+
+<!-- 页脚 -->
+<div id="footer"></div>
+
+<script src="http://g.tbcdn.cn/kissy/k/1.3.2/kissy-min.js"></script>
+<script src="http://g.alicdn.com/bui/bui/1.1.5/adapter.js"></script>
+
+<!-- <script src="http://a.tbcdn.cn/??apps/alimall/app/aliadmin/loo/dapai/s/lplib/config-min.js"></script> -->
+
+<script>
+
+    KISSY.config({
+        packages: [
+            {
+                name                  : "bui",
+                path                  : "http://www.jack.com/bui/build/",
+                charset               : "utf-8",
+                ignorePackageNameInUri: true
+            }
+        ]
+    });
+
+
+    KISSY.Config.debugger = true;
+
+
+    var menuConfig = {
+        homePage  : {
+            moduleId: 'storage',
+            pageId  : 'dabiao'
+        },
+        menuConfig: [
+            {
+                id  : 'storage',
+                menu: [
+                    {
+                        text : '大牌代工',
+//                                collapsed:true,   // 是否折叠
+                        items: [
+                            {
+                                id  : 'homeIndex',
+                                text: '首页',
+                                href: 'http://ipu.pui.ipo.com/iconfont/index.html'
+                            },
+                            {
+                                id  : 'dabiao',
+                                text: '测试标签',
+                                href: 'http://www.jack.com/pinganfang/index/demo/pinganfang_index2.0.html'
+//                                        actived:true
+                            },
+                            {
+                                id  : 'choose-goods',
+                                text: '页面4大操作',
+                                href: './lp.html'
+                            },
+                            {
+                                id  : 'homeIndex11',
+                                text: '首页',
+                                href: 'http://ipu.pui.ipo.com/iconfont/index.html'
+                            },
+                            {
+                                id  : 'dabiao12',
+                                text: '测试标签',
+                                href: 'http://www.jack.com/pinganfang/index/demo/pinganfang_index2.0.html'
+//                                        actived:true
+                            },
+                            {
+                                id  : 'choose-goods13',
+                                text: '测试标签2',
+                                href: 'http://www.pinganfang.com'
+                            },
+                            {
+                                id  : 'homeIndex14',
+                                text: '首页',
+                                href: 'http://ipu.pui.ipo.com/iconfont/index.html'
+                            },
+                            {
+                                id  : 'dabiao15',
+                                text: '测试标签',
+                                href: 'http://www.jack.com/pinganfang/index/demo/pinganfang_index2.0.html'
+//                                        actived:true
+                            },
+                            {
+                                id  : 'choose-goods16',
+                                text: '测试标签2',
+                                href: 'http://www.pinganfang.com'
+                            },
+                            {
+                                id  : 'homeIndex17',
+                                text: '首页',
+                                href: 'http://ipu.pui.ipo.com/iconfont/index.html'
+                            },
+                            {
+                                id  : 'dabiao18',
+                                text: '测试标签',
+                                href: 'http://www.jack.com/pinganfang/index/demo/pinganfang_index2.0.html'
+//                                        actived:true
+                            },
+                            {
+                                id  : 'choose-goods19',
+                                text: '测试标签2',
+                                href: 'http://www.pinganfang.com'
+                            }
+                        ]
+                    },
+                    {
+                        text : '平安好房',
+                        items: [
+                            {
+                                id  : 'dabiao2',
+                                text: '唧唧歪歪',
+                                href: 'http://builive.com/demo/menu.php#menu/sidebar-menu.php'
+                            },
+                            {
+                                id  : 'choose-goods2',
+                                text: '嘻嘻哈哈',
+                                href: 'http://builive.com/demo/tooltip.php#tooltip/single.php'
+                            }
+                        ]
+                    }
+                ]
+            },
+
+            {
+                id  : 'storage2',
+                menu: [
+                    {
+                        text : '大牌代工2',
+                        items: [
+                            {
+                                id  : 'dabiao3',
+                                text: '测试标签3',
+                                href: 'http://www.jack.com/pinganfang/index/demo/pinganfang_index2.0.html'
+                            },
+                            {
+                                id  : 'choose-good3',
+                                text: '测试标签3',
+                                href: 'http://www.pinganfang.com'
+                            }
+                        ]
+                    },
+                    {
+                        text : '平安好房',
+                        items: [
+                            {
+                                id  : 'dabiao4',
+                                text: '唧唧歪歪3',
+                                href: 'http://builive.com/demo/menu.php#menu/sidebar-menu.php'
+                            },
+                            {
+                                id  : 'choose-goods4',
+                                text: '嘻嘻哈哈3',
+                                href: 'http://builive.com/demo/tooltip.php#tooltip/single.php'
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+
+
+    KISSY.ready(function (S) {
+
+        S.use('bui/main', function (S, Main) {
+            new Main(menuConfig);
+        });
+
+    });
+
+</script>
+</body>
+</html>

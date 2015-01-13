@@ -1,0 +1,4 @@
+
+/* build Date:2015-01-13 3:25:05 PM author:huangjia */
+
+.flowstep{width:100%;margin:0 auto;padding:20px 5px}.flowstep ol{overflow:hidden;zoom:1}.flowstep li{width:auto;float:left}.flowstep .step-no{cursor:pointer;height:34px;line-height:34px;font-family:'arial black';color:#fff;font-size:15px;background:url(http://img02.taobaocdn.com/imgextra/i2/650029601/TB2I1zEbpXXXXX.XpXXXXXXXXXX_!!650029601.png) no-repeat 50% -170px}.flowstep .step-first .step-no{background-position:50% -238px}.flowstep .step-last .step-no{background-position:50% -68px}.flowstep .step-marks,.flowstep .step-name,.flowstep .step-no{text-overflow:ellipsis;white-space:nowrap;overflow:hidden;text-align:center}.flowstep .step-name{padding:0 3px 10px;color:#888}.flowstep .step-marks{white-space:pre-line;padding-top:10px;color:rgba(195,143,61,.8)}.flowstep .step-marks .time-first,.flowstep .step-marks .time-last{display:inline-block;*display:inline;*zoom:1}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>流程图</title>
+
+    <link rel="stylesheet" type="text/css" href="http://static.pinganfang.com/201412181624/css/web/common2.0/base.css" />
+</head>
+<body>
+
+
+<div class="flowstep" id="J_process-step">
+    <ol data-list="[1,2,3,4]">
+        <li nodeId="1" >
+            <div class="step-name">首页</div>
+            <!--<div class="step-marks">10w(pv)</div>-->
+        </li>
+
+        <li nodeId="2" >
+            <div class="step-name">新房新房新房</div>
+            <!--<div class="step-marks">10w(pv)</div>-->
+        </li>
+        <li nodeId="3" >
+            <div class="step-name">detail页面</div>
+            <!--<div class="step-marks">10w(pv)</div>-->
+        </li>
+        <li nodeId="4" >
+            <div class="step-name">新房新房新房</div>
+            <!--<div class="step-marks">10w(pv)</div>-->
+        </li>
+    </ol>
+</div>
+
+<script src="http://www.jack.com/kissyui/1.3.2/build/kissy-min.js" ></script>
+<script src="http://www.jack.com/kissyui/config_loc.js" ></script>
+
+<script>
+    KISSY.use('gallery/process/1.0/index', function(S, ProcessStep){
+        var Ajax = S.IO,
+            JSON = S.JSON;
+
+        new ProcessStep({
+            container: '#J_process-step',
+            forceFit: true,
+            tipConfig : {
+                headerText: '相关信息',
+                showOn:'click',
+                hideOn:'',
+                mouseHook:false,
+                points:['bc','tc'],
+                closeable:true,
+                delayIn: 0,
+                staticContent: true,
+                getConentText: getContentFn
+            }
+        });
+
+        // 配置ajax数据tip
+        function getContentFn(target){
+            var self = this,
+                liNode = S.one(target).parent('li'),
+                olNode = liNode.parent('ol'),
+                url = './mockdata.php',
+                curLiIndex = parseInt( liNode.attr('nodeId'), 10 ),
+                processAry = JSON.parse( olNode.attr('data-list') ),
+                aryIndex = S.indexOf(curLiIndex, processAry),
+                faxData = {
+                    "iAutoID" : processAry.slice(0, aryIndex + 1 )
+                };
+
+            self.setContent('<img src="http://loadinggif.com/images/image-selection/8.gif" />');
+            self.rePosition();
+
+            Ajax.get(url, faxData, function(data){
+                var data = data.data;
+
+                self.setContent('<div>页面pv: '+data.pv + '</div>');
+                self.rePosition();
+            }, 'json');
+        }
+
+
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+    "name": "countdownHelper",
+    "version": "1.0",
+    "desc": "倒计时助手",
+    "cover": "",
+    "tag":"工具",
+    "author": {
+        "name": "行骏",
+        "email": "xingjun.yexj@alibaba-inc.com",
+        "page": ""
+    },
+    "type": "kissy-gallery",
+    "type-url": "http://gallery.kissyui.com/guide"
+}

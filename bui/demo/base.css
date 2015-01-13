@@ -1,0 +1,528 @@
+/*
+ * 数据平台首页css  覆盖修改 bootstrap默认样式
+ * author: huangjia
+ * date: 20140828
+ */
+
+html {
+    *overflow: hidden
+}
+body {
+    overflow: hidden;
+}
+
+
+/* 背景图片 头 和 二级菜单 */
+#header, .lp4-main-nav {
+    background: url('http://assets.lp.alibaba.com/s/lplib/lpassert/images/lp-bg.png') no-repeat center 0 #204077;
+}
+
+#header{
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+    overflow: hidden;
+}
+
+
+.lp4-title {
+    float: left;
+    color: #C1D5EC;
+    background: url('http://img01.taobaocdn.com/tps/i1/T1vo5sXjxPXXXXXXXX-18-18.png') no-repeat 0 11px transparent;
+    padding: 12px 0 0 26px;
+    margin-left: 12px;
+    font-size: 12px
+}
+
+.lp4-log {
+    color: #7790C7;
+    float: right;
+    padding: 12px 16px 0 0
+}
+
+.lp4-log-user {
+    font-style: bold
+}
+
+.lp4-log-quit {
+    color: #C1D5EC;
+    padding-left: 8px
+}
+
+#content {
+    width: 100%
+}
+
+/* 二级导航 */
+.lp4-main-nav {
+    /* height: 40px; */
+    background-position: center -30px;
+    overflow: hidden;
+    position: relative;
+}
+
+/**订单**/
+.lp-selected .nav-order,.lp4-hide-list .nav-order{
+    background-position:-144px -126px;
+}
+.nav-order{
+    background-position:-144px -176px;
+}
+
+
+.lp4-main-nav .nav-list{
+    /*margin-right:135px;*/
+    border-bottom:1px solid #FFF;
+    overflow: hidden;
+    border-width:0;
+}
+
+.nav-item{
+    overflow:hidden;
+    font-size:14px;
+    color:white;
+    position:relative;
+    width:130px;
+    padding:6px 0 0 8px;
+    cursor:pointer;
+}
+.nav-list .nav-item{
+    float:left;
+    color:#D4D4D4;
+}
+
+
+.nav-list .lp-selected {
+    color: #0C3A86;
+    background: url('http://img01.taobaocdn.com/tps/i1/T1x1itXdxeXXXXXXXX-135-51.png') no-repeat 8px 0 transparent
+}
+
+.nav-item-inner {
+    padding: 5px 0 0 39px;
+    height: 34px;
+    background: url('http://img02.taobaocdn.com/tps/i2/T1ObOtXcXuXXXXXXXX-454-340.png') no-repeat 0 0 transparent;
+    _background: url('http://img02.taobaocdn.com/tps/i2/T1EbmAXbBKXXXXXXXX-454-340.png') no-repeat 0 0 transparent
+}
+
+
+.lp-hover .nav-inventory {
+    background-position: -150px 0
+}
+
+.nav-inventory {
+    background-position: -150px 1px
+}
+
+.lp-hover .nav-order {
+    background-position: -300px 0
+}
+
+.nav-order {
+    background-position: -300px 1px
+}
+
+.lp-hover .nav-product {
+    background-position: 0 -50px
+}
+
+.nav-product {
+    background-position: 0 -49px
+}
+
+.lp-hover .nav-supplier {
+    background-position: 0 0
+}
+
+.nav-supplier {
+    background-position: 0 1px
+}
+
+.lp-hover .nav-cost {
+    background-position: -300px -50px
+}
+
+.nav-cost {
+    background-position: -300px -49px
+}
+
+.lp4-inform {
+    width: 135px;
+    float: right;
+    padding-top: 10px;
+    cursor: pointer;
+    display: none
+}
+
+.lp4-inform-title,.lp4-inform-title .lp-up,.lp4-inform-title .lp-down {
+    background: url('http://img02.taobaocdn.com/tps/i2/T1ObOtXcXuXXXXXXXX-454-340.png') no-repeat 0 0 transparent;
+    _background: url('http://img02.taobaocdn.com/tps/i2/T1EbmAXbBKXXXXXXXX-454-340.png') no-repeat 0 0 transparent
+}
+
+.lp4-inform-title {
+    background-position: -300px -100px;
+    color: #FFF;
+    font-size: 14px;
+    font-weight: 700;
+    height: 32px;
+    padding-left: 38px;
+    padding-top: 5px
+}
+
+.lp4-inform-icon {
+    display: block;
+    float: right;
+    height: 10px;
+    margin-top: 5px;
+    padding-right: 10px;
+    width: 10px
+}
+
+.lp4-inform-title .lp-up {
+    background-position: 0 -150px
+}
+
+.lp4-inform-title .lp-down {
+    background-position: -150px -150px
+}
+
+.lp4-tab-content {
+    margin-top: 3px;
+    width: 100%;
+    height: 100%
+}
+
+.lp4-tab-item {
+    width: 100%;
+    height: 430px
+}
+
+.lp4-tab-item-inner {
+    width: 100%;
+    height: 430px
+}
+
+.lp4-second-nav,.lp4-inner-tab {
+    height: 100%
+}
+
+
+
+a, a:hover{
+    text-decoration: none;
+}
+
+.overflow-hide{
+    overflow: hidden;
+}
+
+/* new clearfix */
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+* html .clearfix  {
+    zoom: 1;
+} /* IE6 */
+*:first-child+html .clearfix {
+    zoom: 1;
+} /* IE7 */
+
+
+/* 常用css样式 */
+.hide{
+    display: none;
+    overflow: hidden;
+}
+.show{
+    display: block;
+    overflow: visible;
+}
+
+/* 分割线 */
+hr.hr-slip {
+    display: block;
+    margin: 20px 0;
+    border: 0;
+    height:0;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #ffffff;
+}
+
+.fl-left{
+    float: left;
+}
+.fl-right{
+    float: right;
+}
+.clear-left{
+    clear: left;
+}
+.clear-right{
+    clear: right;
+}
+.dinl-block{
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+.pos-relative{
+    position: relative;
+}
+.pos-absolute{
+    position: absolute;
+}
+
+/* 无手型 */
+.no-cursor-hander{
+    cursor:default;
+}
+
+
+/* zindex 层级控制 */
+
+/* 普通50以下 */
+.zindex-50{
+    z-index: 50;
+}
+
+/* 超普通 50 -- 100 比如屏幕幕布 */
+.zindex-100{
+    z-index: 100;
+}
+
+/* dialog */
+.zindex-500{
+    z-index: 500;
+}
+
+/* 日历 */
+.zindex-700{
+    z-index: 700;
+}
+/* 备用超高 */
+.zindex-999{
+    z-index: 999;
+}
+
+
+/*超长文字截断*/
+.text-ellipsis{
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+}
+
+/* 竖分割线 */
+.vertical-slip{
+    margin:0 5px;
+    width: 1px;
+    height: 10px;
+    background-color: #666666;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/* 公用间距 */
+.mart-top20{
+    margin-top: 20px;
+}
+.mart-top0{
+    margin-top: 0;
+}
+.mart-right20{
+    margin-right: 20px;
+}
+.mart-bottom20{
+    margin-bottom: 20px;
+}
+.mart-right10{
+    margin-right: 10px;
+}
+.marg-leftright-8px{
+    margin: 0 8px;
+}
+
+
+
+/* 基础颜色 */
+.col_fc6800{
+    color: #fc6800;
+}
+.color-333{
+    color: #333;
+}
+.color-333:hover{
+    color: #fc6800;
+}
+.color-666-6800{
+    color: #fc6800;
+}
+.color-666-6800:hover{
+    color: #fc6800;
+}
+
+/* 边框 */
+.bor-all-e5e5e5 {
+    border: 1px solid #e5e5e5;
+    border-top: 0;
+}
+.bor-top-orange {
+    border-top: 2px solid #fc6800!important;
+}
+.bor-bottom-e5e5e5{
+    border-bottom: 1px solid #e5e5e5;
+}
+.noboder-right{
+    border-right: 0 !important;
+}
+.noboder-left{
+    border-left: 0 !important;
+}
+
+.dis-block{
+    display: inline-block;
+}
+
+
+/* dpl栅格覆盖 */
+.container{
+    /*min-width: 1280px;*/
+}
+.row{
+    margin-bottom: 20px;
+}
+.form-horizontal .controls{
+    margin-left: 0;
+    /*width: 166px;*/
+}
+.line-heith30{
+    line-height: 30px;
+}
+
+
+
+
+/* 全局头部消息提示 */
+.header-notice-content {
+    width: 555px;
+    background-color: #fef5e4;
+    border-radius: 10px;
+    margin: 9px 0 0 5px;
+    height: 35px;
+    line-height: 35px;
+}
+.header-notice-content .slide-div{
+    overflow: hidden;
+}
+.header-notice-content .icon-volume-up{
+    margin: -13px 5px auto 8px;
+}
+.header-notice-content p{
+    color: #696967;
+    text-align: center;
+    position: relative;
+    margin: 0;
+}
+
+
+
+/* 全站页头样式 */
+.hf-title{
+    float:left;
+    margin-left:12px;
+}
+.hf-icon{
+    color: #fc6800;
+    font-size: 23px;
+}
+.lp-title-port {
+    font-family: "Arial";
+    font-size: 20px;
+    color: #dae4f1;
+}
+
+
+/* tab bar导航样式*/
+/*.tab-nav-inner{*/
+    /*background-color: white;*/
+/*}*/
+/*.lpui-tab-nav .lpui-tab-nav-item {*/
+    /*color: #263E74;*/
+    /*background-position: 0 -4px;*/
+/*}*/
+/*.lpui-tab-nav .lpui-tab-nav-con {*/
+    /*background-position: 0 20px;*/
+    /*background-repeat: repeat-x;*/
+    /*background-color: #E8E9EF;*/
+/*}*/
+
+/* menu菜单 和 tab nav 菜单 置顶对齐 */
+.bui-side-menu .bui-menu-title {
+margin: 0 1px;
+background-position: 0px 9px;
+height: 17px;
+color: #636775;
+font-weight: 700;
+overflow: hidden;
+line-height: 25px;
+vertical-align: middle;
+padding: 4px 0 5px 5px;
+}
+
+
+
+/* 左侧导航栏 收缩 style */
+.lp-second-slib-con {
+    position: absolute;
+    top: 0;
+    right: -6px;
+    height: 100%;
+    width: 7px;
+    overflow: hidden;
+}
+.lp-second-slib {
+    position: absolute;
+    height: 100%;
+    width: 6px;
+    cursor: pointer;
+    top: 25px;
+    border-left: 1px solid #C3C3D6;
+    border-radius: 2px;
+    background: url('http://assets.lp.alibaba.com/s/lplib/lpassert/images/left-slib.gif') no-repeat 0 center transparent;
+}
+
+.lp4-second-nav{
+    float: left;
+    width: 150px;
+    /*padding-top:5px;*/
+    position:relative;
+    background-color: #E8E9EE;
+}
+
+.lp-collapse .lp4-second-nav{
+    width: 5px;
+}
+
+/* tab 横向菜单 */
+.lp4-inner-tab{
+    margin-left: 150px;
+}
+.lp-collapse .lp4-inner-tab{
+    margin-left: 5px;
+}
+.lp-collapse .lp-second-slib{
+    background-position: -6px center;
+}
+
+.tab-nav-inner{
+    background-color: #E8E9EF;
+}
+
+.bui-nav-tab-item{
+    height: 20px;
+}

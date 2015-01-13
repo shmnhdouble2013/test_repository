@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>日 历</title>
+    <link href="http://assets.lp.alibaba.com/s/lpsp/base-min.css" rel="stylesheet" type="text/css" />
+    <link href="http://assets.lp.alibaba.com/s/lplib/lpassert/css/lp-page-min.css" rel="stylesheet" type="text/css" />
+    <script src="http://a.tbcdn.cn//??s/kissy/1.2.0/kissy-min.js"></script>
+    <script src="http://assets.lp.alibaba.com/s/lplib/config.js"></script>
+</head>
+
+<body>
+    <style>
+    xmp {
+        color: red;
+    }
+    </style>
+
+
+    <div id="content">
+        
+
+        <form id="searchForm" action="#" method="post">
+
+            <div class="J_Factory">
+                <p class="cut-line"></p>
+                <div class="form-line">
+                    <span class="form-field-container form-field-item">
+                        <label class="form-field-label">
+                            <s>*</s>工厂名称：</label>
+                        <input type="text" name="a1.b.c.d" class="form-field-text form-field" />
+                    </span>
+                    <span class="form-field-container form-field-item">
+                        <label class="form-field-label">厂房面积(平方米)：</label>
+                        <input type="text" class="form-field-text form-field" name="a2.b.c.d" />
+                    </span>
+                    <span class="form-field-container J_SelectCity">
+                        <label class="form-field-label">
+                            <s>*</s>工厂所在地：</label>
+                        <span class="J_provinceTr">
+                            <select class="J_province form-field-select form-field" name="a3.b.c.d">
+                                <option value="">请选择省</option>
+                            </select>
+                            <input type="hidden" class="J_provinceName" value="" />
+                            <input type="hidden" class="J_provinceValue" value="" />
+                        </span>
+                        <span class="J_cityTr">
+                            <select class="J_city form-field-select form-field form-select-addr factoryCity" type="select-one">
+                                <option value="">请选择市</option>
+                            </select>
+                            <input type="hidden" class="J_cityName" name="cityName" value="" />
+                            <input type="hidden" class="J_cityValue" name="" value="" />
+                        </span>
+                        <span class="J_countyTr" style="display:none;">
+                            <select class="J_county form-field-select form-field form-select-addr" type="select-one" style="display:none;">
+                                <option value="">-- 请选择县 --</option>
+                            </select>
+                            <input type="hidden" class="J_countyName" name="_fm.w._0.c" value="" />
+                            <input type="hidden" class="J_countyValue" name="" value="" />
+                        </span>
+                    </span>
+                </div>
+                <div class="form-line">
+                    <span class="form-field-container form-field-item form-field-long-span">
+                        <label class="form-field-label">
+                            <s>*</s>工厂详细地址：</label>
+                        <input type="text" class="form-field-text form-field form-field-long-text factoryAddr" name="factoryAddr" />
+                    </span>
+                    <span class="form-field-container">
+                        <label class="form-field-label">基本联合校验日期：</label>
+                        <input type="text" class="form-field-text form-field" name="time-start" />
+                        <label class="form-label">-</label>
+                        <input type="text" class="form-field-text form-field" name="time-end" />
+                    </span>
+                </div>
+                <p class="del-group J_DelGroup">删除该工厂</p>
+            </div>
+
+            <p class="add-group" id="J_AddGroup">添加工厂</p>
+
+
+            
+
+            <!--分割线-->
+            <p class="cut-line"></p>
+            <div class="form-line">
+                <span class="form-field-container">
+                    <a class="form-button" href="javascript:void(0);" id="btnSearch">
+                        <button class="form-button-blue2" type="submit">查询</button>
+                    </a>
+                    <a href="javascript:void(0)" onclick="more1.destroy()">销毁</a>
+                </span>
+            </div>
+            <div class="form-line">
+                <xmp>var more1 = new S.LP.More({ tempId: 'J_FactoryTemp', validater: formValidater, groupClass: 'J_Factory', addGroupId: 'J_AddGroup', delText: '删除该工厂', maxGroup: 5, inputAction: { 'a1.b.c.d': { rules: { required: true } }, 'factoryAddr': { rules: { required: true } }, 'time-start': { func: S.LP.More.initJoinCalendar({ endTimeName: 'time-end', rules: {required: true} }) } } });
+                </xmp>
+            </div>
+        </form>
+        <div id="J_FactoryTemp" class="ks-hidden">
+            <div class="form-line">
+                <span class="form-field-container form-field-item">
+                    <label class="form-field-label">
+                        <s>*</s>工厂名称：</label>
+                    <input type="text" name="a1.b.c.d" class="form-field-text form-field" />
+                </span>
+                <span class="form-field-container form-field-item">
+                    <label class="form-field-label">厂房面积(平方米)：</label>
+                    <input type="text" class="form-field-text form-field" name="a2.b.c.d" />
+                </span>
+                <span class="form-field-container J_SelectCity">
+                    <label class="form-field-label">
+                        <s>*</s>工厂所在地：</label>
+                    <span class="J_provinceTr">
+                        <select class="J_province form-field-select form-field" name="a3.b.c.d">
+                            <option value="">请选择省</option>
+                        </select>
+                        <input type="hidden" class="J_provinceName" value="" />
+                        <input type="hidden" class="J_provinceValue" value="" />
+                    </span>
+                    <span class="J_cityTr">
+                        <select class="J_city form-field-select form-field form-select-addr factoryCity" type="select-one">
+                            <option value="">请选择市</option>
+                        </select>
+                        <input type="hidden" class="J_cityName" name="cityName" value="" />
+                        <input type="hidden" class="J_cityValue" name="" value="" />
+                    </span>
+                    <span class="J_countyTr" style="display:none;">
+                        <select class="J_county form-field-select form-field form-select-addr" type="select-one" style="display:none;">
+                            <option value="">-- 请选择县 --</option>
+                        </select>
+                        <input type="hidden" class="J_countyName" name="_fm.w._0.c" value="" />
+                        <input type="hidden" class="J_countyValue" name="" value="" />
+                    </span>
+                </span>
+            </div>
+            <div class="form-line">
+                <span class="form-field-container form-field-item form-field-long-span">
+                    <label class="form-field-label">
+                        <s>*</s>工厂详细地址：</label>
+                    <input type="text" class="form-field-text form-field form-field-long-text factoryAddr" name="factoryAddr" />
+                </span>
+                <span class="form-field-container">
+                    <label class="form-field-label">基本联合校验日期：</label>
+                    <input type="text" class="form-field-text form-field" name="time-start" />
+                    <label class="form-label">-</label>
+                    <input type="text" class="form-field-text form-field" name="time-end" />
+                </span>
+            </div>
+        </div>
+
+    </div>
+    <script>
+    var useStr = "lpmodule/more, lpmodule/calendar, lpassert/validation",
+        more1;
+    KISSY.use(useStr, function(S) {
+        var formValidater = new S.Validation('#searchForm', {
+            style: 'text'
+        });
+        S.one('#searchForm').on('submit', function() {
+            return formValidater.isValid();
+        });
+
+        var More = S.LP.More;
+
+        more1 = new More({
+            tempId: 'J_FactoryTemp',
+            validater: formValidater,
+            groupClass: 'J_Factory',
+            addGroupId: 'J_AddGroup',
+            delText: '删除该工厂',
+            maxGroup: 5,
+            inputAction: {
+                'a1.b.c.d': {
+                    rules: {
+                        required: true
+                    }
+                },
+                'factoryAddr': {
+                    rules: {
+                        required: true
+                    }
+                },
+                'time-start': {
+                    func: More.initJoinCalendar({
+                        endTimeName: 'time-end',
+                        rules: {
+                            required: true
+                        }
+                    })
+                }
+            }
+        });
+
+    });
+    </script>
+
+</body>
+
+</html>
