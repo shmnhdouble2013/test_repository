@@ -1,3 +1,3 @@
 
-/* build Date:2015-01-12 6:02:45 PM author:huangjia */
+/* build Date:2015-01-13 4:37:16 PM author:huangjia */
 !function(a){var b="vert-agn",c="hide";a(".J_navlist-container .j_hide-lpname").addClass(c),a(".J_navlist-container .j_lplist-nav").removeClass(b).attr("data-icon","up"),a(".J_navlist-container").delegate("a.j_lplist-nav","click",function(){var d=a(this),e=d.siblings("ul.j_hide-lpname"),f="up"===d.attr("data-icon")?!0:!1;f?(e.removeClass(c),d.attr("data-icon","down"),d.addClass(b)):(e.addClass(c),d.attr("data-icon","up"),d.removeClass(b))})}($||jQuery);
