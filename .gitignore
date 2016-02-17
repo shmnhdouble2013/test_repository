@@ -1,0 +1,9 @@
+# 过滤文件扩展名
+.DS_Store
+.buildpath
+.project
+.settings
+.idea
+.svn
+.swf
+.DS_Store
